@@ -749,9 +749,6 @@
           flex: 1;
           min-width: 0;
         }
-        .preview-label {
-          display: none;
-        }
       }
 
       @media (max-width: 480px) {
@@ -2623,18 +2620,37 @@
 
       // ══ PREVIEW SCALE ═══════════════════════════════════════════════════
       const CARD_W = 794
+      const CARD_H = 1123
       const CARD_MARGIN = 32
 
       function updatePreviewScale() {
         const wrap = document.getElementById("a4-wrap")
         const card = document.getElementById("noodkaart")
         const available = document.documentElement.clientWidth
+
         if (available >= CARD_W + CARD_MARGIN) {
           wrap.classList.remove("scaled")
-          card.style.zoom = ""
+          card.style.transform = ""
+          card.style.transformOrigin = ""
+          wrap.style.display = ""
+          wrap.style.width = ""
+          wrap.style.height = ""
+          wrap.style.overflow = ""
+          wrap.style.margin = ""
+          wrap.style.padding = ""
         } else {
+          const scale = (available - CARD_MARGIN) / CARD_W
+          const scaledW = Math.round(CARD_W * scale)
+          const scaledH = Math.round(CARD_H * scale)
           wrap.classList.add("scaled")
-          card.style.zoom = (available - CARD_MARGIN) / CARD_W
+          card.style.transform = `scale(${scale})`
+          card.style.transformOrigin = "top left"
+          wrap.style.display = "block"
+          wrap.style.width = `${scaledW}px`
+          wrap.style.height = `${scaledH + 32}px`
+          wrap.style.overflow = "hidden"
+          wrap.style.margin = "0 auto"
+          wrap.style.padding = "0"
         }
       }
 
