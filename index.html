@@ -1,979 +1,2427 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="nl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Binnenvaart Noodkaart Generator</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚓</text></svg>">
-<style>
-:root {
-  --font-sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Consolas, 'Courier New', monospace;
-  --navy:      #1B3A5C;
-  --navy2:     #2C5282;
-  --red:       #A93226;
-  --red-bg:    #FDECEA;
-  --red-bg2:   #F5C6C2;
-  --orange:    #CA6F1E;
-  --org-bg:    #FEF3E8;
-  --green:     #1E6B3C;
-  --alt:       #EEF3F8;
-  --dark:      #111111;
-  --mid:       #444444;
-  --lgray:     #AAAAAA;
-  --brand-red: #7B241C;
-  --mob-blue:  #1A5276;
-  --mob-bg:    #EAF2F8;
-  --mob-bg2:   #D6EAF8;
-  --white:     #ffffff;
-  --input-bg:  #F0F6FF;
-  --input-bdr: #A8C4E0;
-  --ui-bg:     #F4F7FA;
-  --ui-border: #D0DBE8;
-}
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); background: var(--ui-bg); color: var(--dark); }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Binnenvaart Noodkaart Generator</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚓</text></svg>" />
+    <style>
+      :root {
+        --font-sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+        --font-mono:
+          ui-monospace, "Cascadia Code", "SF Mono", Consolas, "Courier New",
+          monospace;
+        --navy: #1b3a5c;
+        --navy2: #2c5282;
+        --red: #a93226;
+        --red-bg: #fdecea;
+        --red-bg2: #f5c6c2;
+        --orange: #ca6f1e;
+        --org-bg: #fef3e8;
+        --green: #1e6b3c;
+        --alt: #eef3f8;
+        --dark: #111111;
+        --mid: #444444;
+        --lgray: #aaaaaa;
+        --brand-red: #7b241c;
+        --mob-blue: #1a5276;
+        --mob-bg: #eaf2f8;
+        --mob-bg2: #d6eaf8;
+        --white: #ffffff;
+        --input-bg: #f0f6ff;
+        --input-bdr: #a8c4e0;
+        --ui-bg: #f4f7fa;
+        --ui-border: #d0dbe8;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: var(--font-sans);
+        background: var(--ui-bg);
+        color: var(--dark);
+      }
 
-.editor {
-  background: var(--navy);
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.editor h1 { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: #A8C4E0; letter-spacing: .08em; text-transform: uppercase; }
-.editor h1 span { color: white; }
+      .editor {
+        background: var(--navy);
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .editor h1 {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 600;
+        color: #a8c4e0;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .editor h1 span {
+        color: white;
+      }
 
-.btn-group { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
-.print-btn { font-family: var(--font-sans); font-size: 12px; font-weight: 700; background: var(--orange); color: white; border: none; border-radius: 5px; padding: 8px 16px; cursor: pointer; white-space: nowrap; }
-.print-btn:hover { background: #A85B14; }
-.print-btn.sec { background: var(--navy2); }
-.print-btn.sec:hover { background: #1E3A6E; }
+      .btn-group {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .print-btn {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 700;
+        background: var(--orange);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 16px;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+      .print-btn:hover {
+        background: #a85b14;
+      }
+      .print-btn.sec {
+        background: var(--navy2);
+      }
+      .print-btn.sec:hover {
+        background: #1e3a6e;
+      }
 
-.lang-btns { display: flex; gap: 6px; margin-left: auto; }
-.lang-btn {
-  font-size: 22px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 3px 5px;
-  border-radius: 6px;
-  line-height: 1;
-  opacity: 0.5;
-  transition: opacity .15s, background .15s;
-}
-.lang-btn:hover { opacity: 0.85; }
-.lang-btn.active { background: white; opacity: 1; }
+      .lang-btns {
+        display: flex;
+        gap: 6px;
+        margin-left: auto;
+      }
+      .lang-btn {
+        font-size: 22px;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        padding: 3px 5px;
+        border-radius: 6px;
+        line-height: 1;
+        opacity: 0.5;
+        transition:
+          opacity 0.15s,
+          background 0.15s;
+      }
+      .lang-btn:hover {
+        opacity: 0.85;
+      }
+      .lang-btn.active {
+        background: white;
+        opacity: 1;
+      }
 
-.fields-wrap { display: flex; justify-content: center; padding: 20px 16px 8px; background: var(--ui-bg); }
-.fields-grid { display: flex; flex-direction: column; background: white; border: 1.5px solid var(--ui-border); border-radius: 8px; overflow: hidden; max-width: calc(794px * 1.5); width: 100%; }
-.editor-section { padding: 12px 24px 14px; border-bottom: 1px solid var(--ui-border); }
-.editor-section:last-child { border-bottom: none; }
-.editor-section-title { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--navy); margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1.5px solid var(--alt); }
+      .fields-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 20px 16px 8px;
+        background: var(--ui-bg);
+      }
+      .fields-grid {
+        display: flex;
+        flex-direction: column;
+        background: white;
+        border: 1.5px solid var(--ui-border);
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: calc(794px * 1.5);
+        width: 100%;
+      }
+      .editor-section {
+        padding: 12px 24px 14px;
+        border-bottom: 1px solid var(--ui-border);
+      }
+      .editor-section:last-child {
+        border-bottom: none;
+      }
+      .editor-section-title {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--navy);
+        margin-bottom: 10px;
+        padding-bottom: 5px;
+        border-bottom: 1.5px solid var(--alt);
+      }
 
-.fields-row { display: grid; gap: 10px 16px; }
-.fields-row.r2 { grid-template-columns: 1fr 1fr; }
-.fields-row.r3 { grid-template-columns: 1fr 1fr 1fr; }
-.fields-row.r4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+      .fields-row {
+        display: grid;
+        gap: 10px 16px;
+      }
+      .fields-row.r2 {
+        grid-template-columns: 1fr 1fr;
+      }
+      .fields-row.r3 {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .fields-row.r4 {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+      }
 
-.field-group { display: flex; flex-direction: column; gap: 4px; }
-.field-group label { font-size: 10px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--navy2); }
-.field-group input, .field-group select { font-family: var(--font-mono); font-size: 13px; padding: 7px 10px; border: 1.5px solid var(--input-bdr); border-radius: 4px; background: var(--input-bg); color: var(--dark); outline: none; transition: border-color .15s; }
-.field-group input:focus, .field-group select:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(44,82,130,.15); }
+      .field-group {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .field-group label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--navy2);
+      }
+      .field-group input,
+      .field-group select {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        padding: 7px 10px;
+        border: 1.5px solid var(--input-bdr);
+        border-radius: 4px;
+        background: var(--input-bg);
+        color: var(--dark);
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .field-group input:focus,
+      .field-group select:focus {
+        border-color: var(--navy2);
+        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      }
 
-.input-m { display: flex; align-items: stretch; }
-.input-m input { border-right: none; border-radius: 4px 0 0 4px; width: 100%; }
-.input-m .m-suffix { font-family: var(--font-mono); font-size: 12px; color: var(--mid); background: var(--ui-border); border: 1.5px solid var(--input-bdr); border-left: none; border-radius: 0 4px 4px 0; padding: 0 8px; display: flex; align-items: center; }
+      .input-m {
+        display: flex;
+        align-items: stretch;
+      }
+      .input-m input {
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+        width: 100%;
+      }
+      .input-m .m-suffix {
+        font-family: var(--font-mono);
+        font-size: 12px;
+        color: var(--mid);
+        background: var(--ui-border);
+        border: 1.5px solid var(--input-bdr);
+        border-left: none;
+        border-radius: 0 4px 4px 0;
+        padding: 0 8px;
+        display: flex;
+        align-items: center;
+      }
 
-.contact-rows { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-.contact-row { display: flex; align-items: center; gap: 8px; }
-.contact-row input { font-family: var(--font-mono); font-size: 13px; padding: 6px 8px; border: 1.5px solid var(--input-bdr); border-radius: 4px; background: var(--input-bg); color: var(--dark); outline: none; flex: 1; }
-.contact-row input:focus { border-color: var(--navy2); }
-.add-btn { font-family: var(--font-sans); font-size: 11px; font-weight: 600; color: var(--navy2); background: var(--alt); border: 1.5px solid var(--input-bdr); border-radius: 4px; padding: 5px 12px; cursor: pointer; }
-.add-btn:hover { background: #D6E4F5; }
-.del-btn { font-size: 14px; color: var(--lgray); background: none; border: none; cursor: pointer; padding: 0 4px; line-height: 1; }
-.del-btn:hover { color: var(--red); }
+      .contact-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 8px;
+      }
+      .contact-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .contact-row input {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        padding: 6px 8px;
+        border: 1.5px solid var(--input-bdr);
+        border-radius: 4px;
+        background: var(--input-bg);
+        color: var(--dark);
+        outline: none;
+        flex: 1;
+      }
+      .contact-row input:focus {
+        border-color: var(--navy2);
+      }
+      .add-btn {
+        font-family: var(--font-sans);
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--navy2);
+        background: var(--alt);
+        border: 1.5px solid var(--input-bdr);
+        border-radius: 4px;
+        padding: 5px 12px;
+        cursor: pointer;
+      }
+      .add-btn:hover {
+        background: #d6e4f5;
+      }
+      .del-btn {
+        font-size: 14px;
+        color: var(--lgray);
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+      }
+      .del-btn:hover {
+        color: var(--red);
+      }
 
-.preview-label { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--lgray); text-align: center; padding: 10px 0 6px; }
+      .preview-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--lgray);
+        text-align: center;
+        padding: 10px 0 6px;
+      }
 
-.a4-wrap { display: flex; justify-content: center; padding: 0 16px 32px; }
-.noodkaart { width: 794px; max-width: 100%; background: white; border: 2px solid var(--navy); border-radius: 6px; padding: 14px; font-family: var(--font-sans); font-size: 10.5px; line-height: 1.3; display: flex; flex-direction: column; height: 1123px; }
+      .a4-wrap {
+        display: flex;
+        justify-content: center;
+        padding: 0 16px 32px;
+      }
+      .noodkaart {
+        width: 794px;
+        max-width: 100%;
+        background: white;
+        border: 2px solid var(--navy);
+        border-radius: 6px;
+        padding: 14px;
+        font-family: var(--font-sans);
+        font-size: 10.5px;
+        line-height: 1.3;
+        display: flex;
+        flex-direction: column;
+        height: 1123px;
+      }
 
-.title-bar { background: var(--navy); border-radius: 4px; padding: 7px 11px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; min-height: 34px; }
-.title-bar h2 { font-size: 15px; font-weight: 700; color: white; }
-.title-bar small { font-size: 8.5px; color: #A8C4E0; }
+      .title-bar {
+        background: var(--navy);
+        border-radius: 4px;
+        padding: 7px 11px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        min-height: 34px;
+      }
+      .title-bar h2 {
+        font-size: 15px;
+        font-weight: 700;
+        color: white;
+      }
+      .title-bar small {
+        font-size: 8.5px;
+        color: #a8c4e0;
+      }
 
-.sec-hdr { background: var(--navy); border-radius: 3px 3px 0 0; padding: 0 7px; height: 21px; display: flex; align-items: center; font-size: 9px; font-weight: 700; color: white; letter-spacing: .03em; }
-.sec-hdr.green { background: var(--green); }
-.sec-hdr.red   { background: var(--red); }
-.sec-hdr.brand { background: var(--brand-red); }
-.sec-hdr.mob   { background: var(--mob-blue); }
-.sec-hdr.navy2 { background: var(--navy2); }
+      .sec-hdr {
+        background: var(--navy);
+        border-radius: 3px 3px 0 0;
+        padding: 0 7px;
+        height: 21px;
+        display: flex;
+        align-items: center;
+        font-size: 9px;
+        font-weight: 700;
+        color: white;
+        letter-spacing: 0.03em;
+      }
+      .sec-hdr.green {
+        background: var(--green);
+      }
+      .sec-hdr.red {
+        background: var(--red);
+      }
+      .sec-hdr.brand {
+        background: var(--brand-red);
+      }
+      .sec-hdr.mob {
+        background: var(--mob-blue);
+      }
+      .sec-hdr.navy2 {
+        background: var(--navy2);
+      }
 
-.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-.right-col { display: flex; flex-direction: column; }
-.right-col .verz-block { margin-top: auto; }
+      .cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .right-col {
+        display: flex;
+        flex-direction: column;
+      }
+      .right-col .verz-block {
+        margin-top: auto;
+      }
 
-.dtable { width: 100%; border-collapse: collapse; }
-.dtable tr:nth-child(odd)  td { background: var(--alt); }
-.dtable tr:nth-child(even) td { background: white; }
-.dtable td { padding: 0 6px; height: 26px; font-size: 10.5px; vertical-align: middle; }
-.dtable .sub-hdr td { background: var(--navy2) !important; color: white !important; font-weight: 700; font-size: 9.5px; }
-.dtable td.lbl  { width: 42%; }
-.dtable td.val  { font-weight: 700; }
-.dtable td.c25  { width: 25%; }
-.dtable td.c30  { width: 30%; }
-.dtable td.c40  { width: 40%; }
-.dtable td.c45  { width: 45%; }
-.dtable td.right { text-align: right; font-weight: 700; font-size: 10px; }
+      .dtable {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .dtable tr:nth-child(odd) td {
+        background: var(--alt);
+      }
+      .dtable tr:nth-child(even) td {
+        background: white;
+      }
+      .dtable td {
+        padding: 0 6px;
+        height: 26px;
+        font-size: 10.5px;
+        vertical-align: middle;
+      }
+      .dtable .sub-hdr td {
+        background: var(--navy2) !important;
+        color: white !important;
+        font-weight: 700;
+        font-size: 9.5px;
+      }
+      .dtable td.lbl {
+        width: 42%;
+      }
+      .dtable td.val {
+        font-weight: 700;
+      }
+      .dtable td.c25 {
+        width: 25%;
+      }
+      .dtable td.c30 {
+        width: 30%;
+      }
+      .dtable td.c40 {
+        width: 40%;
+      }
+      .dtable td.c45 {
+        width: 45%;
+      }
+      .dtable td.right {
+        text-align: right;
+        font-weight: 700;
+        font-size: 10px;
+      }
 
-.oproepen-wrap { }
-.oproepen-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid #BBBBBB; }
-.oproep:first-child { border-right: 1px solid #BBBBBB; }
-.oproep-hdr { padding: 0 8px; height: 24px; display: flex; align-items: center; gap: 7px; }
-.oproep-hdr.mayday { background: var(--red); }
-.oproep-hdr.panpan { background: var(--orange); }
-.oproep-hdr .sein-lbl { font-size: 12px; font-weight: 700; color: white; }
-.oproep-hdr .when-lbl { font-size: 8px; font-style: italic; color: rgba(255,255,255,.88); }
-.oproep-body { padding: 8px 10px; font-size: 9.5px; line-height: 1.7; }
-.oproep-body.mayday-bg { background: var(--red-bg); }
-.oproep-body.panpan-bg { background: var(--org-bg); }
-.call-line { color: var(--dark); }
-.call-line.bold-red    { font-weight: 700; color: var(--red);    font-size: 10px; }
-.call-line.bold-orange { font-weight: 700; color: var(--orange); font-size: 10px; }
-.oproep-note { font-size: 8.5px; font-weight: 600; color: var(--dark); text-align: center; padding: 9px 12px; background: var(--alt); border-top: 1px solid #BBBBBB; }
+      .oproepen-wrap {
+      }
+      .oproepen-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid #bbbbbb;
+      }
+      .oproep:first-child {
+        border-right: 1px solid #bbbbbb;
+      }
+      .oproep-hdr {
+        padding: 0 8px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+      .oproep-hdr.mayday {
+        background: var(--red);
+      }
+      .oproep-hdr.panpan {
+        background: var(--orange);
+      }
+      .oproep-hdr .sein-lbl {
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+      }
+      .oproep-hdr .when-lbl {
+        font-size: 8px;
+        font-style: italic;
+        color: rgba(255, 255, 255, 0.88);
+      }
+      .oproep-body {
+        padding: 8px 10px;
+        font-size: 9.5px;
+        line-height: 1.7;
+      }
+      .oproep-body.mayday-bg {
+        background: var(--red-bg);
+      }
+      .oproep-body.panpan-bg {
+        background: var(--org-bg);
+      }
+      .call-line {
+        color: var(--dark);
+      }
+      .call-line.bold-red {
+        font-weight: 700;
+        color: var(--red);
+        font-size: 10px;
+      }
+      .call-line.bold-orange {
+        font-weight: 700;
+        color: var(--orange);
+        font-size: 10px;
+      }
+      .oproep-note {
+        font-size: 8.5px;
+        font-weight: 600;
+        color: var(--dark);
+        text-align: center;
+        padding: 9px 12px;
+        background: var(--alt);
+        border-top: 1px solid #bbbbbb;
+      }
 
-.proto-rows { width: 100%; border-collapse: collapse; }
-.proto-rows tr:nth-child(odd)  td { background: var(--red-bg); }
-.proto-rows tr:nth-child(even) td { background: var(--red-bg2); }
-.proto-rows.mob tr:nth-child(odd)  td { background: var(--mob-bg); }
-.proto-rows.mob tr:nth-child(even) td { background: var(--mob-bg2); }
-.proto-rows td { height: 26px; padding: 0 6px; font-size: 10px; vertical-align: middle; }
-.nr-badge { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; background: var(--brand-red); color: white; font-size: 8.5px; font-weight: 700; border-radius: 2px; margin-right: 6px; flex-shrink: 0; }
-.nr-badge.mob { background: var(--mob-blue); }
-.step-cell { display: flex; align-items: center; }
+      .proto-rows {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .proto-rows tr:nth-child(odd) td {
+        background: var(--red-bg);
+      }
+      .proto-rows tr:nth-child(even) td {
+        background: var(--red-bg2);
+      }
+      .proto-rows.mob tr:nth-child(odd) td {
+        background: var(--mob-bg);
+      }
+      .proto-rows.mob tr:nth-child(even) td {
+        background: var(--mob-bg2);
+      }
+      .proto-rows td {
+        height: 26px;
+        padding: 0 6px;
+        font-size: 10px;
+        vertical-align: middle;
+      }
+      .nr-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 16px;
+        height: 16px;
+        background: var(--brand-red);
+        color: white;
+        font-size: 8.5px;
+        font-weight: 700;
+        border-radius: 2px;
+        margin-right: 6px;
+        flex-shrink: 0;
+      }
+      .nr-badge.mob {
+        background: var(--mob-blue);
+      }
+      .step-cell {
+        display: flex;
+        align-items: center;
+      }
 
-.pill { display: inline-flex; align-items: center; justify-content: center; border-radius: 2px; font-size: 7px; font-weight: 700; color: white; padding: 1px 5px; min-width: 34px; margin-right: 5px; }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2px;
+        font-size: 7px;
+        font-weight: 700;
+        color: white;
+        padding: 1px 5px;
+        min-width: 34px;
+        margin-right: 5px;
+      }
 
-.gelu-hdr { background: var(--navy2); border-radius: 3px 3px 0 0; padding: 0 7px; height: 21px; display: flex; align-items: center; gap: 6px; font-size: 9px; font-weight: 700; color: white; }
-.gelu-hdr .leg-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
-.gelu-hdr .sep { color: rgba(255,255,255,.35); }
-.sym-diamond { display: inline-block; width: 8px; height: 8px; background: white; transform: rotate(45deg); flex-shrink: 0; }
-.sym-circle  { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: white; flex-shrink: 0; }
-.sym-bar     { display: inline-block; width: 15px; height: 5px; background: white; flex-shrink: 0; }
-.gelu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 8px; }
-.gelu-row { display: flex; align-items: center; height: 19px; padding: 0 6px; font-size: 9px; gap: 4px; }
-.gelu-row.alt { background: var(--alt); }
-.gelu-row.wht { background: white; }
-.gelu-pat { display: flex; align-items: center; gap: 3px; width: 76px; flex-shrink: 0; }
-.g-L { display: inline-block; width: 14px; height: 5px; background: var(--navy); flex-shrink: 0; }
-.g-S { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--navy); flex-shrink: 0; }
-.g-XS { display: inline-block; width: 5px; height: 5px; background: var(--navy); transform: rotate(45deg); flex-shrink: 0; }
-.gelu-desc { color: var(--dark); white-space: nowrap; }
-.nk-footer { font-size: 7px; font-style: italic; color: var(--lgray); text-align: center; margin-top: 7px; }
+      .gelu-hdr {
+        background: var(--navy2);
+        border-radius: 3px 3px 0 0;
+        padding: 0 7px;
+        height: 21px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 9px;
+        font-weight: 700;
+        color: white;
+      }
+      .gelu-hdr .leg-item {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        white-space: nowrap;
+      }
+      .gelu-hdr .sep {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .sym-diamond {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background: white;
+        transform: rotate(45deg);
+        flex-shrink: 0;
+      }
+      .sym-circle {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: white;
+        flex-shrink: 0;
+      }
+      .sym-bar {
+        display: inline-block;
+        width: 15px;
+        height: 5px;
+        background: white;
+        flex-shrink: 0;
+      }
+      .gelu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 8px;
+      }
+      .gelu-row {
+        display: flex;
+        align-items: center;
+        height: 19px;
+        padding: 0 6px;
+        font-size: 9px;
+        gap: 4px;
+      }
+      .gelu-row.alt {
+        background: var(--alt);
+      }
+      .gelu-row.wht {
+        background: white;
+      }
+      .gelu-pat {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        width: 76px;
+        flex-shrink: 0;
+      }
+      .g-L {
+        display: inline-block;
+        width: 14px;
+        height: 5px;
+        background: var(--navy);
+        flex-shrink: 0;
+      }
+      .g-S {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--navy);
+        flex-shrink: 0;
+      }
+      .g-XS {
+        display: inline-block;
+        width: 5px;
+        height: 5px;
+        background: var(--navy);
+        transform: rotate(45deg);
+        flex-shrink: 0;
+      }
+      .gelu-desc {
+        color: var(--dark);
+        white-space: nowrap;
+      }
+      .nk-footer {
+        font-size: 7px;
+        font-style: italic;
+        color: var(--lgray);
+        text-align: center;
+        margin-top: 7px;
+      }
 
-@media print {
-  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  body { background: white; margin: 0; padding: 0; }
-  .editor, .fields-wrap, .preview-label, .info-block, .site-footer { display: none !important; }
-  .a4-wrap { padding: 0; display: block; }
-  .noodkaart { width: 100% !important; height: 100vh !important; border: none !important; border-radius: 0 !important; padding: 10px !important; box-shadow: none !important; }
-  @page { size: A4 portrait; margin: 0; }
-}
+      @media print {
+        * {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        body {
+          background: white;
+          margin: 0;
+          padding: 0;
+        }
+        .editor,
+        .fields-wrap,
+        .preview-label,
+        .info-block,
+        .site-footer,
+        #version-warning {
+          display: none !important;
+        }
+        .a4-wrap {
+          padding: 0;
+          display: block;
+        }
+        .noodkaart {
+          width: 100% !important;
+          height: 100vh !important;
+          border: none !important;
+          border-radius: 0 !important;
+          padding: 10px !important;
+          box-shadow: none !important;
+        }
+        @page {
+          size: A4 portrait;
+          margin: 0;
+        }
+      }
 
-@media (max-width: 650px) {
-  .editor { padding: 10px 14px; gap: 8px; }
-  .editor h1 { font-size: 10px; }
-  .fields-wrap { padding: 12px 10px 6px; }
-  .editor-section { padding: 10px 14px 12px; }
-  .fields-row.r3, .fields-row.r4 { grid-template-columns: 1fr 1fr; }
-  .fields-row.r3 > :last-child { grid-column: 1 / -1; }
-  .preview-label { display: none; }
-  .a4-wrap { padding: 0 0 16px; overflow-x: auto; }
-  .noodkaart { min-width: 600px; }
-}
-</style>
-</head>
-<body>
-
-<div class="editor">
-  <h1>Binnenvaart Noodkaart <span>Generator</span></h1>
-  <div class="btn-group">
-    <button class="print-btn sec" onclick="exportJSON()" data-i18n="btn_save">💾 Gegevens opslaan</button>
-    <label class="print-btn sec" style="cursor:pointer">
-      <span data-i18n="btn_load">📂 Gegevens laden</span>
-      <input type="file" accept=".json" onchange="importJSON(event)" style="display:none">
-    </label>
-    <button class="print-btn" onclick="window.print()" data-i18n="btn_print">🖨 Afdrukken / PDF</button>
-  </div>
-  <div class="lang-btns">
-    <button class="lang-btn active" onclick="setLang('nl')" title="Nederlands">🇳🇱</button>
-    <button class="lang-btn" onclick="setLang('en')" title="English">🇬🇧</button>
-    <button class="lang-btn" onclick="setLang('fr')" title="Français">🇫🇷</button>
-    <button class="lang-btn" onclick="setLang('de')" title="Deutsch">🇩🇪</button>
-  </div>
-</div>
-
-<!-- VERSION WARNING -->
-<div id="version-warning" style="display:none;background:var(--navy);border-bottom:3px solid var(--orange);padding:10px 24px;align-items:center;gap:12px">
-  <div style="font-size:18px;flex-shrink:0">ℹ️</div>
-  <div>
-    <div style="font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#FBD38D;margin-bottom:3px" id="vw-title"></div>
-    <div style="font-family:var(--font-sans);font-size:12px;color:white;line-height:1.5" id="vw-body"></div>
-  </div>
-  <button onclick="document.getElementById('version-warning').style.display='none'" style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,.5);font-size:20px;cursor:pointer;flex-shrink:0;line-height:1">×</button>
-</div>
-
-<!-- INFO BLOCK -->
-<div class="info-block" style="background:var(--navy2);padding:14px 24px;display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start;border-bottom:3px solid var(--navy)">
-  <div style="flex:1;min-width:200px">
-    <div style="font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#A8C4E0;margin-bottom:5px" data-i18n="info_what_title"></div>
-    <div style="font-family:var(--font-sans);font-size:12px;color:white;line-height:1.55" data-i18n="info_what_body"></div>
-  </div>
-  <div style="flex:1;min-width:200px">
-    <div style="font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#A8C4E0;margin-bottom:5px" data-i18n="info_save_title"></div>
-    <div style="font-family:var(--font-sans);font-size:12px;color:white;line-height:1.55" data-i18n="info_save_body"></div>
-  </div>
-  <div style="flex:1;min-width:200px">
-    <div style="font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#A8C4E0;margin-bottom:5px" data-i18n="info_print_title"></div>
-    <div style="font-family:var(--font-sans);font-size:12px;color:white;line-height:1.55" data-i18n="info_print_body"></div>
-  </div>
-</div>
-
-<!-- WARNING BANNER -->
-<div class="info-block" style="background:var(--red);margin:10px auto;border-radius:6px;padding:10px 16px;display:flex;align-items:center;gap:12px;max-width:calc(100% - 48px);width:max-content">
-  <div style="font-size:20px;line-height:1;flex-shrink:0">⚠️</div>
-  <div>
-    <div style="font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#F1948A;margin-bottom:3px" data-i18n="warn_title"></div>
-    <div style="font-family:var(--font-sans);font-size:12px;color:white;line-height:1.5" data-i18n="warn_body"></div>
-  </div>
-</div>
-
-<div class="fields-wrap">
-<div class="fields-grid">
-
-  <div class="editor-section">
-    <div class="editor-section-title" data-i18n="sec_ship"></div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="fields-row r3">
-        <div class="field-group"><label data-i18n="f_name"></label><input id="f-name" value="" oninput="update()"></div>
-        <div class="field-group"><label data-i18n="f_type"></label><input id="f-type" value="" oninput="update()"></div>
-        <div class="field-group"><label data-i18n="f_eni"></label><input id="f-eni" value="" oninput="update()"></div>
+      @media (max-width: 650px) {
+        .editor {
+          padding: 10px 14px;
+          gap: 8px;
+        }
+        .editor h1 {
+          font-size: 10px;
+        }
+        .fields-wrap {
+          padding: 12px 10px 6px;
+        }
+        .editor-section {
+          padding: 10px 14px 12px;
+        }
+        .fields-row.r3,
+        .fields-row.r4 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .fields-row.r3 > :last-child {
+          grid-column: 1 / -1;
+        }
+        .preview-label {
+          display: none;
+        }
+        .a4-wrap {
+          padding: 0 0 16px;
+          overflow-x: auto;
+        }
+        .noodkaart {
+          min-width: 600px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="editor">
+      <h1 id="site-title">Maritieme Noodkaart <span>Generator</span></h1>
+      <div class="btn-group">
+        <button
+          id="btn-save"
+          class="print-btn sec"
+          onclick="exportJSON()"
+          data-i18n="btn_save">
+          💾 Gegevens opslaan
+        </button>
+        <label class="print-btn sec" style="cursor: pointer">
+          <span data-i18n="btn_load">📂 Gegevens laden</span>
+          <input
+            type="file"
+            accept=".json"
+            onchange="importJSON(event)"
+            style="display: none" />
+        </label>
+        <button
+          class="print-btn"
+          onclick="window.print()"
+          data-i18n="btn_print">
+          🖨 Afdrukken / PDF
+        </button>
       </div>
-      <div class="fields-row r4">
-        <div class="field-group"><label data-i18n="f_length"></label><div class="input-m"><input id="f-length" type="number" step="0.01" min="0" value="" oninput="update()"><span class="m-suffix">m</span></div></div>
-        <div class="field-group"><label data-i18n="f_width"></label><div class="input-m"><input id="f-width" type="number" step="0.01" min="0" value="" oninput="update()"><span class="m-suffix">m</span></div></div>
-        <div class="field-group"><label data-i18n="f_draft"></label><div class="input-m"><input id="f-draft" type="number" step="0.01" min="0" value="" oninput="update()"><span class="m-suffix">m</span></div></div>
-        <div class="field-group"><label data-i18n="f_airdraft"></label><div class="input-m"><input id="f-airdraft" type="number" step="0.01" min="0" value="" oninput="update()"><span class="m-suffix">m</span></div></div>
-      </div>
-      <div class="fields-row r3">
-        <div class="field-group"><label data-i18n="f_callsign"></label><input id="f-callsign" value="" oninput="update()"></div>
-        <div class="field-group"><label>ATIS</label><input id="f-atis" value="" oninput="update()"></div>
-        <div class="field-group"><label>MMSI</label><input id="f-mmsi" value="" oninput="update()"></div>
+      <div class="lang-btns">
+        <button
+          class="lang-btn active"
+          onclick="setLang('nl')"
+          title="Nederlands">
+          🇳🇱
+        </button>
+        <button class="lang-btn" onclick="setLang('en')" title="English">
+          🇬🇧
+        </button>
+        <button class="lang-btn" onclick="setLang('fr')" title="Français">
+          🇫🇷
+        </button>
+        <button class="lang-btn" onclick="setLang('de')" title="Deutsch">
+          🇩🇪
+        </button>
       </div>
     </div>
-  </div>
 
-  <div class="editor-section">
-    <div class="editor-section-title"><span data-i18n="sec_crew"></span> <span style="font-weight:400;color:var(--lgray);letter-spacing:0;text-transform:none;font-size:10px">— max. 7</span></div>
-    <div class="contact-rows" id="contact-rows"></div>
-    <button class="add-btn" onclick="addContact()" data-i18n="btn_add_crew"></button>
-  </div>
-
-  <div class="editor-section">
-    <div class="editor-section-title" data-i18n="sec_insurer"></div>
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div class="fields-row r2">
-        <div class="field-group"><label data-i18n="f_insurer_name"></label><input id="f-insurer-name" value="" oninput="update()"></div>
-        <div class="field-group"><label data-i18n="f_policy"></label><input id="f-policy" value="" oninput="update()"></div>
-      </div>
-      <div class="fields-row r2">
-        <div class="field-group"><label data-i18n="f_insurer_emergency"></label><input id="f-insurer-emergency" value="" oninput="update()"></div>
-        <div class="field-group"><label data-i18n="f_insurer_office"></label><input id="f-insurer-office" value="" oninput="update()"></div>
-      </div>
-    </div>
-  </div>
-
-</div>
-</div>
-
-<p class="preview-label" data-i18n="preview_label"></p>
-
-<div class="a4-wrap"><div class="noodkaart">
-
-  <div class="title-bar">
-    <h2 id="nk-title">NOODKAART</h2>
-    <small data-i18n="card_subtitle"></small>
-  </div>
-
-  <div style="display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:0">
-
-  <div class="cols">
-    <div>
-      <div class="sec-hdr" data-i18n="card_ship"></div>
-      <table class="dtable">
-        <tr><td class="lbl" data-i18n="f_name"></td>      <td class="val" id="r-name">—</td></tr>
-        <tr><td class="lbl" data-i18n="f_type"></td>      <td class="val" id="r-type">—</td></tr>
-        <tr><td class="lbl" data-i18n="f_eni"></td>       <td class="val" id="r-eni">—</td></tr>
-        <tr><td class="lbl" data-i18n="f_length"></td>    <td class="val"><span id="r-length">0,00</span> m</td></tr>
-        <tr><td class="lbl" data-i18n="f_width"></td>     <td class="val"><span id="r-width">0,00</span> m</td></tr>
-        <tr><td class="lbl" data-i18n="f_draft"></td>     <td class="val"><span id="r-draft">0,00</span> m</td></tr>
-        <tr><td class="lbl" data-i18n="f_airdraft"></td>  <td class="val"><span id="r-airdraft">0,00</span> m</td></tr>
-        <tr><td class="lbl" data-i18n="f_callsign"></td>  <td class="val" id="r-callsign">—</td></tr>
-        <tr><td class="lbl">ATIS</td>                     <td class="val" id="r-atis">—</td></tr>
-        <tr><td class="lbl">MMSI</td>                     <td class="val" id="r-mmsi">—</td></tr>
-      </table>
-    </div>
-    <div class="right-col">
+    <!-- VERSION WARNING (red banner, same style as original warn banner, hidden by default) -->
+    <div
+      id="version-warning"
+      style="
+        display: none;
+        background: var(--red);
+        padding: 10px 24px;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 3px solid #7b241c;
+      ">
+      <div style="font-size: 20px; line-height: 1; flex-shrink: 0">⚠️</div>
       <div>
-        <div class="sec-hdr" data-i18n="card_crew"></div>
-        <table class="dtable" id="r-crew">
-          <tr class="sub-hdr"><td class="c30" data-i18n="th_role"></td><td class="c40" data-i18n="th_name"></td><td class="c30 right" data-i18n="th_contact"></td></tr>
-        </table>
+        <div
+          style="
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #f1948a;
+            margin-bottom: 3px;
+          "
+          id="vw-title"></div>
+        <div
+          style="
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: white;
+            line-height: 1.5;
+          "
+          id="vw-body"></div>
       </div>
-      <div class="verz-block">
-        <div class="sec-hdr green" data-i18n="card_insurer"></div>
-        <table class="dtable">
-          <tr><td class="lbl" id="r-insurer-name">—</td><td class="val"><span data-i18n="card_policy"></span> <span id="r-policy">—</span></td></tr>
-        </table>
+      <button
+        onclick="
+          document.getElementById('version-warning').style.display = 'none'
+        "
+        style="
+          margin-left: auto;
+          background: none;
+          border: none;
+          color: rgba(255, 255, 255, 0.6);
+          font-size: 22px;
+          cursor: pointer;
+          flex-shrink: 0;
+          line-height: 1;
+        ">
+        ×
+      </button>
+    </div>
+
+    <!-- INFO BLOCK: 4 columns, wraps to 2×2, then 1 -->
+    <div
+      class="info-block"
+      style="
+        background: var(--navy2);
+        padding: 14px 24px;
+        display: flex;
+        gap: 24px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        border-bottom: 3px solid var(--navy);
+      ">
+      <div style="flex: 1; min-width: 200px">
+        <div
+          style="
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #a8c4e0;
+            margin-bottom: 5px;
+          "
+          data-i18n="info_what_title"></div>
+        <div
+          style="
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: white;
+            line-height: 1.55;
+          "
+          data-i18n="info_what_body"></div>
+      </div>
+      <div style="flex: 1; min-width: 200px">
+        <div
+          style="
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #a8c4e0;
+            margin-bottom: 5px;
+          "
+          data-i18n="info_print_title"></div>
+        <div
+          style="
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: white;
+            line-height: 1.55;
+          "
+          data-i18n="info_print_body"></div>
+      </div>
+      <div style="flex: 1; min-width: 200px">
+        <div
+          style="
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #a8c4e0;
+            margin-bottom: 5px;
+          "
+          data-i18n="info_save_title"></div>
+        <div
+          style="
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: white;
+            line-height: 1.55;
+          "
+          data-i18n="info_save_body"></div>
+      </div>
+      <div
+        style="
+          flex: 1;
+          min-width: 200px;
+          border-left: 2px solid rgba(169, 50, 38, 0.6);
+          padding-left: 20px;
+        ">
+        <div
+          style="
+            font-family: var(--font-mono);
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #f1948a;
+            margin-bottom: 5px;
+          "
+          data-i18n="warn_title"></div>
+        <div
+          style="
+            font-family: var(--font-sans);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.55;
+          "
+          data-i18n="warn_body"></div>
       </div>
     </div>
-  </div>
 
-  <div class="cols">
-    <div>
-      <div class="sec-hdr" data-i18n="card_channels"></div>
-      <table class="dtable">
-        <tr class="sub-hdr"><td class="c25" data-i18n="th_type"></td><td class="c45" data-i18n="th_waterway"></td><td class="c30 right" data-i18n="th_channel"></td></tr>
-        <tr><td class="c25" data-i18n="k_emergency"></td> <td class="c45" data-i18n="k_inland"></td>  <td class="c30 right">Blokkanaal / 10</td></tr>
-        <tr><td class="c25" data-i18n="k_emergency"></td> <td class="c45" data-i18n="k_open"></td>    <td class="c30 right">16</td></tr>
-        <tr><td class="c25" data-i18n="k_info"></td>      <td class="c45" data-i18n="k_ijssel"></td>  <td class="c30 right">1</td></tr>
-        <tr><td class="c25" data-i18n="k_safety"></td>    <td class="c45" data-i18n="k_rws"></td>     <td class="c30 right">23 / 83</td></tr>
-        <tr><td class="c25" data-i18n="k_cg"></td>        <td class="c45" data-i18n="k_work"></td>    <td class="c30 right">67</td></tr>
-      </table>
-    </div>
-    <div>
-      <div class="sec-hdr" data-i18n="card_numbers"></div>
-      <table class="dtable">
-        <tr class="sub-hdr"><td class="c25" data-i18n="th_type"></td><td class="c45" data-i18n="th_service"></td><td class="c30 right" data-i18n="th_number"></td></tr>
-        <tr>
-          <td class="c25"><span class="pill" style="background:var(--navy)" data-i18n="pill_emergency"></span></td>
-          <td class="c45" data-i18n="h_cg"></td>
-          <td class="c30 right" style="color:var(--navy)">0900-0111</td>
-        </tr>
-        <tr>
-          <td class="c25"><span class="pill" style="background:var(--red)" data-i18n="pill_emergency"></span></td>
-          <td class="c45" data-i18n="h_112"></td>
-          <td class="c30 right" style="color:var(--red)">112</td>
-        </tr>
-        <tr>
-          <td class="c25"><span class="pill" style="background:var(--green)" data-i18n="pill_medical"></span></td>
-          <td class="c45" data-i18n="h_rmd"></td>
-          <td class="c30 right" style="color:var(--green)">+31 88 958 4020</td>
-        </tr>
-        <tr>
-          <td class="c25"><span class="pill" style="background:var(--orange)" id="r-insurer-badge1">—</span></td>
-          <td class="c45" data-i18n="h_insurer_emergency"></td>
-          <td class="c30 right" style="color:var(--orange)" id="r-insurer-emergency">—</td>
-        </tr>
-        <tr>
-          <td class="c25"><span class="pill" style="background:var(--mid)" id="r-insurer-badge2">—</span></td>
-          <td class="c45" data-i18n="h_insurer_office"></td>
-          <td class="c30 right" style="color:var(--mid)" id="r-insurer-office">—</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="oproepen-wrap">
-    <div class="sec-hdr red" data-i18n="card_calls"></div>
-    <div class="oproepen-grid">
-      <div class="oproep">
-        <div class="oproep-hdr mayday">
-          <span class="sein-lbl">MAYDAY</span>
-          <span class="when-lbl" data-i18n="mayday_when"></span>
+    <div class="fields-wrap">
+      <div class="fields-grid">
+        <div class="editor-section">
+          <div class="editor-section-title" data-i18n="sec_ship"></div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div class="fields-row r3">
+              <div class="field-group">
+                <label data-i18n="f_name"></label
+                ><input id="f-name" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_type"></label
+                ><input id="f-type" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_eni"></label
+                ><input id="f-eni" value="" oninput="update()" />
+              </div>
+            </div>
+            <div class="fields-row r4">
+              <div class="field-group">
+                <label data-i18n="f_length"></label>
+                <div class="input-m">
+                  <input
+                    id="f-length"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value=""
+                    oninput="update()" /><span class="m-suffix">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_width"></label>
+                <div class="input-m">
+                  <input
+                    id="f-width"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value=""
+                    oninput="update()" /><span class="m-suffix">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_draft"></label>
+                <div class="input-m">
+                  <input
+                    id="f-draft"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value=""
+                    oninput="update()" /><span class="m-suffix">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_airdraft"></label>
+                <div class="input-m">
+                  <input
+                    id="f-airdraft"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value=""
+                    oninput="update()" /><span class="m-suffix">m</span>
+                </div>
+              </div>
+            </div>
+            <div class="fields-row r3">
+              <div class="field-group">
+                <label data-i18n="f_callsign"></label
+                ><input id="f-callsign" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label>ATIS</label
+                ><input id="f-atis" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label>MMSI</label
+                ><input id="f-mmsi" value="" oninput="update()" />
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="oproep-body mayday-bg">
-          <div class="call-line bold-red">MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY</div>
-          <div class="call-line"><span data-i18n="call_here"></span> <span id="m-name">—</span>, <span data-i18n="call_callsign"></span> <span id="m-callsign-fon">—</span></div>
-          <div class="call-line bold-red">MAYDAY &nbsp; <span id="m-name2">—</span></div>
-          <div class="call-line" data-i18n="call_pos"></div>
-          <div class="call-line" data-i18n="call_mayday_sit"></div>
-          <div class="call-line"><span data-i18n="call_pob"></span> &nbsp;—&nbsp; <span data-i18n="call_help"></span> &nbsp;—&nbsp; <span data-i18n="call_over"></span></div>
+
+        <div class="editor-section">
+          <div class="editor-section-title">
+            <span data-i18n="sec_crew"></span>
+            <span
+              style="
+                font-weight: 400;
+                color: var(--lgray);
+                letter-spacing: 0;
+                text-transform: none;
+                font-size: 10px;
+              "
+              >— max. 7</span
+            >
+          </div>
+          <div class="contact-rows" id="contact-rows"></div>
+          <button
+            class="add-btn"
+            onclick="addContact()"
+            data-i18n="btn_add_crew"></button>
+        </div>
+
+        <div class="editor-section">
+          <div class="editor-section-title" data-i18n="sec_insurer"></div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <div class="fields-row r2">
+              <div class="field-group">
+                <label data-i18n="f_insurer_name"></label
+                ><input id="f-insurer-name" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_policy"></label
+                ><input id="f-policy" value="" oninput="update()" />
+              </div>
+            </div>
+            <div class="fields-row r2">
+              <div class="field-group">
+                <label data-i18n="f_insurer_emergency"></label
+                ><input id="f-insurer-emergency" value="" oninput="update()" />
+              </div>
+              <div class="field-group">
+                <label data-i18n="f_insurer_office"></label
+                ><input id="f-insurer-office" value="" oninput="update()" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="oproep">
-        <div class="oproep-hdr panpan">
-          <span class="sein-lbl">PAN PAN</span>
-          <span class="when-lbl" data-i18n="panpan_when"></span>
+    </div>
+
+    <p class="preview-label" data-i18n="preview_label"></p>
+
+    <div class="a4-wrap">
+      <div class="noodkaart">
+        <div class="title-bar">
+          <h2 id="nk-title">NOODKAART</h2>
+          <small data-i18n="card_subtitle"></small>
         </div>
-        <div class="oproep-body panpan-bg">
-          <div class="call-line bold-orange">PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN</div>
-          <div class="call-line"><span data-i18n="call_here"></span> <span id="p-name">—</span>, <span data-i18n="call_callsign"></span> <span id="p-callsign-fon">—</span></div>
-          <div class="call-line bold-orange">PAN PAN &nbsp; <span id="p-name2">—</span></div>
-          <div class="call-line" data-i18n="call_pos"></div>
-          <div class="call-line" data-i18n="call_panpan_sit"></div>
-          <div class="call-line"><span data-i18n="call_pob"></span> &nbsp;—&nbsp; <span data-i18n="call_assist"></span> &nbsp;—&nbsp; <span data-i18n="call_over"></span></div>
+
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+            min-height: 0;
+          ">
+          <div class="cols">
+            <div>
+              <div class="sec-hdr" data-i18n="card_ship"></div>
+              <table class="dtable">
+                <tr>
+                  <td class="lbl" data-i18n="f_name"></td>
+                  <td class="val" id="r-name">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_type"></td>
+                  <td class="val" id="r-type">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_eni"></td>
+                  <td class="val" id="r-eni">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_length"></td>
+                  <td class="val"><span id="r-length">0,00</span> m</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_width"></td>
+                  <td class="val"><span id="r-width">0,00</span> m</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_draft"></td>
+                  <td class="val"><span id="r-draft">0,00</span> m</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_airdraft"></td>
+                  <td class="val"><span id="r-airdraft">0,00</span> m</td>
+                </tr>
+                <tr>
+                  <td class="lbl" data-i18n="f_callsign"></td>
+                  <td class="val" id="r-callsign">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl">ATIS</td>
+                  <td class="val" id="r-atis">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl">MMSI</td>
+                  <td class="val" id="r-mmsi">—</td>
+                </tr>
+              </table>
+            </div>
+            <div class="right-col">
+              <div>
+                <div class="sec-hdr" data-i18n="card_crew"></div>
+                <table class="dtable" id="r-crew">
+                  <tr class="sub-hdr">
+                    <td class="c30" data-i18n="th_role"></td>
+                    <td class="c40" data-i18n="th_name"></td>
+                    <td class="c30 right" data-i18n="th_contact"></td>
+                  </tr>
+                </table>
+              </div>
+              <div class="verz-block">
+                <div class="sec-hdr green" data-i18n="card_insurer"></div>
+                <table class="dtable">
+                  <tr>
+                    <td class="lbl" id="r-insurer-name">—</td>
+                    <td class="val">
+                      <span data-i18n="card_policy"></span>
+                      <span id="r-policy">—</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="cols">
+            <div>
+              <div class="sec-hdr" data-i18n="card_channels"></div>
+              <table class="dtable">
+                <tr class="sub-hdr">
+                  <td class="c25" data-i18n="th_type"></td>
+                  <td class="c45" data-i18n="th_waterway"></td>
+                  <td class="c30 right" data-i18n="th_channel"></td>
+                </tr>
+                <tr>
+                  <td class="c25" data-i18n="k_emergency"></td>
+                  <td class="c45" data-i18n="k_inland"></td>
+                  <td class="c30 right">Blokkanaal / 10</td>
+                </tr>
+                <tr>
+                  <td class="c25" data-i18n="k_emergency"></td>
+                  <td class="c45" data-i18n="k_open"></td>
+                  <td class="c30 right">16</td>
+                </tr>
+                <tr>
+                  <td class="c25" data-i18n="k_info"></td>
+                  <td class="c45" data-i18n="k_ijssel"></td>
+                  <td class="c30 right">1</td>
+                </tr>
+                <tr>
+                  <td class="c25" data-i18n="k_safety"></td>
+                  <td class="c45" data-i18n="k_rws"></td>
+                  <td class="c30 right">23 / 83</td>
+                </tr>
+                <tr>
+                  <td class="c25" data-i18n="k_cg"></td>
+                  <td class="c45" data-i18n="k_work"></td>
+                  <td class="c30 right">67</td>
+                </tr>
+              </table>
+            </div>
+            <div>
+              <div class="sec-hdr" data-i18n="card_numbers"></div>
+              <table class="dtable">
+                <tr class="sub-hdr">
+                  <td class="c25" data-i18n="th_type"></td>
+                  <td class="c45" data-i18n="th_service"></td>
+                  <td class="c30 right" data-i18n="th_number"></td>
+                </tr>
+                <tr>
+                  <td class="c25">
+                    <span
+                      class="pill"
+                      style="background: var(--navy)"
+                      data-i18n="pill_emergency"></span>
+                  </td>
+                  <td class="c45" data-i18n="h_cg"></td>
+                  <td class="c30 right" style="color: var(--navy)">
+                    0900-0111
+                  </td>
+                </tr>
+                <tr>
+                  <td class="c25">
+                    <span
+                      class="pill"
+                      style="background: var(--red)"
+                      data-i18n="pill_emergency"></span>
+                  </td>
+                  <td class="c45" data-i18n="h_112"></td>
+                  <td class="c30 right" style="color: var(--red)">112</td>
+                </tr>
+                <tr>
+                  <td class="c25">
+                    <span
+                      class="pill"
+                      style="background: var(--green)"
+                      data-i18n="pill_medical"></span>
+                  </td>
+                  <td class="c45" data-i18n="h_rmd"></td>
+                  <td class="c30 right" style="color: var(--green)">
+                    +31 88 958 4020
+                  </td>
+                </tr>
+                <tr>
+                  <td class="c25">
+                    <span
+                      class="pill"
+                      style="background: var(--orange)"
+                      id="r-insurer-badge1"
+                      >—</span
+                    >
+                  </td>
+                  <td class="c45" data-i18n="h_insurer_emergency"></td>
+                  <td
+                    class="c30 right"
+                    style="color: var(--orange)"
+                    id="r-insurer-emergency">
+                    —
+                  </td>
+                </tr>
+                <tr>
+                  <td class="c25">
+                    <span
+                      class="pill"
+                      style="background: var(--mid)"
+                      id="r-insurer-badge2"
+                      >—</span
+                    >
+                  </td>
+                  <td class="c45" data-i18n="h_insurer_office"></td>
+                  <td
+                    class="c30 right"
+                    style="color: var(--mid)"
+                    id="r-insurer-office">
+                    —
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div class="oproepen-wrap">
+            <div class="sec-hdr red" data-i18n="card_calls"></div>
+            <div class="oproepen-grid">
+              <div class="oproep">
+                <div class="oproep-hdr mayday">
+                  <span class="sein-lbl">MAYDAY</span>
+                  <span class="when-lbl" data-i18n="mayday_when"></span>
+                </div>
+                <div class="oproep-body mayday-bg">
+                  <div class="call-line bold-red">
+                    MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY
+                  </div>
+                  <div class="call-line">
+                    <span data-i18n="call_here"></span>
+                    <span id="m-name">—</span>,
+                    <span data-i18n="call_callsign"></span>
+                    <span id="m-callsign-fon">—</span>
+                  </div>
+                  <div class="call-line bold-red">
+                    MAYDAY &nbsp; <span id="m-name2">—</span>
+                  </div>
+                  <div class="call-line" data-i18n="call_pos"></div>
+                  <div class="call-line" data-i18n="call_mayday_sit"></div>
+                  <div class="call-line">
+                    <span data-i18n="call_pob"></span> &nbsp;—&nbsp;
+                    <span data-i18n="call_help"></span> &nbsp;—&nbsp;
+                    <span data-i18n="call_over"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="oproep">
+                <div class="oproep-hdr panpan">
+                  <span class="sein-lbl">PAN PAN</span>
+                  <span class="when-lbl" data-i18n="panpan_when"></span>
+                </div>
+                <div class="oproep-body panpan-bg">
+                  <div class="call-line bold-orange">
+                    PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN
+                  </div>
+                  <div class="call-line">
+                    <span data-i18n="call_here"></span>
+                    <span id="p-name">—</span>,
+                    <span data-i18n="call_callsign"></span>
+                    <span id="p-callsign-fon">—</span>
+                  </div>
+                  <div class="call-line bold-orange">
+                    PAN PAN &nbsp; <span id="p-name2">—</span>
+                  </div>
+                  <div class="call-line" data-i18n="call_pos"></div>
+                  <div class="call-line" data-i18n="call_panpan_sit"></div>
+                  <div class="call-line">
+                    <span data-i18n="call_pob"></span> &nbsp;—&nbsp;
+                    <span data-i18n="call_assist"></span> &nbsp;—&nbsp;
+                    <span data-i18n="call_over"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="oproep-note" data-i18n="call_note"></div>
+          </div>
+
+          <div class="cols">
+            <div>
+              <div class="sec-hdr brand" data-i18n="card_fire"></div>
+              <table class="proto-rows" id="fire-rows"></table>
+            </div>
+            <div>
+              <div class="sec-hdr mob" data-i18n="card_mob"></div>
+              <table class="proto-rows mob" id="mob-rows"></table>
+            </div>
+          </div>
+
+          <div>
+            <div class="gelu-hdr">
+              <span data-i18n="card_signals"></span>
+              <span class="sep">|</span>
+              <span class="leg-item"
+                ><span class="sym-diamond"></span>&nbsp;<span
+                  data-i18n="sig_xs"></span>
+                = ¼ <span data-i18n="sig_sec"></span
+              ></span>
+              <span class="sep">|</span>
+              <span class="leg-item"
+                ><span class="sym-circle"></span>&nbsp;<span
+                  data-i18n="sig_s"></span>
+                = 1 <span data-i18n="sig_sec"></span
+              ></span>
+              <span class="sep">|</span>
+              <span class="leg-item"
+                ><span class="sym-bar"></span>&nbsp;<span
+                  data-i18n="sig_l"></span>
+                = 4 <span data-i18n="sig_secs"></span
+              ></span>
+            </div>
+            <div class="gelu-grid" id="signal-grid"></div>
+          </div>
         </div>
+        <!-- end space-between wrapper -->
+        <div class="nk-footer" id="nk-footer"></div>
       </div>
     </div>
-    <div class="oproep-note" data-i18n="call_note"></div>
-  </div>
 
-  <div class="cols">
-    <div>
-      <div class="sec-hdr brand" data-i18n="card_fire"></div>
-      <table class="proto-rows" id="fire-rows"></table>
-    </div>
-    <div>
-      <div class="sec-hdr mob" data-i18n="card_mob"></div>
-      <table class="proto-rows mob" id="mob-rows"></table>
-    </div>
-  </div>
+    <footer
+      class="site-footer"
+      style="
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--lgray);
+        text-align: center;
+        padding: 16px 24px;
+        border-top: 1px solid var(--ui-border);
+        background: var(--ui-bg);
+        letter-spacing: 0.04em;
+      ">
+      <span data-i18n="footer_made"></span>
+      <span style="color: var(--mid); font-weight: 600">Steven de Lange</span>
+      &nbsp;·&nbsp; v3 &nbsp;·&nbsp; 2026
+    </footer>
 
-  <div>
-    <div class="gelu-hdr">
-      <span data-i18n="card_signals"></span>
-      <span class="sep">|</span>
-      <span class="leg-item"><span class="sym-diamond"></span>&nbsp;<span data-i18n="sig_xs"></span> = ¼ <span data-i18n="sig_sec"></span></span>
-      <span class="sep">|</span>
-      <span class="leg-item"><span class="sym-circle"></span>&nbsp;<span data-i18n="sig_s"></span> = 1 <span data-i18n="sig_sec"></span></span>
-      <span class="sep">|</span>
-      <span class="leg-item"><span class="sym-bar"></span>&nbsp;<span data-i18n="sig_l"></span> = 4 <span data-i18n="sig_secs"></span></span>
-    </div>
-    <div class="gelu-grid" id="signal-grid"></div>
-  </div>
+    <script>
+      // ══ TRANSLATIONS ════════════════════════════════════════════════════
+      const T = {
+        nl: {
+          btn_save: "💾 Gegevens opslaan",
+          btn_load: "📂 Gegevens laden",
+          btn_print: "🖨 Afdrukken / PDF",
+          btn_add_crew: "+ Opvarende toevoegen",
+          info_what_title: "Wat is dit?",
+          info_what_body:
+            "Een generator voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water.",
+          info_save_title: "Gegevens opslaan & laden",
+          info_save_body:
+            'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong style="color:#FBD38D">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong style="color:#FBD38D">Gegevens laden</strong>.',
+          info_print_title: "Afdrukken / PDF maken",
+          info_print_body:
+            'Klik op <strong style="color:#FBD38D">Afdrukken / PDF</strong> bovenaan. Kies <strong style="color:#FBD38D">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong style="color:#FBD38D">Achtergronden afdrukken</strong> is ingeschakeld.',
+          warn_title: "Let op — automatisch opslaan is niet 100% veilig",
+          warn_body:
+            'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong style="color:#FBD38D">handmatig op te slaan</strong> via de knop bovenaan.',
+          vw_title: "Verouderde versie geladen",
+          vw_body:
+            "Je hebt een oudere opgeslagen versie geladen. Alle beschikbare gegevens zijn ingeladen. Sla je gegevens op om te updaten naar de huidige versie.",
+          preview_label: "Afdrukvoorbeeld — A4",
+          footer_made: "Ontworpen door",
+          sec_ship: "Scheepsgegevens",
+          sec_crew: "Opvarenden",
+          sec_insurer: "Verzekeraar",
+          f_name: "Scheepsnaam",
+          crew_name_placeholder: "Naam",
+          f_type: "Type",
+          f_eni: "ENI / Europanummer",
+          f_length: "Lengte",
+          f_width: "Breedte",
+          f_draft: "Diepgang",
+          f_airdraft: "Kruiphoogte",
+          f_callsign: "Roepnaam",
+          f_insurer_name: "Naam",
+          f_policy: "Polisnummer",
+          f_insurer_emergency: "Telefoon nood (24/7)",
+          f_insurer_office: "Telefoon kantoor",
+          role_skipper: "Schipper",
+          role_mate: "Maat",
+          role_passenger: "Passagier",
+          role_child: "Kind",
+          role_pet: "Huisdier",
+          contact_placeholder: "Contact (optioneel)",
+          card_subtitle: "Houd dit document bereikbaar tijdens het varen",
+          card_ship: "SCHEEPSGEGEVENS",
+          card_crew: "OPVARENDEN",
+          card_insurer: "VERZEKERAAR",
+          card_policy: "Polis:",
+          card_channels: "NOODKANALEN (MARIFOON)",
+          card_numbers: "HULPNUMMERS",
+          card_title: "MARITIEME NOODKAART",
+          site_title: "Maritieme Noodkaart Generator",
+          card_calls: "NOODOPROEPEN",
+          card_fire: "BRAND AAN BOORD — ACTIEPROTOCOL",
+          card_mob: "MAN OVERBOORD — ACTIEPROTOCOL",
+          card_signals: "GELUIDSSIGNALEN (BPR)",
+          th_role: "Rol",
+          th_name: "Naam",
+          th_contact: "Contact",
+          th_type: "Type",
+          th_waterway: "Vaarwater / gebruik",
+          th_channel: "Kanaal",
+          th_service: "Dienst",
+          th_number: "Nummer",
+          pill_emergency: "NOOD",
+          pill_medical: "MEDISCH",
+          k_emergency: "Nood",
+          k_inland: "Binnenwater",
+          k_open: "Open water / zee",
+          k_info: "Info",
+          k_ijssel: "IJsselmeer / Markermeer",
+          k_safety: "Veiligheid",
+          k_rws: "Veiligheidsberichten (RWS)",
+          k_cg: "Kustwacht",
+          k_work: "Werkkanaal",
+          h_cg: "Kustwacht (geen marifoon)",
+          h_112: "Ambulance / Brandweer",
+          h_rmd: "RMD medisch advies (KNRM)",
+          h_insurer_emergency: "Verzekeraar spoed (24/7)",
+          h_insurer_office: "Verzekeraar kantoor",
+          mayday_when: "Levensgevaar: zinken / brand / man overboord",
+          panpan_when: "Spoed: motorpech / medisch niet-acuut",
+          call_here: "Hier",
+          call_callsign: "roepnaam",
+          call_pos: "Mijn positie is: [GPS-coordinaten of herkenningspunt]",
+          call_mayday_sit:
+            "Wat er aan de hand is: [brand / zinken / man overboord]",
+          call_panpan_sit:
+            "Wat er aan de hand is: [motorpech / medische situatie]",
+          call_pob: "[Personen + dieren aan boord]",
+          call_help: "Hulp nodig",
+          call_assist: "Assistentie",
+          call_over: "Over",
+          call_note:
+            "Let op: alleen de schipper mag opdracht geven tot MAYDAY of PAN PAN — of dat laten doen — tenzij de schipper zelf niet meer in staat is om opdracht te geven.",
+          fire: [
+            "Motor uit",
+            "Ventilatie dicht (luiken, patrijspoorten, ventilatieopeningen)",
+            "Marifoon: PAN PAN — of MAYDAY bij levensgevaar",
+            "Reddingsvesten aan voor iedereen aan boord",
+            "Blusmiddel pakken — deur niet openen naar vuurzijde",
+            "Reddingsvlot / -sloep klaarmaken als situatie escaleert",
+          ],
+          mob: [
+            'Roep "MAN OVERBOORD" — laat iemand de persoon niet uit het oog verliezen',
+            "Gooi reddingsmiddelen toe (boei, lijn, jerrycan)",
+            "Noteer of onthoud de GPS-positie",
+            "MAYDAY via marifoon — geef positie en aantal opvarenden door",
+            "Vaar terug — benadering met de wind mee, motor uitzetten bij de persoon",
+            "Persoon aan boord krijgen — warmte, droge kleding, medische check",
+          ],
+          sig_xs: "zeer kort",
+          sig_s: "kort",
+          sig_l: "lang",
+          sig_sec: "seconde",
+          sig_secs: "seconden",
+          signals: [
+            'Attentiesein ("let op")',
+            "Noodsein (schip in nood)",
+            "Gevaar voor aanvaring",
+            "Blijf-weg sein (brand/explosie) — herhaald ≥ 15 min",
+            "Ik ga stuurboordszijde uit",
+            "Ik ga bakboordszijde uit",
+            "Ik sla achteruit",
+            "Ik ga oversteken",
+            "Ik keer via stuurboord",
+            "Ik keer via bakboord",
+            "Ik wil je aan stuurboord oplopen",
+            "Ik wil je aan bakboord oplopen",
+            "Ik ga een haven in over stuurboord",
+            "Ik ga een haven in over bakboord",
+          ],
+          footer_text:
+            "Noodkaart {name} | Controleer regelmatig of gegevens nog actueel zijn | Afgedrukt op {date}",
+        },
+        en: {
+          btn_save: "💾 Save data",
+          btn_load: "📂 Load data",
+          btn_print: "🖨 Print / PDF",
+          btn_add_crew: "+ Add crew member",
+          info_what_title: "What is this?",
+          info_what_body:
+            "A generator for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water.",
+          info_save_title: "Save & load data",
+          info_save_body:
+            'Your data is automatically saved in this browser. Use <strong style="color:#FBD38D">Save data</strong> to download a backup and load it on another device via <strong style="color:#FBD38D">Load data</strong>.',
+          info_print_title: "Print / make PDF",
+          info_print_body:
+            'Click <strong style="color:#FBD38D">Print / PDF</strong> at the top. Choose <strong style="color:#FBD38D">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong style="color:#FBD38D">Print backgrounds</strong> is enabled for colours.',
+          warn_title: "Warning — auto-save is not 100% reliable",
+          warn_body:
+            'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong style="color:#FBD38D">saving your data manually</strong> using the button above.',
+          vw_title: "Outdated version loaded",
+          vw_body:
+            "You have loaded an older saved version. All available data has been loaded. Save your data to update to the current version.",
+          preview_label: "Print preview — A4",
+          footer_made: "Designed by",
+          sec_ship: "Vessel details",
+          sec_crew: "Persons on board",
+          sec_insurer: "Insurer",
+          f_name: "Vessel name",
+          crew_name_placeholder: "Name",
+          f_type: "Type",
+          f_eni: "ENI / European number",
+          f_length: "Length",
+          f_width: "Width",
+          f_draft: "Draft",
+          f_airdraft: "Air draft",
+          f_callsign: "Call sign",
+          f_insurer_name: "Name",
+          f_policy: "Policy number",
+          f_insurer_emergency: "Emergency phone (24/7)",
+          f_insurer_office: "Office phone",
+          role_skipper: "Skipper",
+          role_mate: "Mate",
+          role_passenger: "Passenger",
+          role_child: "Child",
+          role_pet: "Pet",
+          contact_placeholder: "Contact (optional)",
+          card_subtitle: "Keep this document accessible while sailing",
+          card_ship: "VESSEL DETAILS",
+          card_crew: "PERSONS ON BOARD",
+          card_insurer: "INSURER",
+          card_policy: "Policy:",
+          card_channels: "EMERGENCY CHANNELS (VHF)",
+          card_numbers: "EMERGENCY NUMBERS",
+          card_title: "MARITIME EMERGENCY CARD",
+          site_title: "Maritime Emergency Card Generator",
+          card_calls: "EMERGENCY CALLS",
+          card_fire: "FIRE ON BOARD — ACTION PROTOCOL",
+          card_mob: "MAN OVERBOARD — ACTION PROTOCOL",
+          card_signals: "SOUND SIGNALS (BPR)",
+          th_role: "Role",
+          th_name: "Name",
+          th_contact: "Contact",
+          th_type: "Type",
+          th_waterway: "Waterway / use",
+          th_channel: "Channel",
+          th_service: "Service",
+          th_number: "Number",
+          pill_emergency: "EMERG",
+          pill_medical: "MEDICAL",
+          k_emergency: "Emergency",
+          k_inland: "Inland waterway",
+          k_open: "Open water / sea",
+          k_info: "Info",
+          k_ijssel: "IJsselmeer / Markermeer",
+          k_safety: "Safety",
+          k_rws: "Safety broadcasts (RWS)",
+          k_cg: "Coastguard",
+          k_work: "Working channel",
+          h_cg: "Coastguard (no radio)",
+          h_112: "Ambulance / Fire brigade",
+          h_rmd: "RMD medical advice (KNRM)",
+          h_insurer_emergency: "Insurer emergency (24/7)",
+          h_insurer_office: "Insurer office",
+          mayday_when: "Life in danger: sinking / fire / man overboard",
+          panpan_when: "Urgent: engine failure / medical non-critical",
+          call_here: "This is",
+          call_callsign: "call sign",
+          call_pos: "My position is: [GPS coordinates or landmark]",
+          call_mayday_sit:
+            "Nature of distress: [fire / sinking / man overboard]",
+          call_panpan_sit:
+            "Nature of urgency: [engine failure / medical situation]",
+          call_pob: "[Persons + animals on board]",
+          call_help: "Require assistance",
+          call_assist: "Require assistance",
+          call_over: "Over",
+          call_note:
+            "Note: only the skipper may order a MAYDAY or PAN PAN call — or instruct someone to do so — unless the skipper is no longer able to give orders.",
+          fire: [
+            "Stop engine",
+            "Close ventilation (hatches, portholes, air vents)",
+            "Radio: PAN PAN — or MAYDAY if lives are at risk",
+            "Life jackets on for everyone on board",
+            "Grab fire extinguisher — do not open door towards the fire",
+            "Prepare liferaft / dinghy if situation escalates",
+          ],
+          mob: [
+            'Shout "MAN OVERBOARD" — keep the person in sight at all times',
+            "Throw flotation aids (buoy, line, jerrycan)",
+            "Note or memorise GPS position",
+            "MAYDAY on radio — report position and number of persons on board",
+            "Return to person — approach downwind, cut engine near person",
+            "Get person on board — warmth, dry clothes, medical check",
+          ],
+          sig_xs: "very short",
+          sig_s: "short",
+          sig_l: "long",
+          sig_sec: "second",
+          sig_secs: "seconds",
+          signals: [
+            'Attention signal ("watch out")',
+            "Distress signal (vessel in distress)",
+            "Danger of collision",
+            "Keep-clear signal (fire/explosion) — repeated ≥ 15 min",
+            "I am turning to starboard",
+            "I am turning to port",
+            "I am going astern",
+            "I am crossing",
+            "I am turning around via starboard",
+            "I am turning around via port",
+            "I intend to overtake you on your starboard side",
+            "I intend to overtake you on your port side",
+            "I am entering harbour via starboard",
+            "I am entering harbour via port",
+          ],
+          footer_text:
+            "Emergency card {name} | Check regularly that data is still current | Printed on {date}",
+        },
+        fr: {
+          btn_save: "💾 Enregistrer",
+          btn_load: "📂 Charger",
+          btn_print: "🖨 Imprimer / PDF",
+          btn_add_crew: "+ Ajouter une personne",
+          info_what_title: "À quoi sert cet outil?",
+          info_what_body:
+            "Un générateur de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau.",
+          info_save_title: "Enregistrer & charger",
+          info_save_body:
+            'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong style="color:#FBD38D">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong style="color:#FBD38D">Charger</strong>.',
+          info_print_title: "Imprimer / créer un PDF",
+          info_print_body:
+            'Cliquez sur <strong style="color:#FBD38D">Imprimer / PDF</strong> en haut. Choisissez <strong style="color:#FBD38D">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong style="color:#FBD38D">Imprimer les arrière-plans</strong> est activé.',
+          warn_title:
+            "Attention — la sauvegarde automatique n'est pas fiable à 100%",
+          warn_body:
+            "Le navigateur peut perdre des données lors d'une mise à jour ou d'un effacement. Nous recommandons toujours de <strong style=\"color:#FBD38D\">sauvegarder manuellement</strong> via le bouton ci-dessus.",
+          vw_title: "Version obsolète chargée",
+          vw_body:
+            "Vous avez chargé une ancienne version sauvegardée. Toutes les données disponibles ont été chargées. Enregistrez vos données pour passer à la version actuelle.",
+          preview_label: "Aperçu impression — A4",
+          footer_made: "Conçu par",
+          sec_ship: "Données du navire",
+          sec_crew: "Personnes à bord",
+          sec_insurer: "Assureur",
+          f_name: "Nom du navire",
+          crew_name_placeholder: "Nom",
+          f_type: "Type",
+          f_eni: "ENI / Numéro européen",
+          f_length: "Longueur",
+          f_width: "Largeur",
+          f_draft: "Tirant d'eau",
+          f_airdraft: "Tirant d'air",
+          f_callsign: "Indicatif d'appel",
+          f_insurer_name: "Nom",
+          f_policy: "Numéro de police",
+          f_insurer_emergency: "Téléphone urgence (24/7)",
+          f_insurer_office: "Téléphone bureau",
+          role_skipper: "Capitaine",
+          role_mate: "Second",
+          role_passenger: "Passager",
+          role_child: "Enfant",
+          role_pet: "Animal",
+          contact_placeholder: "Contact (optionnel)",
+          card_subtitle: "Gardez ce document accessible pendant la navigation",
+          card_ship: "DONNÉES DU NAVIRE",
+          card_crew: "PERSONNES À BORD",
+          card_insurer: "ASSUREUR",
+          card_policy: "Police:",
+          card_channels: "CANAUX D'URGENCE (VHF)",
+          card_numbers: "NUMÉROS D'URGENCE",
+          card_calls: "APPELS D'URGENCE",
+          card_title: "CARTE D'URGENCE MARITIME",
+          site_title: "Générateur de Carte Maritime",
+          card_fire: "INCENDIE À BORD — PROTOCOLE D'ACTION",
+          card_mob: "HOMME À LA MER — PROTOCOLE D'ACTION",
+          card_signals: "SIGNAUX SONORES (BPR)",
+          th_role: "Rôle",
+          th_name: "Nom",
+          th_contact: "Contact",
+          th_type: "Type",
+          th_waterway: "Voie d'eau / usage",
+          th_channel: "Canal",
+          th_service: "Service",
+          th_number: "Numéro",
+          pill_emergency: "URGENCE",
+          pill_medical: "MÉDICAL",
+          k_emergency: "Urgence",
+          k_inland: "Voie intérieure",
+          k_open: "Eau libre / mer",
+          k_info: "Info",
+          k_ijssel: "IJsselmeer / Markermeer",
+          k_safety: "Sécurité",
+          k_rws: "Bulletins de sécurité (RWS)",
+          k_cg: "Garde-côtes",
+          k_work: "Canal de travail",
+          h_cg: "Garde-côtes (sans radio)",
+          h_112: "Ambulance / Pompiers",
+          h_rmd: "Conseil médical RMD (KNRM)",
+          h_insurer_emergency: "Assureur urgence (24/7)",
+          h_insurer_office: "Assureur bureau",
+          mayday_when: "Danger de mort: naufrage / incendie / homme à la mer",
+          panpan_when: "Urgence: panne moteur / médical non critique",
+          call_here: "Ici",
+          call_callsign: "indicatif",
+          call_pos: "Ma position est: [coordonnées GPS ou point de repère]",
+          call_mayday_sit:
+            "Nature du sinistre: [incendie / naufrage / homme à la mer]",
+          call_panpan_sit:
+            "Nature de l'urgence: [panne moteur / situation médicale]",
+          call_pob: "[Personnes + animaux à bord]",
+          call_help: "Besoin d'aide",
+          call_assist: "Besoin d'assistance",
+          call_over: "Terminé",
+          call_note:
+            "Attention: seul le capitaine peut ordonner un appel MAYDAY ou PAN PAN — ou demander à quelqu'un de le faire — sauf si le capitaine n'est plus en mesure de donner des ordres.",
+          fire: [
+            "Couper le moteur",
+            "Fermer la ventilation (écoutilles, hublots, aérations)",
+            "Radio: PAN PAN — ou MAYDAY si des vies sont en danger",
+            "Gilets de sauvetage pour tous à bord",
+            "Prendre l'extincteur — ne pas ouvrir la porte côté feu",
+            "Préparer le radeau / annexe si la situation s'aggrave",
+          ],
+          mob: [
+            'Crier "HOMME À LA MER" — garder la personne en vue en permanence',
+            "Lancer des équipements de flottaison (bouée, cordage, jerrican)",
+            "Noter ou mémoriser la position GPS",
+            "MAYDAY à la radio — signaler la position et le nombre de personnes à bord",
+            "Revenir vers la personne — approche sous le vent, couper le moteur près de la personne",
+            "Récupérer la personne — chaleur, vêtements secs, contrôle médical",
+          ],
+          sig_xs: "très court",
+          sig_s: "court",
+          sig_l: "long",
+          sig_sec: "seconde",
+          sig_secs: "secondes",
+          signals: [
+            'Signal d\'attention ("attention")',
+            "Signal de détresse (navire en détresse)",
+            "Danger de collision",
+            'Signal "restez à l\'écart" (feu/explosion) — répété ≥ 15 min',
+            "Je vire à tribord",
+            "Je vire à bâbord",
+            "Je bats en arrière",
+            "Je traverse",
+            "Je vire en passant par tribord",
+            "Je vire en passant par bâbord",
+            "Je veux vous doubler par tribord",
+            "Je veux vous doubler par bâbord",
+            "J'entre au port par tribord",
+            "J'entre au port par bâbord",
+          ],
+          footer_text:
+            "Carte d'urgence {name} | Vérifiez régulièrement que les données sont à jour | Imprimé le {date}",
+        },
+        de: {
+          btn_save: "💾 Daten speichern",
+          btn_load: "📂 Daten laden",
+          btn_print: "🖨 Drucken / PDF",
+          btn_add_crew: "+ Person hinzufügen",
+          info_what_title: "Was ist das?",
+          info_what_body:
+            "Ein Generator für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen.",
+          info_save_title: "Daten speichern & laden",
+          info_save_body:
+            'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong style="color:#FBD38D">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong style="color:#FBD38D">Daten laden</strong> einzulesen.',
+          info_print_title: "Drucken / PDF erstellen",
+          info_print_body:
+            'Klicken Sie oben auf <strong style="color:#FBD38D">Drucken / PDF</strong>. Wählen Sie <strong style="color:#FBD38D">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong style="color:#FBD38D">Hintergründe drucken</strong> aktiviert ist.',
+          warn_title: "Achtung — automatisches Speichern ist nicht 100% sicher",
+          warn_body:
+            'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong style="color:#FBD38D">manuell zu speichern</strong> über die Schaltfläche oben.',
+          vw_title: "Veraltete Version geladen",
+          vw_body:
+            "Sie haben eine ältere gespeicherte Version geladen. Alle verfügbaren Daten wurden geladen. Speichern Sie Ihre Daten, um auf die aktuelle Version zu aktualisieren.",
+          preview_label: "Druckvorschau — A4",
+          footer_made: "Gestaltet von",
+          sec_ship: "Schiffsdaten",
+          sec_crew: "Personen an Bord",
+          sec_insurer: "Versicherer",
+          f_name: "Schiffsname",
+          crew_name_placeholder: "Name",
+          f_type: "Typ",
+          f_eni: "ENI / Europanummer",
+          f_length: "Länge",
+          f_width: "Breite",
+          f_draft: "Tiefgang",
+          f_airdraft: "Durchfahrtshöhe",
+          f_callsign: "Rufzeichen",
+          f_insurer_name: "Name",
+          f_policy: "Policennummer",
+          f_insurer_emergency: "Notfalltelefon (24/7)",
+          f_insurer_office: "Bürotelefon",
+          role_skipper: "Schiffsführer",
+          role_mate: "Steuermann",
+          role_passenger: "Passagier",
+          role_child: "Kind",
+          role_pet: "Haustier",
+          contact_placeholder: "Kontakt (optional)",
+          card_subtitle:
+            "Halten Sie dieses Dokument während der Fahrt griffbereit",
+          card_ship: "SCHIFFSDATEN",
+          card_crew: "PERSONEN AN BORD",
+          card_insurer: "VERSICHERER",
+          card_policy: "Police:",
+          card_channels: "NOTFUNKKANÄLE (UKW)",
+          card_numbers: "NOTRUFNUMMERN",
+          card_title: "MARITIME NOTFALLKARTE",
+          site_title: "Maritime Notfallkarte Generator",
+          card_calls: "NOTRUFE",
+          card_fire: "FEUER AN BORD — AKTIONSPROTOKOLL",
+          card_mob: "MANN ÜBER BORD — AKTIONSPROTOKOLL",
+          card_signals: "SCHALLZEICHEN (BPR)",
+          th_role: "Rolle",
+          th_name: "Name",
+          th_contact: "Kontakt",
+          th_type: "Typ",
+          th_waterway: "Gewässer / Verwendung",
+          th_channel: "Kanal",
+          th_service: "Dienst",
+          th_number: "Nummer",
+          pill_emergency: "NOTFALL",
+          pill_medical: "MEDIZIN",
+          k_emergency: "Notfall",
+          k_inland: "Binnenwasser",
+          k_open: "Offenes Wasser / See",
+          k_info: "Info",
+          k_ijssel: "IJsselmeer / Markermeer",
+          k_safety: "Sicherheit",
+          k_rws: "Sicherheitsmeldungen (RWS)",
+          k_cg: "Küstenwache",
+          k_work: "Arbeitskanal",
+          h_cg: "Küstenwache (kein Funk)",
+          h_112: "Krankenwagen / Feuerwehr",
+          h_rmd: "RMD Medizinischer Rat (KNRM)",
+          h_insurer_emergency: "Versicherer Notfall (24/7)",
+          h_insurer_office: "Versicherer Büro",
+          mayday_when: "Lebensgefahr: sinken / Feuer / Mann über Bord",
+          panpan_when: "Dringend: Motorausfall / medizinisch nicht kritisch",
+          call_here: "Hier",
+          call_callsign: "Rufzeichen",
+          call_pos:
+            "Meine Position ist: [GPS-Koordinaten oder Orientierungspunkt]",
+          call_mayday_sit:
+            "Art des Notfalls: [Feuer / sinken / Mann über Bord]",
+          call_panpan_sit:
+            "Art der Dringlichkeit: [Motorausfall / medizinische Situation]",
+          call_pob: "[Personen + Tiere an Bord]",
+          call_help: "Benötige Hilfe",
+          call_assist: "Benötige Assistenz",
+          call_over: "Kommen",
+          call_note:
+            "Achtung: Nur der Schiffsführer darf einen MAYDAY- oder PAN PAN-Ruf anordnen — oder jemanden damit beauftragen — es sei denn, er ist nicht mehr in der Lage, Anweisungen zu geben.",
+          fire: [
+            "Motor abstellen",
+            "Belüftung schließen (Luken, Bullaugen, Lüftungsöffnungen)",
+            "Funk: PAN PAN — oder MAYDAY bei Lebensgefahr",
+            "Rettungswesten für alle an Bord anlegen",
+            "Feuerlöscher nehmen — Tür zur Brandseite nicht öffnen",
+            "Rettungsinsel / Beiboot vorbereiten, falls Lage eskaliert",
+          ],
+          mob: [
+            'Ruf "MANN ÜBER BORD" — Person immer im Blick behalten',
+            "Rettungsmittel zuwerfen (Boje, Leine, Kanister)",
+            "GPS-Position notieren oder merken",
+            "MAYDAY über Funk — Position und Personenzahl durchgeben",
+            "Zur Person zurückfahren — Ansteuerung mit dem Wind, Motor neben der Person abstellen",
+            "Person an Bord holen — Wärme, trockene Kleidung, medizinische Versorgung",
+          ],
+          sig_xs: "sehr kurz",
+          sig_s: "kurz",
+          sig_l: "lang",
+          sig_sec: "Sekunde",
+          sig_secs: "Sekunden",
+          signals: [
+            'Aufmerksamkeitssignal ("Achtung")',
+            "Notsignal (Schiff in Not)",
+            "Kollisionsgefahr",
+            "Freihaltezeichen (Feuer/Explosion) — wiederholt ≥ 15 min",
+            "Ich weiche nach Steuerbord aus",
+            "Ich weiche nach Backbord aus",
+            "Ich fahre rückwärts",
+            "Ich quere",
+            "Ich wende über Steuerbord",
+            "Ich wende über Backbord",
+            "Ich will Sie von Steuerbord überholen",
+            "Ich will Sie von Backbord überholen",
+            "Ich laufe einen Hafen über Steuerbord an",
+            "Ich laufe einen Hafen über Backbord an",
+          ],
+          footer_text:
+            "Notfallkarte {name} | Überprüfen Sie regelmäßig, ob die Daten noch aktuell sind | Gedruckt am {date}",
+        },
+      }
 
-  </div><!-- end space-between wrapper -->
-  <div class="nk-footer" id="nk-footer"></div>
+      // ══ LANGUAGE ════════════════════════════════════════════════════════
+      let currentLang = "nl"
 
-</div></div>
+      function setLang(lang) {
+        currentLang = lang
+        document.documentElement.lang = lang
+        document
+          .querySelectorAll(".lang-btn")
+          .forEach((b) =>
+            b.classList.toggle(
+              "active",
+              b.getAttribute("onclick") === `setLang('${lang}')`,
+            ),
+          )
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n")
+          if (T[lang][key] !== undefined) el.innerHTML = T[lang][key]
+        })
+        // Site title (has a <span> inside so we handle it separately)
+        const siteTitle =
+          T[lang].site_title || "Maritime Emergency Card Generator"
+        const parts = siteTitle.split(" ")
+        const last = parts.pop()
+        document.getElementById("site-title").innerHTML =
+          parts.join(" ") + " <span>" + last + "</span>"
+        renderContactEditor()
+        buildProtocols()
+        buildSignals()
+        update()
+        const vw = document.getElementById("version-warning")
+        if (vw && vw.style.display !== "none") showVersionWarning()
+        saveToStorage()
+      }
 
-<footer class="site-footer" style="font-family:var(--font-mono);font-size:11px;color:var(--lgray);text-align:center;padding:16px 24px;border-top:1px solid var(--ui-border);background:var(--ui-bg);letter-spacing:.04em">
-  <span data-i18n="footer_made"></span> <span style="color:var(--mid);font-weight:600">Steven de Lange</span>
-  &nbsp;·&nbsp; v3 &nbsp;·&nbsp; 2026
-</footer>
+      // ══ NATO ════════════════════════════════════════════════════════════
+      const NATO = {
+        A: "Alfa",
+        B: "Bravo",
+        C: "Charlie",
+        D: "Delta",
+        E: "Echo",
+        F: "Foxtrot",
+        G: "Golf",
+        H: "Hotel",
+        I: "India",
+        J: "Juliett",
+        K: "Kilo",
+        L: "Lima",
+        M: "Mike",
+        N: "November",
+        O: "Oscar",
+        P: "Papa",
+        Q: "Quebec",
+        R: "Romeo",
+        S: "Sierra",
+        T: "Tango",
+        U: "Uniform",
+        V: "Victor",
+        W: "Whiskey",
+        X: "X-ray",
+        Y: "Yankee",
+        Z: "Zulu",
+        0: "nul",
+        1: "een",
+        2: "twee",
+        3: "drie",
+        4: "vier",
+        5: "vijf",
+        6: "zes",
+        7: "zeven",
+        8: "acht",
+        9: "negen",
+      }
+      function toFonetic(s) {
+        return s
+          .toUpperCase()
+          .split("")
+          .map((c) => NATO[c] || c)
+          .join(" ")
+      }
 
-<script>
-// ══ TRANSLATIONS ════════════════════════════════════════════════════
-const T = {
-  nl: {
-    btn_save:'💾 Gegevens opslaan', btn_load:'📂 Gegevens laden', btn_print:'🖨 Afdrukken / PDF',
-    btn_add_crew:'+ Opvarende toevoegen',
-    info_what_title:'Wat is dit?',
-    info_what_body:'Een generator voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water.',
-    info_save_title:'Gegevens opslaan & laden',
-    info_save_body:'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong style="color:#FBD38D">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong style="color:#FBD38D">Gegevens laden</strong>.',
-    info_print_title:'Afdrukken / PDF maken',
-    info_print_body:'Klik op <strong style="color:#FBD38D">Afdrukken / PDF</strong> bovenaan. Kies <strong style="color:#FBD38D">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong style="color:#FBD38D">Achtergronden afdrukken</strong> is ingeschakeld.',
-    warn_title:'Let op — automatisch opslaan is niet 100% veilig',
-    warn_body:'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong style="color:#FBD38D">handmatig op te slaan</strong> via de knop bovenaan.',
-    vw_title:'Verouderde versie geladen',
-    vw_body:'Je hebt een oudere opgeslagen versie geladen. Alle beschikbare gegevens zijn ingeladen. Sla je gegevens op om te updaten naar de huidige versie.',
-    preview_label:'Afdrukvoorbeeld — A4', footer_made:'Ontworpen door',
-    sec_ship:'Scheepsgegevens', sec_crew:'Opvarenden', sec_insurer:'Verzekeraar',
-    f_name:'Scheepsnaam', f_type:'Type', f_eni:'ENI / Europanummer',
-    f_length:'Lengte', f_width:'Breedte', f_draft:'Diepgang', f_airdraft:'Kruiphoogte',
-    f_callsign:'Roepnaam',
-    f_insurer_name:'Naam', f_policy:'Polisnummer', f_insurer_emergency:'Telefoon nood (24/7)', f_insurer_office:'Telefoon kantoor',
-    role_skipper:'Schipper', role_mate:'Maat', role_passenger:'Passagier', role_child:'Kind', role_pet:'Huisdier',
-    contact_placeholder:'Contact (optioneel)',
-    card_subtitle:'Houd dit document bereikbaar tijdens het varen',
-    card_ship:'SCHEEPSGEGEVENS', card_crew:'OPVARENDEN', card_insurer:'VERZEKERAAR', card_policy:'Polis:',
-    card_channels:'NOODKANALEN (MARIFOON)', card_numbers:'HULPNUMMERS',
-    card_calls:'NOODOPROEPEN', card_fire:'BRAND AAN BOORD — ACTIEPROTOCOL',
-    card_mob:'MAN OVERBOORD — ACTIEPROTOCOL', card_signals:'GELUIDSSIGNALEN (BPR)',
-    th_role:'Rol', th_name:'Naam', th_contact:'Contact',
-    th_type:'Type', th_waterway:'Vaarwater / gebruik', th_channel:'Kanaal',
-    th_service:'Dienst', th_number:'Nummer',
-    pill_emergency:'NOOD', pill_medical:'MEDISCH',
-    k_emergency:'Nood', k_inland:'Binnenwater', k_open:'Open water / zee',
-    k_info:'Info', k_ijssel:'IJsselmeer / Markermeer',
-    k_safety:'Veiligheid', k_rws:'Veiligheidsberichten (RWS)',
-    k_cg:'Kustwacht', k_work:'Werkkanaal',
-    h_cg:'Kustwacht (geen marifoon)', h_112:'Ambulance / Brandweer',
-    h_rmd:'RMD medisch advies (KNRM)', h_insurer_emergency:'Verzekeraar spoed (24/7)', h_insurer_office:'Verzekeraar kantoor',
-    mayday_when:'Levensgevaar: zinken / brand / man overboord',
-    panpan_when:'Spoed: motorpech / medisch niet-acuut',
-    call_here:'Hier', call_callsign:'roepnaam', call_pos:'Mijn positie is: [GPS-coordinaten of herkenningspunt]',
-    call_mayday_sit:'Wat er aan de hand is: [brand / zinken / man overboord]',
-    call_panpan_sit:'Wat er aan de hand is: [motorpech / medische situatie]',
-    call_pob:'[Personen + dieren aan boord]', call_help:'Hulp nodig', call_assist:'Assistentie', call_over:'Over',
-    call_note:'Let op: alleen de schipper mag opdracht geven tot MAYDAY of PAN PAN — of dat laten doen — tenzij de schipper zelf niet meer in staat is om opdracht te geven.',
-    fire:['Motor uit','Ventilatie dicht (luiken, patrijspoorten, ventilatieopeningen)','Marifoon: PAN PAN — of MAYDAY bij levensgevaar','Reddingsvesten aan voor iedereen aan boord','Blusmiddel pakken — deur niet openen naar vuurzijde','Reddingsvlot / -sloep klaarmaken als situatie escaleert'],
-    mob:['Roep "MAN OVERBOORD" — laat iemand de persoon niet uit het oog verliezen','Gooi reddingsmiddelen toe (boei, lijn, jerrycan)','Noteer of onthoud de GPS-positie','MAYDAY via marifoon — geef positie en aantal opvarenden door','Vaar terug — benadering met de wind mee, motor uitzetten bij de persoon','Persoon aan boord krijgen — warmte, droge kleding, medische check'],
-    sig_xs:'zeer kort', sig_s:'kort', sig_l:'lang', sig_sec:'seconde', sig_secs:'seconden',
-    signals:['Attentiesein ("let op")','Noodsein (schip in nood)','Gevaar voor aanvaring','Blijf-weg sein (brand/explosie) — herhaald ≥ 15 min','Ik ga stuurboordszijde uit','Ik ga bakboordszijde uit','Ik sla achteruit','Ik ga oversteken','Ik keer via stuurboord','Ik keer via bakboord','Ik wil je aan stuurboord oplopen','Ik wil je aan bakboord oplopen','Ik ga een haven in over stuurboord','Ik ga een haven in over bakboord'],
-    footer_text:'Noodkaart {name} | Controleer regelmatig of gegevens nog actueel zijn | Afgedrukt op {date}',
-  },
-  en: {
-    btn_save:'💾 Save data', btn_load:'📂 Load data', btn_print:'🖨 Print / PDF',
-    btn_add_crew:'+ Add crew member',
-    info_what_title:'What is this?',
-    info_what_body:'A generator for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water.',
-    info_save_title:'Save & load data',
-    info_save_body:'Your data is automatically saved in this browser. Use <strong style="color:#FBD38D">Save data</strong> to download a backup and load it on another device via <strong style="color:#FBD38D">Load data</strong>.',
-    info_print_title:'Print / make PDF',
-    info_print_body:'Click <strong style="color:#FBD38D">Print / PDF</strong> at the top. Choose <strong style="color:#FBD38D">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong style="color:#FBD38D">Print backgrounds</strong> is enabled for colours.',
-    warn_title:'Warning — auto-save is not 100% reliable',
-    warn_body:'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong style="color:#FBD38D">saving your data manually</strong> using the button above.',
-    vw_title:'Outdated version loaded',
-    vw_body:'You have loaded an older saved version. All available data has been loaded. Save your data to update to the current version.',
-    preview_label:'Print preview — A4', footer_made:'Designed by',
-    sec_ship:'Vessel details', sec_crew:'Persons on board', sec_insurer:'Insurer',
-    f_name:'Vessel name', f_type:'Type', f_eni:'ENI / European number',
-    f_length:'Length', f_width:'Width', f_draft:'Draft', f_airdraft:'Air draft',
-    f_callsign:'Call sign',
-    f_insurer_name:'Name', f_policy:'Policy number', f_insurer_emergency:'Emergency phone (24/7)', f_insurer_office:'Office phone',
-    role_skipper:'Skipper', role_mate:'Mate', role_passenger:'Passenger', role_child:'Child', role_pet:'Pet',
-    contact_placeholder:'Contact (optional)',
-    card_subtitle:'Keep this document accessible while sailing',
-    card_ship:'VESSEL DETAILS', card_crew:'PERSONS ON BOARD', card_insurer:'INSURER', card_policy:'Policy:',
-    card_channels:'EMERGENCY CHANNELS (VHF)', card_numbers:'EMERGENCY NUMBERS',
-    card_calls:'EMERGENCY CALLS', card_fire:'FIRE ON BOARD — ACTION PROTOCOL',
-    card_mob:'MAN OVERBOARD — ACTION PROTOCOL', card_signals:'SOUND SIGNALS (BPR)',
-    th_role:'Role', th_name:'Name', th_contact:'Contact',
-    th_type:'Type', th_waterway:'Waterway / use', th_channel:'Channel',
-    th_service:'Service', th_number:'Number',
-    pill_emergency:'EMERG', pill_medical:'MEDICAL',
-    k_emergency:'Emergency', k_inland:'Inland waterway', k_open:'Open water / sea',
-    k_info:'Info', k_ijssel:'IJsselmeer / Markermeer',
-    k_safety:'Safety', k_rws:'Safety broadcasts (RWS)',
-    k_cg:'Coastguard', k_work:'Working channel',
-    h_cg:'Coastguard (no radio)', h_112:'Ambulance / Fire brigade',
-    h_rmd:'RMD medical advice (KNRM)', h_insurer_emergency:'Insurer emergency (24/7)', h_insurer_office:'Insurer office',
-    mayday_when:'Life in danger: sinking / fire / man overboard',
-    panpan_when:'Urgent: engine failure / medical non-critical',
-    call_here:'This is', call_callsign:'call sign', call_pos:'My position is: [GPS coordinates or landmark]',
-    call_mayday_sit:'Nature of distress: [fire / sinking / man overboard]',
-    call_panpan_sit:'Nature of urgency: [engine failure / medical situation]',
-    call_pob:'[Persons + animals on board]', call_help:'Require assistance', call_assist:'Require assistance', call_over:'Over',
-    call_note:'Note: only the skipper may order a MAYDAY or PAN PAN call — or instruct someone to do so — unless the skipper is no longer able to give orders.',
-    fire:['Stop engine','Close ventilation (hatches, portholes, air vents)','Radio: PAN PAN — or MAYDAY if lives are at risk','Life jackets on for everyone on board','Grab fire extinguisher — do not open door towards the fire','Prepare liferaft / dinghy if situation escalates'],
-    mob:['Shout "MAN OVERBOARD" — keep the person in sight at all times','Throw flotation aids (buoy, line, jerrycan)','Note or memorise GPS position','MAYDAY on radio — report position and number of persons on board','Return to person — approach downwind, cut engine near person','Get person on board — warmth, dry clothes, medical check'],
-    sig_xs:'very short', sig_s:'short', sig_l:'long', sig_sec:'second', sig_secs:'seconds',
-    signals:['Attention signal ("watch out")','Distress signal (vessel in distress)','Danger of collision','Keep-clear signal (fire/explosion) — repeated ≥ 15 min','I am turning to starboard','I am turning to port','I am going astern','I am crossing','I am turning around via starboard','I am turning around via port','I intend to overtake you on your starboard side','I intend to overtake you on your port side','I am entering harbour via starboard','I am entering harbour via port'],
-    footer_text:'Emergency card {name} | Check regularly that data is still current | Printed on {date}',
-  },
-  fr: {
-    btn_save:'💾 Enregistrer', btn_load:'📂 Charger', btn_print:'🖨 Imprimer / PDF',
-    btn_add_crew:'+ Ajouter une personne',
-    info_what_title:'À quoi sert cet outil?',
-    info_what_body:'Un générateur de carte d\'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d\'urgence sur l\'eau.',
-    info_save_title:'Enregistrer & charger',
-    info_save_body:'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong style="color:#FBD38D">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong style="color:#FBD38D">Charger</strong>.',
-    info_print_title:'Imprimer / créer un PDF',
-    info_print_body:'Cliquez sur <strong style="color:#FBD38D">Imprimer / PDF</strong> en haut. Choisissez <strong style="color:#FBD38D">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong style="color:#FBD38D">Imprimer les arrière-plans</strong> est activé.',
-    warn_title:'Attention — la sauvegarde automatique n\'est pas fiable à 100%',
-    warn_body:'Le navigateur peut perdre des données lors d\'une mise à jour ou d\'un effacement. Nous recommandons toujours de <strong style="color:#FBD38D">sauvegarder manuellement</strong> via le bouton ci-dessus.',
-    vw_title:'Version obsolète chargée',
-    vw_body:'Vous avez chargé une ancienne version sauvegardée. Toutes les données disponibles ont été chargées. Enregistrez vos données pour passer à la version actuelle.',
-    preview_label:'Aperçu impression — A4', footer_made:'Conçu par',
-    sec_ship:'Données du navire', sec_crew:'Personnes à bord', sec_insurer:'Assureur',
-    f_name:'Nom du navire', f_type:'Type', f_eni:'ENI / Numéro européen',
-    f_length:'Longueur', f_width:'Largeur', f_draft:'Tirant d\'eau', f_airdraft:'Tirant d\'air',
-    f_callsign:'Indicatif d\'appel',
-    f_insurer_name:'Nom', f_policy:'Numéro de police', f_insurer_emergency:'Téléphone urgence (24/7)', f_insurer_office:'Téléphone bureau',
-    role_skipper:'Capitaine', role_mate:'Second', role_passenger:'Passager', role_child:'Enfant', role_pet:'Animal',
-    contact_placeholder:'Contact (optionnel)',
-    card_subtitle:'Gardez ce document accessible pendant la navigation',
-    card_ship:'DONNÉES DU NAVIRE', card_crew:'PERSONNES À BORD', card_insurer:'ASSUREUR', card_policy:'Police:',
-    card_channels:'CANAUX D\'URGENCE (VHF)', card_numbers:'NUMÉROS D\'URGENCE',
-    card_calls:'APPELS D\'URGENCE', card_fire:'INCENDIE À BORD — PROTOCOLE D\'ACTION',
-    card_mob:'HOMME À LA MER — PROTOCOLE D\'ACTION', card_signals:'SIGNAUX SONORES (BPR)',
-    th_role:'Rôle', th_name:'Nom', th_contact:'Contact',
-    th_type:'Type', th_waterway:'Voie d\'eau / usage', th_channel:'Canal',
-    th_service:'Service', th_number:'Numéro',
-    pill_emergency:'URGENCE', pill_medical:'MÉDICAL',
-    k_emergency:'Urgence', k_inland:'Voie intérieure', k_open:'Eau libre / mer',
-    k_info:'Info', k_ijssel:'IJsselmeer / Markermeer',
-    k_safety:'Sécurité', k_rws:'Bulletins de sécurité (RWS)',
-    k_cg:'Garde-côtes', k_work:'Canal de travail',
-    h_cg:'Garde-côtes (sans radio)', h_112:'Ambulance / Pompiers',
-    h_rmd:'Conseil médical RMD (KNRM)', h_insurer_emergency:'Assureur urgence (24/7)', h_insurer_office:'Assureur bureau',
-    mayday_when:'Danger de mort: naufrage / incendie / homme à la mer',
-    panpan_when:'Urgence: panne moteur / médical non critique',
-    call_here:'Ici', call_callsign:'indicatif', call_pos:'Ma position est: [coordonnées GPS ou point de repère]',
-    call_mayday_sit:'Nature du sinistre: [incendie / naufrage / homme à la mer]',
-    call_panpan_sit:'Nature de l\'urgence: [panne moteur / situation médicale]',
-    call_pob:'[Personnes + animaux à bord]', call_help:'Besoin d\'aide', call_assist:'Besoin d\'assistance', call_over:'Terminé',
-    call_note:'Attention: seul le capitaine peut ordonner un appel MAYDAY ou PAN PAN — ou demander à quelqu\'un de le faire — sauf si le capitaine n\'est plus en mesure de donner des ordres.',
-    fire:['Couper le moteur','Fermer la ventilation (écoutilles, hublots, aérations)','Radio: PAN PAN — ou MAYDAY si des vies sont en danger','Gilets de sauvetage pour tous à bord','Prendre l\'extincteur — ne pas ouvrir la porte côté feu','Préparer le radeau / annexe si la situation s\'aggrave'],
-    mob:['Crier "HOMME À LA MER" — garder la personne en vue en permanence','Lancer des équipements de flottaison (bouée, cordage, jerrican)','Noter ou mémoriser la position GPS','MAYDAY à la radio — signaler la position et le nombre de personnes à bord','Revenir vers la personne — approche sous le vent, couper le moteur près de la personne','Récupérer la personne — chaleur, vêtements secs, contrôle médical'],
-    sig_xs:'très court', sig_s:'court', sig_l:'long', sig_sec:'seconde', sig_secs:'secondes',
-    signals:['Signal d\'attention ("attention")','Signal de détresse (navire en détresse)','Danger de collision','Signal "restez à l\'écart" (feu/explosion) — répété ≥ 15 min','Je vire à tribord','Je vire à bâbord','Je bats en arrière','Je traverse','Je vire en passant par tribord','Je vire en passant par bâbord','Je veux vous doubler par tribord','Je veux vous doubler par bâbord','J\'entre au port par tribord','J\'entre au port par bâbord'],
-    footer_text:'Carte d\'urgence {name} | Vérifiez régulièrement que les données sont à jour | Imprimé le {date}',
-  },
-  de: {
-    btn_save:'💾 Daten speichern', btn_load:'📂 Daten laden', btn_print:'🖨 Drucken / PDF',
-    btn_add_crew:'+ Person hinzufügen',
-    info_what_title:'Was ist das?',
-    info_what_body:'Ein Generator für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen.',
-    info_save_title:'Daten speichern & laden',
-    info_save_body:'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong style="color:#FBD38D">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong style="color:#FBD38D">Daten laden</strong> einzulesen.',
-    info_print_title:'Drucken / PDF erstellen',
-    info_print_body:'Klicken Sie oben auf <strong style="color:#FBD38D">Drucken / PDF</strong>. Wählen Sie <strong style="color:#FBD38D">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong style="color:#FBD38D">Hintergründe drucken</strong> aktiviert ist.',
-    warn_title:'Achtung — automatisches Speichern ist nicht 100% sicher',
-    warn_body:'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong style="color:#FBD38D">manuell zu speichern</strong> über die Schaltfläche oben.',
-    vw_title:'Veraltete Version geladen',
-    vw_body:'Sie haben eine ältere gespeicherte Version geladen. Alle verfügbaren Daten wurden geladen. Speichern Sie Ihre Daten, um auf die aktuelle Version zu aktualisieren.',
-    preview_label:'Druckvorschau — A4', footer_made:'Gestaltet von',
-    sec_ship:'Schiffsdaten', sec_crew:'Personen an Bord', sec_insurer:'Versicherer',
-    f_name:'Schiffsname', f_type:'Typ', f_eni:'ENI / Europanummer',
-    f_length:'Länge', f_width:'Breite', f_draft:'Tiefgang', f_airdraft:'Durchfahrtshöhe',
-    f_callsign:'Rufzeichen',
-    f_insurer_name:'Name', f_policy:'Policennummer', f_insurer_emergency:'Notfalltelefon (24/7)', f_insurer_office:'Bürotelefon',
-    role_skipper:'Schiffsführer', role_mate:'Steuermann', role_passenger:'Passagier', role_child:'Kind', role_pet:'Haustier',
-    contact_placeholder:'Kontakt (optional)',
-    card_subtitle:'Halten Sie dieses Dokument während der Fahrt griffbereit',
-    card_ship:'SCHIFFSDATEN', card_crew:'PERSONEN AN BORD', card_insurer:'VERSICHERER', card_policy:'Police:',
-    card_channels:'NOTFUNKKANÄLE (UKW)', card_numbers:'NOTRUFNUMMERN',
-    card_calls:'NOTRUFE', card_fire:'FEUER AN BORD — AKTIONSPROTOKOLL',
-    card_mob:'MANN ÜBER BORD — AKTIONSPROTOKOLL', card_signals:'SCHALLZEICHEN (BPR)',
-    th_role:'Rolle', th_name:'Name', th_contact:'Kontakt',
-    th_type:'Typ', th_waterway:'Gewässer / Verwendung', th_channel:'Kanal',
-    th_service:'Dienst', th_number:'Nummer',
-    pill_emergency:'NOTFALL', pill_medical:'MEDIZIN',
-    k_emergency:'Notfall', k_inland:'Binnenwasser', k_open:'Offenes Wasser / See',
-    k_info:'Info', k_ijssel:'IJsselmeer / Markermeer',
-    k_safety:'Sicherheit', k_rws:'Sicherheitsmeldungen (RWS)',
-    k_cg:'Küstenwache', k_work:'Arbeitskanal',
-    h_cg:'Küstenwache (kein Funk)', h_112:'Krankenwagen / Feuerwehr',
-    h_rmd:'RMD Medizinischer Rat (KNRM)', h_insurer_emergency:'Versicherer Notfall (24/7)', h_insurer_office:'Versicherer Büro',
-    mayday_when:'Lebensgefahr: sinken / Feuer / Mann über Bord',
-    panpan_when:'Dringend: Motorausfall / medizinisch nicht kritisch',
-    call_here:'Hier', call_callsign:'Rufzeichen', call_pos:'Meine Position ist: [GPS-Koordinaten oder Orientierungspunkt]',
-    call_mayday_sit:'Art des Notfalls: [Feuer / sinken / Mann über Bord]',
-    call_panpan_sit:'Art der Dringlichkeit: [Motorausfall / medizinische Situation]',
-    call_pob:'[Personen + Tiere an Bord]', call_help:'Benötige Hilfe', call_assist:'Benötige Assistenz', call_over:'Kommen',
-    call_note:'Achtung: Nur der Schiffsführer darf einen MAYDAY- oder PAN PAN-Ruf anordnen — oder jemanden damit beauftragen — es sei denn, er ist nicht mehr in der Lage, Anweisungen zu geben.',
-    fire:['Motor abstellen','Belüftung schließen (Luken, Bullaugen, Lüftungsöffnungen)','Funk: PAN PAN — oder MAYDAY bei Lebensgefahr','Rettungswesten für alle an Bord anlegen','Feuerlöscher nehmen — Tür zur Brandseite nicht öffnen','Rettungsinsel / Beiboot vorbereiten, falls Lage eskaliert'],
-    mob:['Ruf "MANN ÜBER BORD" — Person immer im Blick behalten','Rettungsmittel zuwerfen (Boje, Leine, Kanister)','GPS-Position notieren oder merken','MAYDAY über Funk — Position und Personenzahl durchgeben','Zur Person zurückfahren — Ansteuerung mit dem Wind, Motor neben der Person abstellen','Person an Bord holen — Wärme, trockene Kleidung, medizinische Versorgung'],
-    sig_xs:'sehr kurz', sig_s:'kurz', sig_l:'lang', sig_sec:'Sekunde', sig_secs:'Sekunden',
-    signals:['Aufmerksamkeitssignal ("Achtung")','Notsignal (Schiff in Not)','Kollisionsgefahr','Freihaltezeichen (Feuer/Explosion) — wiederholt ≥ 15 min','Ich weiche nach Steuerbord aus','Ich weiche nach Backbord aus','Ich fahre rückwärts','Ich quere','Ich wende über Steuerbord','Ich wende über Backbord','Ich will Sie von Steuerbord überholen','Ich will Sie von Backbord überholen','Ich laufe einen Hafen über Steuerbord an','Ich laufe einen Hafen über Backbord an'],
-    footer_text:'Notfallkarte {name} | Überprüfen Sie regelmäßig, ob die Daten noch aktuell sind | Gedruckt am {date}',
-  },
-};
+      // ══ CONTACTS ════════════════════════════════════════════════════════
+      const MAX_EXTRA = 5
+      let fixedCrew = [
+        { role: "skipper", name: "", phone: "" },
+        { role: "mate", name: "", phone: "" },
+      ]
+      let extraCrew = []
 
-// ══ LANGUAGE ════════════════════════════════════════════════════════
-let currentLang = 'nl';
+      function iStyle() {
+        return "font-family:var(--font-mono);font-size:13px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:var(--input-bg);color:var(--dark);outline:none;flex:1"
+      }
+      function sStyle(dis) {
+        return `font-family:var(--font-mono);font-size:12px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:${dis ? "var(--ui-border)" : "var(--input-bg)"};color:${dis ? "var(--mid)" : "var(--dark)"};outline:none;min-width:120px;width:120px;${dis ? "appearance:none;-webkit-appearance:none;" : ""}`
+      }
 
-function setLang(lang) {
-  currentLang = lang;
-  document.documentElement.lang = lang;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick') === `setLang('${lang}')`));
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (T[lang][key] !== undefined) el.innerHTML = T[lang][key];
-  });
-  renderContactEditor();
-  buildProtocols();
-  buildSignals();
-  update();
-  const vw = document.getElementById('version-warning');
-  if (vw && vw.style.display !== 'none') showVersionWarning();
-  saveToStorage();
-}
+      function extraRoleKeys() {
+        return ["passenger", "child", "pet"]
+      }
+      function roleLabel(key) {
+        return T[currentLang][`role_${key}`] || key
+      }
+      function fixedRoleLabel(i) {
+        return i === 0 ? roleLabel("skipper") : roleLabel("mate")
+      }
 
-// ══ NATO ════════════════════════════════════════════════════════════
-const NATO = {A:'Alfa',B:'Bravo',C:'Charlie',D:'Delta',E:'Echo',F:'Foxtrot',G:'Golf',H:'Hotel',I:'India',J:'Juliett',K:'Kilo',L:'Lima',M:'Mike',N:'November',O:'Oscar',P:'Papa',Q:'Quebec',R:'Romeo',S:'Sierra',T:'Tango',U:'Uniform',V:'Victor',W:'Whiskey',X:'X-ray',Y:'Yankee',Z:'Zulu','0':'nul','1':'een','2':'twee','3':'drie','4':'vier','5':'vijf','6':'zes','7':'zeven','8':'acht','9':'negen'};
-function toFonetic(s) { return s.toUpperCase().split('').map(c => NATO[c] || c).join(' '); }
-
-// ══ CONTACTS ════════════════════════════════════════════════════════
-const MAX_EXTRA = 5;
-let fixedCrew  = [{ role:'skipper', name:'', phone:'' }, { role:'mate', name:'', phone:'' }];
-let extraCrew  = [];
-
-function iStyle() { return 'font-family:var(--font-mono);font-size:13px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:var(--input-bg);color:var(--dark);outline:none;flex:1'; }
-function sStyle(dis) { return `font-family:var(--font-mono);font-size:12px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:${dis?'var(--ui-border)':'var(--input-bg)'};color:${dis?'var(--mid)':'var(--dark)'};outline:none;min-width:120px;width:120px;${dis?'appearance:none;-webkit-appearance:none;':''}`; }
-
-function extraRoleKeys() { return ['passenger','child','pet']; }
-function roleLabel(key) { return T[currentLang][`role_${key}`] || key; }
-function fixedRoleLabel(i) { return i === 0 ? roleLabel('skipper') : roleLabel('mate'); }
-
-function renderContactEditor() {
-  const el = document.getElementById('contact-rows');
-  el.innerHTML = '';
-  fixedCrew.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.className = 'contact-row';
-    row.innerHTML = `
+      function renderContactEditor() {
+        const el = document.getElementById("contact-rows")
+        el.innerHTML = ""
+        fixedCrew.forEach((c, i) => {
+          const row = document.createElement("div")
+          row.className = "contact-row"
+          row.innerHTML = `
       <select disabled style="${sStyle(true)}"><option>${fixedRoleLabel(i)}</option></select>
-      <input value="${c.name}" placeholder="${T[currentLang].f_name}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input value="${c.name}" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
       <input value="${c.phone}" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
-      <button class="del-btn" onclick="clearFixed(${i})">×</button>`;
-    el.appendChild(row);
-  });
-  extraCrew.forEach((c, i) => {
-    const row = document.createElement('div');
-    row.className = 'contact-row';
-    row.innerHTML = `
+      <button class="del-btn" onclick="clearFixed(${i})">×</button>`
+          el.appendChild(row)
+        })
+        extraCrew.forEach((c, i) => {
+          const row = document.createElement("div")
+          row.className = "contact-row"
+          row.innerHTML = `
       <select onchange="extraCrew[${i}].role=this.value;update()" style="${sStyle(false)}">
-        ${extraRoleKeys().map(k => `<option value="${k}"${c.role===k?' selected':''}>${roleLabel(k)}</option>`).join('')}
+        ${extraRoleKeys()
+          .map(
+            (k) =>
+              `<option value="${k}"${c.role === k ? " selected" : ""}>${roleLabel(k)}</option>`,
+          )
+          .join("")}
       </select>
-      <input value="${c.name}" placeholder="${T[currentLang].f_name}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input value="${c.name}" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
       <input value="${c.phone}" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
-      <button class="del-btn" onclick="removeExtra(${i})">×</button>`;
-    el.appendChild(row);
-  });
-  const addBtn = document.querySelector('.add-btn');
-  addBtn.style.display = extraCrew.length >= MAX_EXTRA ? 'none' : '';
-  addBtn.textContent = T[currentLang].btn_add_crew;
-}
+      <button class="del-btn" onclick="removeExtra(${i})">×</button>`
+          el.appendChild(row)
+        })
+        const addBtn = document.querySelector(".add-btn")
+        addBtn.style.display = extraCrew.length >= MAX_EXTRA ? "none" : ""
+        addBtn.textContent = T[currentLang].btn_add_crew
+      }
 
-function clearFixed(i) { fixedCrew[i].name=''; fixedCrew[i].phone=''; renderContactEditor(); update(); }
-function addContact() { if(extraCrew.length>=MAX_EXTRA)return; extraCrew.push({role:'passenger',name:'',phone:''}); renderContactEditor(); update(); }
-function removeExtra(i) { extraCrew.splice(i,1); renderContactEditor(); update(); }
+      function clearFixed(i) {
+        fixedCrew[i].name = ""
+        fixedCrew[i].phone = ""
+        renderContactEditor()
+        update()
+      }
+      function addContact() {
+        if (extraCrew.length >= MAX_EXTRA) return
+        extraCrew.push({ role: "passenger", name: "", phone: "" })
+        renderContactEditor()
+        update()
+      }
+      function removeExtra(i) {
+        extraCrew.splice(i, 1)
+        renderContactEditor()
+        update()
+      }
 
-// ══ PROTOCOLS ═══════════════════════════════════════════════════════
-function buildProtocols() {
-  ['fire','mob'].forEach(type => {
-    const tbl = document.getElementById(`${type}-rows`);
-    tbl.innerHTML = '';
-    T[currentLang][type].forEach((step, i) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `<td><div class="step-cell"><span class="nr-badge${type==='mob'?' mob':''}">${i+1}</span>${step}</div></td>`;
-      tbl.appendChild(tr);
-    });
-  });
-}
+      // ══ PROTOCOLS ═══════════════════════════════════════════════════════
+      function buildProtocols() {
+        ;["fire", "mob"].forEach((type) => {
+          const tbl = document.getElementById(`${type}-rows`)
+          tbl.innerHTML = ""
+          T[currentLang][type].forEach((step, i) => {
+            const tr = document.createElement("tr")
+            tr.innerHTML = `<td><div class="step-cell"><span class="nr-badge${type === "mob" ? " mob" : ""}">${i + 1}</span>${step}</div></td>`
+            tbl.appendChild(tr)
+          })
+        })
+      }
 
-// ══ SOUND SIGNALS ════════════════════════════════════════════════════
-const SIGNAL_PATTERNS = [['L'],['L','L','L'],['XS','XS','XS','XS','XS','XS'],['S','L'],['S'],['S','S'],['S','S','S'],['L','L','L'],['L','S'],['L','S','S'],['L','L','S'],['L','L','S','S'],['L','L','L','S'],['L','L','L','S','S']];
+      // ══ SOUND SIGNALS ════════════════════════════════════════════════════
+      const SIGNAL_PATTERNS = [
+        ["L"],
+        ["L", "L", "L"],
+        ["XS", "XS", "XS", "XS", "XS", "XS"],
+        ["S", "L"],
+        ["S"],
+        ["S", "S"],
+        ["S", "S", "S"],
+        ["L", "L", "L"],
+        ["L", "S"],
+        ["L", "S", "S"],
+        ["L", "L", "S"],
+        ["L", "L", "S", "S"],
+        ["L", "L", "L", "S"],
+        ["L", "L", "L", "S", "S"],
+      ]
 
-function buildSignals() {
-  const grid = document.getElementById('signal-grid');
-  grid.innerHTML = '';
-  T[currentLang].signals.forEach((desc, i) => {
-    const rowI = Math.floor(i/2);
-    const div = document.createElement('div');
-    div.className = `gelu-row ${rowI%2===0?'alt':'wht'}`;
-    const pat = document.createElement('div');
-    pat.className = 'gelu-pat';
-    SIGNAL_PATTERNS[i].forEach(p => {
-      const el = document.createElement('span');
-      el.className = p==='L'?'g-L':p==='S'?'g-S':'g-XS';
-      pat.appendChild(el);
-    });
-    const d = document.createElement('span');
-    d.className = 'gelu-desc';
-    d.textContent = desc;
-    div.appendChild(pat); div.appendChild(d);
-    grid.appendChild(div);
-  });
-}
+      function buildSignals() {
+        const grid = document.getElementById("signal-grid")
+        grid.innerHTML = ""
+        T[currentLang].signals.forEach((desc, i) => {
+          const rowI = Math.floor(i / 2)
+          const div = document.createElement("div")
+          div.className = `gelu-row ${rowI % 2 === 0 ? "alt" : "wht"}`
+          const pat = document.createElement("div")
+          pat.className = "gelu-pat"
+          SIGNAL_PATTERNS[i].forEach((p) => {
+            const el = document.createElement("span")
+            el.className = p === "L" ? "g-L" : p === "S" ? "g-S" : "g-XS"
+            pat.appendChild(el)
+          })
+          const d = document.createElement("span")
+          d.className = "gelu-desc"
+          d.textContent = desc
+          div.appendChild(pat)
+          div.appendChild(d)
+          grid.appendChild(div)
+        })
+      }
 
-// ══ UPDATE ═══════════════════════════════════════════════════════════
-function update() {
-  const t = T[currentLang];
-  const name    = document.getElementById('f-name').value;
-  const type    = document.getElementById('f-type').value;
-  const eni     = document.getElementById('f-eni').value;
-  const length  = document.getElementById('f-length').value;
-  const width   = document.getElementById('f-width').value;
-  const draft   = document.getElementById('f-draft').value;
-  const airdraft= document.getElementById('f-airdraft').value;
-  const callsign= document.getElementById('f-callsign').value;
-  const atis    = document.getElementById('f-atis').value;
-  const mmsi    = document.getElementById('f-mmsi').value;
-  const insName = document.getElementById('f-insurer-name').value;
-  const policy  = document.getElementById('f-policy').value;
-  const insEmerg= document.getElementById('f-insurer-emergency').value;
-  const insOff  = document.getElementById('f-insurer-office').value;
+      // ══ UPDATE ═══════════════════════════════════════════════════════════
+      function update() {
+        const t = T[currentLang]
+        const name = document.getElementById("f-name").value
+        const type = document.getElementById("f-type").value
+        const eni = document.getElementById("f-eni").value
+        const length = document.getElementById("f-length").value
+        const width = document.getElementById("f-width").value
+        const draft = document.getElementById("f-draft").value
+        const airdraft = document.getElementById("f-airdraft").value
+        const callsign = document.getElementById("f-callsign").value
+        const atis = document.getElementById("f-atis").value
+        const mmsi = document.getElementById("f-mmsi").value
+        const insName = document.getElementById("f-insurer-name").value
+        const policy = document.getElementById("f-policy").value
+        const insEmerg = document.getElementById("f-insurer-emergency").value
+        const insOff = document.getElementById("f-insurer-office").value
 
-  const fmt  = v => { const n=parseFloat(v); return isNaN(n)?'0,00':n.toFixed(2).replace('.',','); };
-  const dash = v => v || '—';
-  const fon  = callsign ? toFonetic(callsign) : '—';
+        const fmt = (v) => {
+          const n = parseFloat(v)
+          return isNaN(n) ? "0,00" : n.toFixed(2).replace(".", ",")
+        }
+        const dash = (v) => v || "—"
+        const fon = callsign ? toFonetic(callsign) : "—"
 
-  document.getElementById('r-name').textContent     = dash(name);
-  document.getElementById('r-type').textContent     = dash(type);
-  document.getElementById('r-eni').textContent      = dash(eni);
-  document.getElementById('r-length').textContent   = fmt(length);
-  document.getElementById('r-width').textContent    = fmt(width);
-  document.getElementById('r-draft').textContent    = fmt(draft);
-  document.getElementById('r-airdraft').textContent = fmt(airdraft);
-  document.getElementById('r-callsign').textContent = dash(callsign);
-  document.getElementById('r-atis').textContent     = dash(atis);
-  document.getElementById('r-mmsi').textContent     = dash(mmsi);
+        document.getElementById("r-name").textContent = dash(name)
+        document.getElementById("r-type").textContent = dash(type)
+        document.getElementById("r-eni").textContent = dash(eni)
+        document.getElementById("r-length").textContent = fmt(length)
+        document.getElementById("r-width").textContent = fmt(width)
+        document.getElementById("r-draft").textContent = fmt(draft)
+        document.getElementById("r-airdraft").textContent = fmt(airdraft)
+        document.getElementById("r-callsign").textContent = dash(callsign)
+        document.getElementById("r-atis").textContent = dash(atis)
+        document.getElementById("r-mmsi").textContent = dash(mmsi)
 
-  // Crew — always 7 rows
-  const tbl = document.getElementById('r-crew');
-  while(tbl.rows.length > 1) tbl.deleteRow(1);
-  const allCrew = [
-    ...fixedCrew.map((c,i) => ({...c, displayRole: fixedRoleLabel(i)})),
-    ...extraCrew.map(c => ({...c, displayRole: roleLabel(c.role)})),
-  ];
-  for(let i=0;i<7;i++){
-    const tr = tbl.insertRow();
-    tr.style.background = i%2===0?'var(--alt)':'white';
-    if(i < allCrew.length){
-      const c = allCrew[i];
-      tr.innerHTML = `<td class="c30">${c.displayRole}</td><td class="c40" style="font-weight:700">${c.name||'—'}</td><td class="c30 right">${c.phone||'—'}</td>`;
-    } else {
-      tr.innerHTML = `<td class="c30" style="color:var(--lgray)">—</td><td class="c40" style="color:var(--lgray)">—</td><td class="c30 right" style="color:var(--lgray)">—</td>`;
-    }
-  }
+        // Crew — always 7 rows
+        const tbl = document.getElementById("r-crew")
+        while (tbl.rows.length > 1) tbl.deleteRow(1)
+        const allCrew = [
+          ...fixedCrew.map((c, i) => ({
+            ...c,
+            displayRole: fixedRoleLabel(i),
+          })),
+          ...extraCrew.map((c) => ({ ...c, displayRole: roleLabel(c.role) })),
+        ]
+        for (let i = 0; i < 7; i++) {
+          const tr = tbl.insertRow()
+          tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
+          if (i < allCrew.length) {
+            const c = allCrew[i]
+            tr.innerHTML = `<td class="c30">${c.displayRole}</td><td class="c40" style="font-weight:700">${c.name || "—"}</td><td class="c30 right">${c.phone || "—"}</td>`
+          } else {
+            tr.innerHTML = `<td class="c30" style="color:var(--lgray)">—</td><td class="c40" style="color:var(--lgray)">—</td><td class="c30 right" style="color:var(--lgray)">—</td>`
+          }
+        }
 
-  // Insurer
-  document.getElementById('r-insurer-name').textContent    = dash(insName);
-  document.getElementById('r-policy').textContent          = dash(policy);
-  document.getElementById('r-insurer-emergency').textContent = dash(insEmerg);
-  document.getElementById('r-insurer-office').textContent  = dash(insOff);
-  document.getElementById('r-insurer-badge1').textContent  = insName || '—';
-  document.getElementById('r-insurer-badge2').textContent  = insName || '—';
+        // Insurer
+        document.getElementById("r-insurer-name").textContent = dash(insName)
+        document.getElementById("r-policy").textContent = dash(policy)
+        document.getElementById("r-insurer-emergency").textContent =
+          dash(insEmerg)
+        document.getElementById("r-insurer-office").textContent = dash(insOff)
+        document.getElementById("r-insurer-badge1").textContent = insName || "—"
+        document.getElementById("r-insurer-badge2").textContent = insName || "—"
 
-  // Emergency calls
-  ['m-name','m-name2','p-name','p-name2'].forEach(id => document.getElementById(id).textContent = dash(name));
-  ['m-callsign-fon','p-callsign-fon'].forEach(id => document.getElementById(id).textContent = fon);
+        // Emergency calls
+        ;["m-name", "m-name2", "p-name", "p-name2"].forEach(
+          (id) => (document.getElementById(id).textContent = dash(name)),
+        )
+        ;["m-callsign-fon", "p-callsign-fon"].forEach(
+          (id) => (document.getElementById(id).textContent = fon),
+        )
 
-  // Title + footer
-  const displayName = name || 'Noodkaart';
-  document.getElementById('nk-title').textContent = displayName.toUpperCase() + ' — ' + t.card_calls.split(' ')[0];
-  const now    = new Date();
-  const date   = now.toLocaleDateString(currentLang === 'nl' ? 'nl-NL' : currentLang, {day:'numeric',month:'long',year:'numeric'});
-  const dateISO = now.toISOString().slice(0,10);
-  document.getElementById('nk-footer').textContent = t.footer_text.replace('{name}',displayName).replace('{date}',date);
-  document.title = `Binnenvaart Noodkaart - ${displayName} - ${dateISO}`;
+        // Title + footer
+        const displayName = name || "Noodkaart"
+        document.getElementById("nk-title").textContent =
+          displayName.toUpperCase() + " — " + t.card_title
 
-  saveToStorage();
-}
+        // Enable/disable save button based on whether any data has been entered
+        const hasData = [
+          name,
+          type,
+          eni,
+          callsign,
+          atis,
+          mmsi,
+          document.getElementById("f-insurer-name").value,
+          ...fixedCrew.map((c) => c.name + c.phone),
+          ...extraCrew.map((c) => c.name),
+        ].some((v) => v && v.trim() !== "")
+        const saveBtn = document.getElementById("btn-save")
+        saveBtn.disabled = !hasData
+        saveBtn.style.opacity = hasData ? "1" : "0.4"
+        saveBtn.style.cursor = hasData ? "pointer" : "not-allowed"
+        const now = new Date()
+        const date = now.toLocaleDateString(
+          currentLang === "nl" ? "nl-NL" : currentLang,
+          { day: "numeric", month: "long", year: "numeric" },
+        )
+        const dateISO = now.toISOString().slice(0, 10)
+        document.getElementById("nk-footer").textContent = t.footer_text
+          .replace("{name}", displayName)
+          .replace("{date}", date)
+        document.title = `Binnenvaart Noodkaart - ${displayName} - ${dateISO}`
 
-// ══ STORAGE ═══════════════════════════════════════════════════════════
-const CURRENT_VERSION = 3;
-const STORAGE_KEY     = 'binnenvaart_noodkaart';
+        saveToStorage()
+      }
 
-function getFormData() {
-  return {
-    version: CURRENT_VERSION,
-    lang: currentLang,
-    name:         document.getElementById('f-name').value,
-    type:         document.getElementById('f-type').value,
-    eni:          document.getElementById('f-eni').value,
-    length:       document.getElementById('f-length').value,
-    width:        document.getElementById('f-width').value,
-    draft:        document.getElementById('f-draft').value,
-    airDraft:     document.getElementById('f-airdraft').value,
-    callSign:     document.getElementById('f-callsign').value,
-    atis:         document.getElementById('f-atis').value,
-    mmsi:         document.getElementById('f-mmsi').value,
-    insurerName:  document.getElementById('f-insurer-name').value,
-    policyNumber: document.getElementById('f-policy').value,
-    insurerEmergencyPhone: document.getElementById('f-insurer-emergency').value,
-    insurerOfficePhone:    document.getElementById('f-insurer-office').value,
-    fixedCrew, extraCrew,
-  };
-}
+      // ══ STORAGE ═══════════════════════════════════════════════════════════
+      const CURRENT_VERSION = 4
+      const STORAGE_KEY = "binnenvaart_noodkaart"
 
-function migrateData(d) {
-  const version = d.version || 1;
-  if (version >= CURRENT_VERSION) return { data: d, outdated: false };
+      function getFormData() {
+        return {
+          version: CURRENT_VERSION,
+          lang: currentLang,
+          name: document.getElementById("f-name").value,
+          type: document.getElementById("f-type").value,
+          eni: document.getElementById("f-eni").value,
+          length: document.getElementById("f-length").value,
+          width: document.getElementById("f-width").value,
+          draft: document.getElementById("f-draft").value,
+          airDraft: document.getElementById("f-airdraft").value,
+          callSign: document.getElementById("f-callsign").value,
+          atis: document.getElementById("f-atis").value,
+          mmsi: document.getElementById("f-mmsi").value,
+          insurerName: document.getElementById("f-insurer-name").value,
+          policyNumber: document.getElementById("f-policy").value,
+          insurerEmergencyPhone: document.getElementById("f-insurer-emergency")
+            .value,
+          insurerOfficePhone: document.getElementById("f-insurer-office").value,
+          fixedCrew,
+          extraCrew,
+        }
+      }
 
-  // v1/v2 used Dutch field names and fixedCrew as 'fixed', extraCrew as 'extras'
-  const m = {
-    version: CURRENT_VERSION,
-    lang: d.lang || 'nl',
-    name:         d.name  || d.naam  || '',
-    type:         d.type  || '',
-    eni:          d.eni   || '',
-    length:       d.length  || d.lengte  || '',
-    width:        d.width   || d.breedte || '',
-    draft:        d.draft   || d.diepgang|| '',
-    airDraft:     d.airDraft|| d.kruip   || '',
-    callSign:     d.callSign|| d.roep    || '',
-    atis:         d.atis  || '',
-    mmsi:         d.mmsi  || '',
-    insurerName:  d.insurerName  || d.verzNaam    || '',
-    policyNumber: d.policyNumber || d.verzPolis   || '',
-    insurerEmergencyPhone: d.insurerEmergencyPhone || d.verzNood    || '',
-    insurerOfficePhone:    d.insurerOfficePhone    || d.verzKantoor || '',
-    fixedCrew: (d.fixedCrew || d.fixed || []).map(c => ({
-      role:  c.role  || (c.rol==='Schipper'?'skipper':c.rol==='Maat'?'mate':'skipper'),
-      name:  c.name  || c.naam  || '',
-      phone: c.phone || c.tel   || '',
-    })),
-    extraCrew: (d.extraCrew || d.extras || []).map(c => ({
-      role:  c.role  || 'passenger',
-      name:  c.name  || c.naam  || '',
-      phone: c.phone || c.tel   || '',
-    })),
-  };
-  return { data: m, outdated: true };
-}
+      function migrateData(d) {
+        const version = d.version || 1
+        if (version >= CURRENT_VERSION) return { data: d, outdated: false }
 
-function showVersionWarning() {
-  const t  = T[currentLang];
-  const el = document.getElementById('version-warning');
-  document.getElementById('vw-title').textContent = t.vw_title;
-  document.getElementById('vw-body').textContent  = t.vw_body;
-  el.style.display = 'flex';
-}
+        // v1/v2 used Dutch field names and fixedCrew as 'fixed', extraCrew as 'extras'
+        const m = {
+          version: CURRENT_VERSION,
+          lang: d.lang || "nl",
+          name: d.name || d.naam || "",
+          type: d.type || "",
+          eni: d.eni || "",
+          length: d.length || d.lengte || "",
+          width: d.width || d.breedte || "",
+          draft: d.draft || d.diepgang || "",
+          airDraft: d.airDraft || d.kruip || "",
+          callSign: d.callSign || d.roep || "",
+          atis: d.atis || "",
+          mmsi: d.mmsi || "",
+          insurerName: d.insurerName || d.verzNaam || "",
+          policyNumber: d.policyNumber || d.verzPolis || "",
+          insurerEmergencyPhone: d.insurerEmergencyPhone || d.verzNood || "",
+          insurerOfficePhone: d.insurerOfficePhone || d.verzKantoor || "",
+          fixedCrew: (d.fixedCrew || d.fixed || []).map((c) => ({
+            role:
+              c.role ||
+              (c.rol === "Schipper"
+                ? "skipper"
+                : c.rol === "Maat"
+                  ? "mate"
+                  : "skipper"),
+            name: c.name || c.naam || "",
+            phone: c.phone || c.tel || "",
+          })),
+          extraCrew: (d.extraCrew || d.extras || []).map((c) => ({
+            role: c.role || "passenger",
+            name: c.name || c.naam || "",
+            phone: c.phone || c.tel || "",
+          })),
+        }
+        return { data: m, outdated: true }
+      }
 
-function applyFormData(d) {
-  const { data, outdated } = migrateData(d);
-  if (outdated) showVersionWarning();
+      let suppressWarningHide = false
 
-  if (data.lang && T[data.lang]) currentLang = data.lang;
-  const s = (id,v) => { const el=document.getElementById(id); if(el&&v!==undefined) el.value=v; };
-  s('f-name',   data.name);   s('f-type', data.type); s('f-eni',  data.eni);
-  s('f-length', data.length); s('f-width',data.width); s('f-draft',data.draft); s('f-airdraft',data.airDraft);
-  s('f-callsign',data.callSign); s('f-atis',data.atis); s('f-mmsi',data.mmsi);
-  s('f-insurer-name',      data.insurerName);
-  s('f-policy',            data.policyNumber);
-  s('f-insurer-emergency', data.insurerEmergencyPhone);
-  s('f-insurer-office',    data.insurerOfficePhone);
-  if (Array.isArray(data.fixedCrew)) fixedCrew = data.fixedCrew;
-  if (Array.isArray(data.extraCrew)) extraCrew = data.extraCrew;
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.getAttribute('onclick') === `setLang('${currentLang}')`));
-  setLang(currentLang);
-}
+      function showVersionWarning() {
+        const t = T[currentLang]
+        const el = document.getElementById("version-warning")
+        document.getElementById("vw-title").textContent = t.vw_title
+        document.getElementById("vw-body").textContent = t.vw_body
+        el.style.display = "flex"
+      }
 
-function saveToStorage() {
-  try {
-    ['binnenvaart_noodkaart_v1'].forEach(k => localStorage.removeItem(k));
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormData()));
-  } catch(e){}
-}
+      function applyFormData(d) {
+        const { data, outdated } = migrateData(d)
 
-function loadFromStorage() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('binnenvaart_noodkaart_v1');
-    if (raw) { applyFormData(JSON.parse(raw)); return true; }
-  } catch(e){}
-  return false;
-}
+        if (data.lang && T[data.lang]) currentLang = data.lang
+        const s = (id, v) => {
+          const el = document.getElementById(id)
+          if (el && v !== undefined) el.value = v
+        }
+        s("f-name", data.name)
+        s("f-type", data.type)
+        s("f-eni", data.eni)
+        s("f-length", data.length)
+        s("f-width", data.width)
+        s("f-draft", data.draft)
+        s("f-airdraft", data.airDraft)
+        s("f-callsign", data.callSign)
+        s("f-atis", data.atis)
+        s("f-mmsi", data.mmsi)
+        s("f-insurer-name", data.insurerName)
+        s("f-policy", data.policyNumber)
+        s("f-insurer-emergency", data.insurerEmergencyPhone)
+        s("f-insurer-office", data.insurerOfficePhone)
+        if (Array.isArray(data.fixedCrew)) fixedCrew = data.fixedCrew
+        if (Array.isArray(data.extraCrew)) extraCrew = data.extraCrew
+        document
+          .querySelectorAll(".lang-btn")
+          .forEach((b) =>
+            b.classList.toggle(
+              "active",
+              b.getAttribute("onclick") === `setLang('${currentLang}')`,
+            ),
+          )
+        // suppress banner hide during the setLang → saveToStorage call triggered by loading
+        suppressWarningHide = true
+        setLang(currentLang)
+        suppressWarningHide = false
+        if (outdated) showVersionWarning()
+      }
 
-function exportJSON() {
-  const data  = getFormData();
-  const name  = data.name || 'noodkaart';
-  const today = new Date().toISOString().slice(0,10);
-  const blob  = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a     = document.createElement('a');
-  a.href      = URL.createObjectURL(blob);
-  a.download  = `Binnenvaart Noodkaart - ${name} - ${today}.json`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-}
+      function saveToStorage() {
+        try {
+          ;["binnenvaart_noodkaart_v1"].forEach((k) =>
+            localStorage.removeItem(k),
+          )
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormData()))
+          if (!suppressWarningHide)
+            document.getElementById("version-warning").style.display = "none"
+        } catch (e) {}
+      }
 
-function importJSON(e) {
-  const file = e.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    try { applyFormData(JSON.parse(ev.target.result)); }
-    catch(err) { alert('Invalid file — could not load data.'); }
-  };
-  reader.readAsText(file);
-  e.target.value = '';
-}
+      function loadFromStorage() {
+        try {
+          const raw =
+            localStorage.getItem(STORAGE_KEY) ||
+            localStorage.getItem("binnenvaart_noodkaart_v1")
+          if (raw) {
+            applyFormData(JSON.parse(raw))
+            return true
+          }
+        } catch (e) {}
+        return false
+      }
 
-// ══ INIT ════════════════════════════════════════════════════════════
-buildProtocols();
-buildSignals();
-if (!loadFromStorage()) setLang('nl');
-</script>
-</body>
+      function exportJSON() {
+        const data = getFormData()
+        const name = data.name || "noodkaart"
+        const today = new Date().toISOString().slice(0, 10)
+        const blob = new Blob([JSON.stringify(data, null, 2)], {
+          type: "application/json",
+        })
+        const a = document.createElement("a")
+        a.href = URL.createObjectURL(blob)
+        a.download = `Binnenvaart Noodkaart v${CURRENT_VERSION} - ${name} - ${today}.json`
+        a.click()
+        URL.revokeObjectURL(a.href)
+      }
+
+      function importJSON(e) {
+        const file = e.target.files[0]
+        if (!file) return
+        const reader = new FileReader()
+        reader.onload = (ev) => {
+          try {
+            applyFormData(JSON.parse(ev.target.result))
+          } catch (err) {
+            alert("Invalid file — could not load data.")
+          }
+        }
+        reader.readAsText(file)
+        e.target.value = ""
+      }
+
+      // ══ INIT ════════════════════════════════════════════════════════════
+      buildProtocols()
+      buildSignals()
+      if (!loadFromStorage()) setLang("nl")
+    </script>
+  </body>
 </html>
