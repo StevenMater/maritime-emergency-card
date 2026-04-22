@@ -65,7 +65,10 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
-      .editor h1 span {
+      .editor h1 .title-text {
+        color: inherit;
+      }
+      .editor h1 .title-text span {
         color: white;
       }
 
@@ -74,6 +77,12 @@
         gap: 8px;
         flex-wrap: wrap;
         align-items: center;
+        justify-content: space-between;
+      }
+      .btn-group-left {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
       }
       .print-btn {
         font-family: var(--font-sans);
@@ -86,6 +95,9 @@
         padding: 8px 16px;
         cursor: pointer;
         white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
       }
       .print-btn:hover {
         background: #a85b14;
@@ -675,6 +687,26 @@
         }
       }
 
+      @media (max-width: 700px) {
+        .editor-section .btn-group {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .editor-section .btn-group .btn-group-left {
+          display: contents;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .editor-section .btn-group {
+          display: flex;
+          flex-direction: column;
+        }
+        .editor-section .btn-group .btn-group-left {
+          display: contents;
+        }
+      }
+
       @media (max-width: 650px) {
         .editor {
           padding: 10px 14px;
@@ -734,9 +766,6 @@
         }
         .lang-btns {
           margin-left: 0;
-        }
-        .editor-section .btn-group {
-          flex-direction: column;
         }
         .editor-section .btn-group .print-btn,
         .editor-section .btn-group label.print-btn {
@@ -1144,23 +1173,26 @@
 
         <div class="editor-section">
           <div class="btn-group">
-            <button
-              id="btn-save"
-              class="print-btn sec"
-              onclick="exportJSON()"
-              data-i18n="btn_save">
-              💾 Gegevens opslaan
-            </button>
-            <label class="print-btn sec" style="cursor: pointer">
-              <span data-i18n="btn_load">📂 Gegevens laden</span>
-              <input
-                type="file"
-                accept=".json"
-                onchange="importJSON(event)"
-                style="display: none" />
-            </label>
+            <div class="btn-group-left">
+              <button
+                id="btn-save"
+                class="print-btn sec"
+                onclick="exportJSON()"
+                data-i18n="btn_save">
+                💾 Gegevens opslaan
+              </button>
+              <label class="print-btn sec" style="cursor: pointer">
+                <span data-i18n="btn_load">📂 Gegevens laden</span>
+                <input
+                  type="file"
+                  accept=".json"
+                  onchange="importJSON(event)"
+                  style="display: none" />
+              </label>
+            </div>
             <button
               class="print-btn"
+              style="background: #2a9d5c"
               onclick="window.print()"
               data-i18n="btn_print">
               🖨 Afdrukken / PDF
