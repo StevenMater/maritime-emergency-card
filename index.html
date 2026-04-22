@@ -921,15 +921,23 @@
             <div class="fields-row r3">
               <div class="field-group">
                 <label data-i18n="f_name"></label
-                ><input id="f-name" value="" oninput="update()" />
+                ><input
+                  id="f-name"
+                  value=""
+                  maxlength="30"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label data-i18n="f_type"></label
-                ><input id="f-type" value="" oninput="update()" />
+                ><input
+                  id="f-type"
+                  value=""
+                  maxlength="30"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label data-i18n="f_eni"></label
-                ><input id="f-eni" value="" oninput="update()" />
+                ><input id="f-eni" value="" maxlength="30" oninput="update()" />
               </div>
             </div>
             <div class="fields-row r4">
@@ -985,15 +993,27 @@
             <div class="fields-row r3">
               <div class="field-group">
                 <label data-i18n="f_callsign"></label
-                ><input id="f-callsign" value="" oninput="update()" />
+                ><input
+                  id="f-callsign"
+                  value=""
+                  maxlength="30"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label>ATIS</label
-                ><input id="f-atis" value="" oninput="update()" />
+                ><input
+                  id="f-atis"
+                  value=""
+                  maxlength="30"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label>MMSI</label
-                ><input id="f-mmsi" value="" oninput="update()" />
+                ><input
+                  id="f-mmsi"
+                  value=""
+                  maxlength="30"
+                  oninput="update()" />
               </div>
             </div>
           </div>
@@ -1026,21 +1046,37 @@
             <div class="fields-row r2">
               <div class="field-group">
                 <label data-i18n="f_insurer_name"></label
-                ><input id="f-insurer-name" value="" oninput="update()" />
+                ><input
+                  id="f-insurer-name"
+                  value=""
+                  maxlength="15"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label data-i18n="f_policy"></label
-                ><input id="f-policy" value="" oninput="update()" />
+                ><input
+                  id="f-policy"
+                  value=""
+                  maxlength="25"
+                  oninput="update()" />
               </div>
             </div>
             <div class="fields-row r2">
               <div class="field-group">
                 <label data-i18n="f_insurer_emergency"></label
-                ><input id="f-insurer-emergency" value="" oninput="update()" />
+                ><input
+                  id="f-insurer-emergency"
+                  value=""
+                  maxlength="17"
+                  oninput="update()" />
               </div>
               <div class="field-group">
                 <label data-i18n="f_insurer_office"></label
-                ><input id="f-insurer-office" value="" oninput="update()" />
+                ><input
+                  id="f-insurer-office"
+                  value=""
+                  maxlength="17"
+                  oninput="update()" />
               </div>
             </div>
           </div>
@@ -2038,8 +2074,8 @@
           row.className = "contact-row"
           row.innerHTML = `
       <select disabled style="${sStyle(true)}"><option>${fixedRoleLabel(i)}</option></select>
-      <input value="${c.name}" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input value="${c.phone}" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <input value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
       <button class="del-btn" onclick="clearFixed(${i})">×</button>`
           el.appendChild(row)
         })
@@ -2055,8 +2091,8 @@
           )
           .join("")}
       </select>
-      <input value="${c.name}" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input value="${c.phone}" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <input value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
       <button class="del-btn" onclick="removeExtra(${i})">×</button>`
           el.appendChild(row)
         })
