@@ -746,14 +746,7 @@
         }
       }
 
-      @media (max-width: 420px) {
-        .info-block {
-          grid-template-columns: 1fr;
-        }
-        .info-block > div:last-child {
-          border-left: none;
-          padding-left: 0;
-        }
+      @media (max-width: 520px) {
         .fields-row.r2,
         .fields-row.r3,
         .fields-row.r4 {
@@ -761,6 +754,16 @@
         }
         .fields-row.r3 > :last-child {
           grid-column: auto;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .info-block {
+          grid-template-columns: 1fr;
+        }
+        .info-block > div:last-child {
+          border-left: none;
+          padding-left: 0;
         }
       }
 
