@@ -832,12 +832,15 @@
           margin: 0;
         }
       }
-
     </style>
   </head>
   <body>
     <div class="editor">
-      <h1 id="site-title"><span class="title-text">Maritieme Noodkaart <span>Generator</span></span></h1>
+      <h1 id="site-title">
+        <span class="title-text"
+          >Maritieme Noodkaart <span>Generator</span></span
+        >
+      </h1>
       <div class="lang-btns">
         <button
           class="lang-btn active"
@@ -1540,7 +1543,8 @@
           btn_load: "📂 Gegevens laden",
           btn_print: "🖨 Afdrukken / PDF",
           btn_clear: "🗑 Alles wissen",
-          clear_confirm: "Alle gegevens wissen? Dit kan niet ongedaan worden gemaakt.",
+          clear_confirm:
+            "Alle gegevens wissen? Dit kan niet ongedaan worden gemaakt.",
           btn_add_crew: "+ Opvarende toevoegen",
           info_what_title: "Wat is dit?",
           info_what_body:
@@ -1816,7 +1820,8 @@
           btn_load: "📂 Charger",
           btn_print: "🖨 Imprimer / PDF",
           btn_clear: "🗑 Tout effacer",
-          clear_confirm: "Effacer toutes les données ? Cette action est irréversible.",
+          clear_confirm:
+            "Effacer toutes les données ? Cette action est irréversible.",
           btn_add_crew: "+ Ajouter une personne",
           info_what_title: "À quoi sert cet outil?",
           info_what_body:
@@ -1955,7 +1960,8 @@
           btn_load: "📂 Daten laden",
           btn_print: "🖨 Drucken / PDF",
           btn_clear: "🗑 Alles löschen",
-          clear_confirm: "Alle Daten löschen? Dies kann nicht rückgängig gemacht werden.",
+          clear_confirm:
+            "Alle Daten löschen? Dies kann nicht rückgängig gemacht werden.",
           btn_add_crew: "+ Person hinzufügen",
           info_what_title: "Was ist das?",
           info_what_body:
@@ -2116,7 +2122,11 @@
         const parts = siteTitle.split(" ")
         const last = parts.pop()
         document.getElementById("site-title").innerHTML =
-          '<span class="title-text">' + parts.join(" ") + " <span>" + last + "</span></span>"
+          '<span class="title-text">' +
+          parts.join(" ") +
+          " <span>" +
+          last +
+          "</span></span>"
         renderContactEditor()
         buildProtocols()
         buildSignals()
@@ -2188,7 +2198,7 @@
         const arrow = dis
           ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
           : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23444444'/%3E%3C/svg%3E")`
-        return `font-family:var(--font-mono);padding:6px 32px 6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background-color:${dis ? "var(--ui-border)" : "var(--input-bg)"};background-image:${arrow};background-repeat:no-repeat;background-position:right 14px center;-webkit-appearance:none;appearance:none;color:${dis ? "var(--mid)" : "var(--dark)"};outline:none`
+        return `font-family:var(--font-mono);padding:6px 16px 6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background-color:${dis ? "var(--ui-border)" : "var(--input-bg)"};background-image:${arrow};background-repeat:no-repeat;background-position:right 8px center;-webkit-appearance:none;appearance:none;color:${dis ? "var(--mid)" : "var(--dark)"};outline:none`
       }
 
       function extraRoleKeys() {
@@ -2571,11 +2581,27 @@
       function clearAll() {
         if (!confirm(T[currentLang].clear_confirm)) return
         ;[
-          "f-name", "f-type", "f-eni", "f-length", "f-width",
-          "f-draft", "f-airdraft", "f-callsign", "f-atis", "f-mmsi",
-          "f-insurer-name", "f-policy", "f-insurer-emergency", "f-insurer-office",
-        ].forEach((id) => { document.getElementById(id).value = "" })
-        fixedCrew = [{ name: "", phone: "" }, { name: "", phone: "" }]
+          "f-name",
+          "f-type",
+          "f-eni",
+          "f-length",
+          "f-width",
+          "f-draft",
+          "f-airdraft",
+          "f-callsign",
+          "f-atis",
+          "f-mmsi",
+          "f-insurer-name",
+          "f-policy",
+          "f-insurer-emergency",
+          "f-insurer-office",
+        ].forEach((id) => {
+          document.getElementById(id).value = ""
+        })
+        fixedCrew = [
+          { name: "", phone: "" },
+          { name: "", phone: "" },
+        ]
         extraCrew = []
         setLang(currentLang)
       }
