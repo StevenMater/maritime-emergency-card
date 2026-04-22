@@ -196,6 +196,7 @@
         outline: none;
         transition: border-color 0.15s;
       }
+
       .field-group input:focus,
       .field-group select:focus {
         border-color: var(--navy2);
@@ -227,7 +228,7 @@
       .contact-rows {
         display: flex;
         flex-direction: column;
-        gap: 6px;
+        gap: 12px;
         margin-bottom: 8px;
       }
       .contact-row {
@@ -291,6 +292,10 @@
         display: flex;
         justify-content: center;
         padding: 0 16px 32px;
+      }
+      .a4-wrap.scaled .noodkaart {
+        width: 794px;
+        max-width: none;
       }
       .noodkaart {
         width: 794px;
@@ -643,6 +648,122 @@
         margin-top: 7px;
       }
 
+      .info-block {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        align-items: start;
+      }
+
+      .crew-sel {
+        font-size: 12px;
+        width: 120px;
+        min-width: 120px;
+        background: var(--input-bg);
+        color: var(--dark);
+      }
+      .crew-inp {
+        font-size: 13px;
+        flex: 1;
+        background: var(--input-bg);
+        color: var(--dark);
+      }
+
+      @media (max-width: 740px) {
+        .info-block {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 650px) {
+        .editor {
+          padding: 10px 14px;
+          gap: 8px;
+        }
+        .editor h1 {
+          font-size: 10px;
+        }
+        .fields-wrap {
+          padding: 12px 10px 6px;
+        }
+        .editor-section {
+          padding: 10px 14px 12px;
+        }
+        .fields-row.r3,
+        .fields-row.r4 {
+          grid-template-columns: 1fr 1fr;
+        }
+        .fields-row.r3 > :last-child {
+          grid-column: 1 / -1;
+        }
+        .field-group input,
+        .field-group select {
+          font-size: 16px;
+        }
+        .crew-inp,
+        .crew-sel {
+          font-size: 16px;
+        }
+        .contact-row {
+          flex-wrap: wrap;
+          row-gap: 6px;
+        }
+        .crew-sel {
+          flex: 1 1 100%;
+          width: auto;
+          min-width: 0;
+        }
+        .crew-inp {
+          flex: 1;
+          min-width: 0;
+        }
+        .preview-label {
+          display: none;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .editor h1 .title-text {
+          display: none;
+        }
+        .editor h1::before {
+          content: "⚓";
+          font-size: 20px;
+          font-style: normal;
+          letter-spacing: 0;
+        }
+        .lang-btns {
+          margin-left: 0;
+        }
+        .editor-section .btn-group {
+          flex-direction: column;
+        }
+        .editor-section .btn-group .print-btn,
+        .editor-section .btn-group label.print-btn {
+          width: 100%;
+          text-align: center;
+          box-sizing: border-box;
+        }
+      }
+
+      @media (max-width: 420px) {
+        .info-block {
+          grid-template-columns: 1fr;
+        }
+        .info-block > div:last-child {
+          border-left: none;
+          padding-left: 0;
+        }
+        .fields-row.r2,
+        .fields-row.r3,
+        .fields-row.r4 {
+          grid-template-columns: 1fr;
+        }
+        .fields-row.r3 > :last-child {
+          grid-column: auto;
+        }
+      }
+
       @media print {
         * {
           -webkit-print-color-adjust: exact !important;
@@ -672,6 +793,7 @@
           border-radius: 0 !important;
           padding: 10px !important;
           box-shadow: none !important;
+          zoom: 1 !important;
         }
         @page {
           size: A4 portrait;
@@ -679,43 +801,11 @@
         }
       }
 
-      @media (max-width: 650px) {
-        .editor {
-          padding: 10px 14px;
-          gap: 8px;
-        }
-        .editor h1 {
-          font-size: 10px;
-        }
-        .fields-wrap {
-          padding: 12px 10px 6px;
-        }
-        .editor-section {
-          padding: 10px 14px 12px;
-        }
-        .fields-row.r3,
-        .fields-row.r4 {
-          grid-template-columns: 1fr 1fr;
-        }
-        .fields-row.r3 > :last-child {
-          grid-column: 1 / -1;
-        }
-        .preview-label {
-          display: none;
-        }
-        .a4-wrap {
-          padding: 0 0 16px;
-          overflow-x: auto;
-        }
-        .noodkaart {
-          min-width: 600px;
-        }
-      }
     </style>
   </head>
   <body>
     <div class="editor">
-      <h1 id="site-title">Maritieme Noodkaart <span>Generator</span></h1>
+      <h1 id="site-title"><span class="title-text">Maritieme Noodkaart <span>Generator</span></span></h1>
       <div class="lang-btns">
         <button
           class="lang-btn active"
@@ -792,13 +882,9 @@
       style="
         background: var(--navy2);
         padding: 14px 24px;
-        display: flex;
-        gap: 24px;
-        flex-wrap: wrap;
-        align-items: flex-start;
         border-bottom: 3px solid var(--navy);
       ">
-      <div style="flex: 1; min-width: 200px">
+      <div>
         <div
           style="
             font-family: var(--font-mono);
@@ -819,7 +905,7 @@
           "
           data-i18n="info_what_body"></div>
       </div>
-      <div style="flex: 1; min-width: 200px">
+      <div>
         <div
           style="
             font-family: var(--font-mono);
@@ -840,7 +926,7 @@
           "
           data-i18n="info_print_body"></div>
       </div>
-      <div style="flex: 1; min-width: 200px">
+      <div>
         <div
           style="
             font-family: var(--font-mono);
@@ -863,8 +949,6 @@
       </div>
       <div
         style="
-          flex: 1;
-          min-width: 200px;
           border-left: 2px solid rgba(169, 50, 38, 0.6);
           padding-left: 20px;
         ">
@@ -1091,9 +1175,8 @@
     </div>
 
     <p class="preview-label" data-i18n="preview_label"></p>
-
-    <div class="a4-wrap">
-      <div class="noodkaart">
+    <div class="a4-wrap" id="a4-wrap">
+      <div class="noodkaart" id="noodkaart">
         <div class="title-bar">
           <h2 id="nk-title">NOODKAART</h2>
           <small data-i18n="card_subtitle"></small>
@@ -1432,10 +1515,10 @@
             'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong style="color:#FBD38D">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong style="color:#FBD38D">Gegevens laden</strong>.',
           info_print_title: "Afdrukken / PDF maken",
           info_print_body:
-            'Klik op <strong style="color:#FBD38D">Afdrukken / PDF</strong> bovenaan. Kies <strong style="color:#FBD38D">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong style="color:#FBD38D">Achtergronden afdrukken</strong> is ingeschakeld.',
+            'Klik op <strong style="color:#FBD38D">Afdrukken / PDF</strong> onderaan het formulier. Kies <strong style="color:#FBD38D">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong style="color:#FBD38D">Achtergronden afdrukken</strong> is ingeschakeld.',
           warn_title: "Let op — automatisch opslaan is niet 100% veilig",
           warn_body:
-            'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong style="color:#FBD38D">handmatig op te slaan</strong> via de knop bovenaan.',
+            'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong style="color:#FBD38D">handmatig op te slaan</strong> via de knop onderaan het formulier.',
           vw_title: "Verouderde versie geladen",
           vw_body:
             "Je hebt een oudere opgeslagen versie geladen. Alle beschikbare gegevens zijn ingeladen. Sla je gegevens op om te updaten naar de huidige versie.",
@@ -1570,10 +1653,10 @@
             'Your data is automatically saved in this browser. Use <strong style="color:#FBD38D">Save data</strong> to download a backup and load it on another device via <strong style="color:#FBD38D">Load data</strong>.',
           info_print_title: "Print / make PDF",
           info_print_body:
-            'Click <strong style="color:#FBD38D">Print / PDF</strong> at the top. Choose <strong style="color:#FBD38D">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong style="color:#FBD38D">Print backgrounds</strong> is enabled for colours.',
+            'Click <strong style="color:#FBD38D">Print / PDF</strong> at the bottom of the form. Choose <strong style="color:#FBD38D">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong style="color:#FBD38D">Print backgrounds</strong> is enabled for colours.',
           warn_title: "Warning — auto-save is not 100% reliable",
           warn_body:
-            'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong style="color:#FBD38D">saving your data manually</strong> using the button above.',
+            'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong style="color:#FBD38D">saving your data manually</strong> using the button at the bottom of the form.',
           vw_title: "Outdated version loaded",
           vw_body:
             "You have loaded an older saved version. All available data has been loaded. Save your data to update to the current version.",
@@ -1708,11 +1791,11 @@
             'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong style="color:#FBD38D">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong style="color:#FBD38D">Charger</strong>.',
           info_print_title: "Imprimer / créer un PDF",
           info_print_body:
-            'Cliquez sur <strong style="color:#FBD38D">Imprimer / PDF</strong> en haut. Choisissez <strong style="color:#FBD38D">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong style="color:#FBD38D">Imprimer les arrière-plans</strong> est activé.',
+            'Cliquez sur <strong style="color:#FBD38D">Imprimer / PDF</strong> en bas du formulaire. Choisissez <strong style="color:#FBD38D">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong style="color:#FBD38D">Imprimer les arrière-plans</strong> est activé.',
           warn_title:
             "Attention — la sauvegarde automatique n'est pas fiable à 100%",
           warn_body:
-            "Le navigateur peut perdre des données lors d'une mise à jour ou d'un effacement. Nous recommandons toujours de <strong style=\"color:#FBD38D\">sauvegarder manuellement</strong> via le bouton ci-dessus.",
+            "Le navigateur peut perdre des données lors d'une mise à jour ou d'un effacement. Nous recommandons toujours de <strong style=\"color:#FBD38D\">sauvegarder manuellement</strong> via le bouton en bas du formulaire.",
           vw_title: "Version obsolète chargée",
           vw_body:
             "Vous avez chargé une ancienne version sauvegardée. Toutes les données disponibles ont été chargées. Enregistrez vos données pour passer à la version actuelle.",
@@ -1847,10 +1930,10 @@
             'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong style="color:#FBD38D">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong style="color:#FBD38D">Daten laden</strong> einzulesen.',
           info_print_title: "Drucken / PDF erstellen",
           info_print_body:
-            'Klicken Sie oben auf <strong style="color:#FBD38D">Drucken / PDF</strong>. Wählen Sie <strong style="color:#FBD38D">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong style="color:#FBD38D">Hintergründe drucken</strong> aktiviert ist.',
+            'Klicken Sie unten im Formular auf <strong style="color:#FBD38D">Drucken / PDF</strong>. Wählen Sie <strong style="color:#FBD38D">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong style="color:#FBD38D">Hintergründe drucken</strong> aktiviert ist.',
           warn_title: "Achtung — automatisches Speichern ist nicht 100% sicher",
           warn_body:
-            'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong style="color:#FBD38D">manuell zu speichern</strong> über die Schaltfläche oben.',
+            'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong style="color:#FBD38D">manuell zu speichern</strong> über die Schaltfläche unten im Formular.',
           vw_title: "Veraltete Version geladen",
           vw_body:
             "Sie haben eine ältere gespeicherte Version geladen. Alle verfügbaren Daten wurden geladen. Speichern Sie Ihre Daten, um auf die aktuelle Version zu aktualisieren.",
@@ -1998,7 +2081,7 @@
         const parts = siteTitle.split(" ")
         const last = parts.pop()
         document.getElementById("site-title").innerHTML =
-          parts.join(" ") + " <span>" + last + "</span>"
+          '<span class="title-text">' + parts.join(" ") + " <span>" + last + "</span></span>"
         renderContactEditor()
         buildProtocols()
         buildSignals()
@@ -2064,10 +2147,13 @@
       let extraCrew = []
 
       function iStyle() {
-        return "font-family:var(--font-mono);font-size:13px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:var(--input-bg);color:var(--dark);outline:none;flex:1"
+        return "font-family:var(--font-mono);padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;outline:none"
       }
       function sStyle(dis) {
-        return `font-family:var(--font-mono);font-size:12px;padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background:${dis ? "var(--ui-border)" : "var(--input-bg)"};color:${dis ? "var(--mid)" : "var(--dark)"};outline:none;min-width:120px;width:120px;${dis ? "appearance:none;-webkit-appearance:none;" : ""}`
+        const arrow = dis
+          ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
+          : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23444444'/%3E%3C/svg%3E")`
+        return `font-family:var(--font-mono);padding:6px 32px 6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background-color:${dis ? "var(--ui-border)" : "var(--input-bg)"};background-image:${arrow};background-repeat:no-repeat;background-position:right 14px center;-webkit-appearance:none;appearance:none;color:${dis ? "var(--mid)" : "var(--dark)"};outline:none`
       }
 
       function extraRoleKeys() {
@@ -2087,9 +2173,9 @@
           const row = document.createElement("div")
           row.className = "contact-row"
           row.innerHTML = `
-      <select disabled style="${sStyle(true)}"><option>${fixedRoleLabel(i)}</option></select>
-      <input value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <select class="crew-sel" disabled style="${sStyle(true)}"><option>${fixedRoleLabel(i)}</option></select>
+      <input class="crew-inp" value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
       <button class="del-btn" onclick="clearFixed(${i})">×</button>`
           el.appendChild(row)
         })
@@ -2097,7 +2183,7 @@
           const row = document.createElement("div")
           row.className = "contact-row"
           row.innerHTML = `
-      <select onchange="extraCrew[${i}].role=this.value;update()" style="${sStyle(false)}">
+      <select class="crew-sel" onchange="extraCrew[${i}].role=this.value;update()" style="${sStyle(false)}">
         ${extraRoleKeys()
           .map(
             (k) =>
@@ -2105,8 +2191,8 @@
           )
           .join("")}
       </select>
-      <input value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <input class="crew-inp" value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
+      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
       <button class="del-btn" onclick="removeExtra(${i})">×</button>`
           el.appendChild(row)
         })
@@ -2474,11 +2560,31 @@
         e.target.value = ""
       }
 
+      // ══ PREVIEW SCALE ═══════════════════════════════════════════════════
+      const CARD_W = 794
+      const CARD_MARGIN = 32
+
+      function updatePreviewScale() {
+        const wrap = document.getElementById("a4-wrap")
+        const card = document.getElementById("noodkaart")
+        const available = document.documentElement.clientWidth
+        if (available >= CARD_W + CARD_MARGIN) {
+          wrap.classList.remove("scaled")
+          card.style.zoom = ""
+        } else {
+          wrap.classList.add("scaled")
+          card.style.zoom = (available - CARD_MARGIN) / CARD_W
+        }
+      }
+
+      window.addEventListener("resize", updatePreviewScale)
+
       // ══ INIT ════════════════════════════════════════════════════════════
       document.getElementById("site-version").textContent = CURRENT_VERSION
       buildProtocols()
       buildSignals()
       if (!loadFromStorage()) setLang("nl")
+      updatePreviewScale()
     </script>
   </body>
 </html>
