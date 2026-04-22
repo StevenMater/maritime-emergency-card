@@ -716,29 +716,6 @@
   <body>
     <div class="editor">
       <h1 id="site-title">Maritieme Noodkaart <span>Generator</span></h1>
-      <div class="btn-group">
-        <button
-          id="btn-save"
-          class="print-btn sec"
-          onclick="exportJSON()"
-          data-i18n="btn_save">
-          💾 Gegevens opslaan
-        </button>
-        <label class="print-btn sec" style="cursor: pointer">
-          <span data-i18n="btn_load">📂 Gegevens laden</span>
-          <input
-            type="file"
-            accept=".json"
-            onchange="importJSON(event)"
-            style="display: none" />
-        </label>
-        <button
-          class="print-btn"
-          onclick="window.print()"
-          data-i18n="btn_print">
-          🖨 Afdrukken / PDF
-        </button>
-      </div>
       <div class="lang-btns">
         <button
           class="lang-btn active"
@@ -1077,6 +1054,39 @@
             </div>
           </div>
         </div>
+
+        <div class="editor-section">
+          <div class="btn-group">
+            <button
+              id="btn-save"
+              class="print-btn sec"
+              onclick="exportJSON()"
+              data-i18n="btn_save">
+              💾 Gegevens opslaan
+            </button>
+            <label class="print-btn sec" style="cursor: pointer">
+              <span data-i18n="btn_load">📂 Gegevens laden</span>
+              <input
+                type="file"
+                accept=".json"
+                onchange="importJSON(event)"
+                style="display: none" />
+            </label>
+            <button
+              class="print-btn"
+              onclick="window.print()"
+              data-i18n="btn_print">
+              🖨 Afdrukken / PDF
+            </button>
+            <button
+              class="print-btn"
+              style="background: var(--red)"
+              onclick="clearAll()"
+              data-i18n="btn_clear">
+              🗑 Alles wissen
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1401,7 +1411,7 @@
       ">
       <span data-i18n="footer_made"></span>
       <span style="color: var(--mid); font-weight: 600">Steven de Lange</span>
-      &nbsp;·&nbsp; v4 &nbsp;·&nbsp; 2026
+      &nbsp;·&nbsp; v<span id="site-version"></span> &nbsp;·&nbsp; 2026
     </footer>
 
     <script>
@@ -1411,6 +1421,8 @@
           btn_save: "💾 Gegevens opslaan",
           btn_load: "📂 Gegevens laden",
           btn_print: "🖨 Afdrukken / PDF",
+          btn_clear: "🗑 Alles wissen",
+          clear_confirm: "Alle gegevens wissen? Dit kan niet ongedaan worden gemaakt.",
           btn_add_crew: "+ Opvarende toevoegen",
           info_what_title: "Wat is dit?",
           info_what_body:
@@ -1547,6 +1559,8 @@
           btn_save: "💾 Save data",
           btn_load: "📂 Load data",
           btn_print: "🖨 Print / PDF",
+          btn_clear: "🗑 Clear all",
+          clear_confirm: "Clear all data? This cannot be undone.",
           btn_add_crew: "+ Add crew member",
           info_what_title: "What is this?",
           info_what_body:
@@ -1683,6 +1697,8 @@
           btn_save: "💾 Enregistrer",
           btn_load: "📂 Charger",
           btn_print: "🖨 Imprimer / PDF",
+          btn_clear: "🗑 Tout effacer",
+          clear_confirm: "Effacer toutes les données ? Cette action est irréversible.",
           btn_add_crew: "+ Ajouter une personne",
           info_what_title: "À quoi sert cet outil?",
           info_what_body:
@@ -1820,6 +1836,8 @@
           btn_save: "💾 Daten speichern",
           btn_load: "📂 Daten laden",
           btn_print: "🖨 Drucken / PDF",
+          btn_clear: "🗑 Alles löschen",
+          clear_confirm: "Alle Daten löschen? Dies kann nicht rückgängig gemacht werden.",
           btn_add_crew: "+ Person hinzufügen",
           info_what_title: "Was ist das?",
           info_what_body:
@@ -2279,7 +2297,7 @@
       }
 
       // ══ STORAGE ═══════════════════════════════════════════════════════════
-      const CURRENT_VERSION = 4
+      const CURRENT_VERSION = 5
       const STORAGE_KEY = "binnenvaart_noodkaart"
 
       function getFormData() {
@@ -2348,8 +2366,6 @@
         return { data: m, outdated: true }
       }
 
-      let suppressWarningHide = false
-
       function showVersionWarning() {
         const t = T[currentLang]
         const el = document.getElementById("version-warning")
@@ -2390,10 +2406,7 @@
               b.getAttribute("onclick") === `setLang('${currentLang}')`,
             ),
           )
-        // suppress banner hide during the setLang → saveToStorage call triggered by loading
-        suppressWarningHide = true
         setLang(currentLang)
-        suppressWarningHide = false
         if (outdated) showVersionWarning()
       }
 
@@ -2403,8 +2416,6 @@
             localStorage.removeItem(k),
           )
           localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormData()))
-          if (!suppressWarningHide)
-            document.getElementById("version-warning").style.display = "none"
         } catch (e) {}
       }
 
@@ -2433,6 +2444,19 @@
         a.download = `Binnenvaart Noodkaart v${CURRENT_VERSION} - ${name} - ${today}.json`
         a.click()
         URL.revokeObjectURL(a.href)
+        document.getElementById("version-warning").style.display = "none"
+      }
+
+      function clearAll() {
+        if (!confirm(T[currentLang].clear_confirm)) return
+        ;[
+          "f-name", "f-type", "f-eni", "f-length", "f-width",
+          "f-draft", "f-airdraft", "f-callsign", "f-atis", "f-mmsi",
+          "f-insurer-name", "f-policy", "f-insurer-emergency", "f-insurer-office",
+        ].forEach((id) => { document.getElementById(id).value = "" })
+        fixedCrew = [{ name: "", phone: "" }, { name: "", phone: "" }]
+        extraCrew = []
+        setLang(currentLang)
       }
 
       function importJSON(e) {
@@ -2451,6 +2475,7 @@
       }
 
       // ══ INIT ════════════════════════════════════════════════════════════
+      document.getElementById("site-version").textContent = CURRENT_VERSION
       buildProtocols()
       buildSignals()
       if (!loadFromStorage()) setLang("nl")
