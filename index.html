@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Binnenvaart Noodkaart Generator</title>
+    <title>Maritieme Noodkaart</title>
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚓</text></svg>" />
@@ -517,7 +517,7 @@
       .proto-rows td {
         height: 26px;
         padding: 0 6px;
-        font-size: 10px;
+        font-size: 9.5px;
         vertical-align: middle;
       }
       .nr-badge {
@@ -622,7 +622,7 @@
         display: flex;
         align-items: center;
         gap: 3px;
-        width: 76px;
+        width: 104px;
         flex-shrink: 0;
       }
       .g-L {
@@ -762,7 +762,7 @@
           letter-spacing: 0;
         }
         .lang-btns {
-          margin-left: 0;
+          margin-left: auto;
         }
         .editor-section .btn-group .print-btn,
         .editor-section .btn-group label.print-btn {
@@ -816,8 +816,9 @@
           display: block;
         }
         .noodkaart {
-          width: 100% !important;
-          height: 100vh !important;
+          width: 210mm !important;
+          height: 297mm !important;
+          overflow: hidden !important;
           border: none !important;
           border-radius: 0 !important;
           padding: 10px !important;
@@ -1530,6 +1531,9 @@
       <span data-i18n="footer_made"></span>
       <span style="color: var(--mid); font-weight: 600">Steven de Lange</span>
       &nbsp;·&nbsp; v<span id="site-version"></span> &nbsp;·&nbsp; 2026
+      <br>
+      <span data-i18n="footer_feedback"></span>
+      <a href="mailto:stevenmater@gmail.com" style="color: var(--mid)">stevenmater@gmail.com</a>
     </footer>
 
     <script>
@@ -1545,7 +1549,7 @@
           btn_add_crew: "+ Opvarende toevoegen",
           info_what_title: "Wat is dit?",
           info_what_body:
-            "Een generator voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water.",
+            "Een generator voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water. Deze kaart is ingericht voor het vaargebied Nederland.",
           info_save_title: "Gegevens opslaan & laden",
           info_save_body:
             'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong style="color:#FBD38D">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong style="color:#FBD38D">Gegevens laden</strong>.',
@@ -1582,7 +1586,7 @@
           role_child: "Kind",
           role_pet: "Huisdier",
           contact_placeholder: "Contact (optioneel)",
-          card_subtitle: "Houd dit document bereikbaar tijdens het varen",
+          card_subtitle: "Houd dit document bereikbaar tijdens het varen — Vaargebied 🇳🇱",
           card_ship: "SCHEEPSGEGEVENS",
           card_crew: "OPVARENDEN",
           card_insurer: "VERZEKERAAR",
@@ -1643,11 +1647,11 @@
             "Reddingsvlot / -sloep klaarmaken als situatie escaleert",
           ],
           mob: [
-            'Roep "MAN OVERBOORD" — laat iemand de persoon niet uit het oog verliezen',
-            "Gooi reddingsmiddelen toe (boei, lijn, jerrycan)",
+            'Roep "MAN OVERBOORD" — verlies de drenkeling niet uit het oog en blijf wijzen',
+            "Mik een reddingsboei op het hoofd van de drenkeling — gooi ook lijn of jerrycan",
             "Noteer of onthoud de GPS-positie",
             "MAYDAY via marifoon — geef positie en aantal opvarenden door",
-            "Vaar terug — benadering met de wind mee, motor uitzetten bij de persoon",
+            "Vaar terug — benadering met de wind mee, motor aanlaten, schroef uit werk bij de persoon",
             "Persoon aan boord krijgen — warmte, droge kleding, medische check",
           ],
           sig_xs: "zeer kort",
@@ -1657,7 +1661,7 @@
           sig_secs: "seconden",
           signals: [
             'Attentiesein ("let op")',
-            "Noodsein (schip in nood)",
+            "Noodsein (schip in nood) — min. 6 stoten",
             "Gevaar voor aanvaring",
             "Blijf-weg sein (brand/explosie) — herhaald ≥ 15 min",
             "Ik ga stuurboordszijde uit",
@@ -1673,6 +1677,10 @@
           ],
           footer_text:
             "Noodkaart {name} | Controleer regelmatig of gegevens nog actueel zijn | Afgedrukt op {date}",
+          location_label: "Vaargebied",
+          location_flag: "🇳🇱",
+          info_what_body_location: "Deze kaart is ingericht voor het vaargebied Nederland.",
+          footer_feedback: "Feedback? Mail me op",
         },
         en: {
           btn_save: "💾 Save data",
@@ -1683,7 +1691,7 @@
           btn_add_crew: "+ Add crew member",
           info_what_title: "What is this?",
           info_what_body:
-            "A generator for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water.",
+            "A generator for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water. This card is configured for the Netherlands.",
           info_save_title: "Save & load data",
           info_save_body:
             'Your data is automatically saved in this browser. Use <strong style="color:#FBD38D">Save data</strong> to download a backup and load it on another device via <strong style="color:#FBD38D">Load data</strong>.',
@@ -1720,7 +1728,7 @@
           role_child: "Child",
           role_pet: "Pet",
           contact_placeholder: "Contact (optional)",
-          card_subtitle: "Keep this document accessible while sailing",
+          card_subtitle: "Keep this document accessible while sailing — Sailing area 🇳🇱",
           card_ship: "VESSEL DETAILS",
           card_crew: "PERSONS ON BOARD",
           card_insurer: "INSURER",
@@ -1781,11 +1789,11 @@
             "Prepare liferaft / dinghy if situation escalates",
           ],
           mob: [
-            'Shout "MAN OVERBOARD" — keep the person in sight at all times',
-            "Throw flotation aids (buoy, line, jerrycan)",
+            'Shout "MAN OVERBOARD" — keep eyes on the person and keep pointing',
+            "Aim a lifebuoy at the head of the person in the water — also throw a line or jerrycan",
             "Note or memorise GPS position",
             "MAYDAY on radio — report position and number of persons on board",
-            "Return to person — approach downwind, cut engine near person",
+            "Return to person — approach downwind, keep engine running, put propeller out of gear near person",
             "Get person on board — warmth, dry clothes, medical check",
           ],
           sig_xs: "very short",
@@ -1795,7 +1803,7 @@
           sig_secs: "seconds",
           signals: [
             'Attention signal ("watch out")',
-            "Distress signal (vessel in distress)",
+            "Distress signal (vessel in distress) — min. 6 blasts",
             "Danger of collision",
             "Keep-clear signal (fire/explosion) — repeated ≥ 15 min",
             "I am turning to starboard",
@@ -1811,6 +1819,10 @@
           ],
           footer_text:
             "Emergency card {name} | Check regularly that data is still current | Printed on {date}",
+          location_label: "Sailing area",
+          location_flag: "🇳🇱",
+          info_what_body_location: "This card is configured for the Netherlands.",
+          footer_feedback: "Feedback? Mail me at",
         },
         fr: {
           btn_save: "💾 Enregistrer",
@@ -1822,7 +1834,7 @@
           btn_add_crew: "+ Ajouter une personne",
           info_what_title: "À quoi sert cet outil?",
           info_what_body:
-            "Un générateur de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau.",
+            "Un générateur de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau. Cette carte est configurée pour les Pays-Bas.",
           info_save_title: "Enregistrer & charger",
           info_save_body:
             'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong style="color:#FBD38D">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong style="color:#FBD38D">Charger</strong>.',
@@ -1860,7 +1872,7 @@
           role_child: "Enfant",
           role_pet: "Animal",
           contact_placeholder: "Contact (optionnel)",
-          card_subtitle: "Gardez ce document accessible pendant la navigation",
+          card_subtitle: "Gardez ce document accessible pendant la navigation — Zone de navigation 🇳🇱",
           card_ship: "DONNÉES DU NAVIRE",
           card_crew: "PERSONNES À BORD",
           card_insurer: "ASSUREUR",
@@ -1921,11 +1933,11 @@
             "Préparer le radeau / annexe si la situation s'aggrave",
           ],
           mob: [
-            'Crier "HOMME À LA MER" — garder la personne en vue en permanence',
-            "Lancer des équipements de flottaison (bouée, cordage, jerrican)",
+            'Crier "HOMME À LA MER" — ne pas perdre la personne de vue et continuer à indiquer sa position',
+            "Viser la tête de la personne avec une bouée de sauvetage — jeter aussi une ligne ou un jerrican",
             "Noter ou mémoriser la position GPS",
             "MAYDAY à la radio — signaler la position et le nombre de personnes à bord",
-            "Revenir vers la personne — approche sous le vent, couper le moteur près de la personne",
+            "Revenir vers la personne — approche sous le vent, garder le moteur allumé, désengager l'hélice près de la personne",
             "Récupérer la personne — chaleur, vêtements secs, contrôle médical",
           ],
           sig_xs: "très court",
@@ -1935,7 +1947,7 @@
           sig_secs: "secondes",
           signals: [
             'Signal d\'attention ("attention")',
-            "Signal de détresse (navire en détresse)",
+            "Signal de détresse (navire en détresse) — min. 6 sons",
             "Danger de collision",
             'Signal "restez à l\'écart" (feu/explosion) — répété ≥ 15 min',
             "Je vire à tribord",
@@ -1951,6 +1963,10 @@
           ],
           footer_text:
             "Carte d'urgence {name} | Vérifiez régulièrement que les données sont à jour | Imprimé le {date}",
+          location_label: "Zone de navigation",
+          location_flag: "🇳🇱",
+          info_what_body_location: "Cette carte est configurée pour les Pays-Bas.",
+          footer_feedback: "Feedback? Écrivez-moi à",
         },
         de: {
           btn_save: "💾 Daten speichern",
@@ -1962,7 +1978,7 @@
           btn_add_crew: "+ Person hinzufügen",
           info_what_title: "Was ist das?",
           info_what_body:
-            "Ein Generator für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen.",
+            "Ein Generator für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen. Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           info_save_title: "Daten speichern & laden",
           info_save_body:
             'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong style="color:#FBD38D">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong style="color:#FBD38D">Daten laden</strong> einzulesen.',
@@ -2000,7 +2016,7 @@
           role_pet: "Haustier",
           contact_placeholder: "Kontakt (optional)",
           card_subtitle:
-            "Halten Sie dieses Dokument während der Fahrt griffbereit",
+            "Halten Sie dieses Dokument während der Fahrt griffbereit — Fahrtgebiet 🇳🇱",
           card_ship: "SCHIFFSDATEN",
           card_crew: "PERSONEN AN BORD",
           card_insurer: "VERSICHERER",
@@ -2062,11 +2078,11 @@
             "Rettungsinsel / Beiboot vorbereiten, falls Lage eskaliert",
           ],
           mob: [
-            'Ruf "MANN ÜBER BORD" — Person immer im Blick behalten',
-            "Rettungsmittel zuwerfen (Boje, Leine, Kanister)",
+            'Ruf "MANN ÜBER BORD" — Person nicht aus den Augen verlieren und weiter zeigen',
+            "Rettungsring auf den Kopf der Person zielen — auch Leine oder Kanister zuwerfen",
             "GPS-Position notieren oder merken",
             "MAYDAY über Funk — Position und Personenzahl durchgeben",
-            "Zur Person zurückfahren — Ansteuerung mit dem Wind, Motor neben der Person abstellen",
+            "Zur Person zurückfahren — Ansteuerung mit dem Wind, Motor laufen lassen, Schraube außer Eingriff setzen",
             "Person an Bord holen — Wärme, trockene Kleidung, medizinische Versorgung",
           ],
           sig_xs: "sehr kurz",
@@ -2076,7 +2092,7 @@
           sig_secs: "Sekunden",
           signals: [
             'Aufmerksamkeitssignal ("Achtung")',
-            "Notsignal (Schiff in Not)",
+            "Notsignal (Schiff in Not) — mind. 6 Töne",
             "Kollisionsgefahr",
             "Freihaltezeichen (Feuer/Explosion) — wiederholt ≥ 15 min",
             "Ich weiche nach Steuerbord aus",
@@ -2092,6 +2108,10 @@
           ],
           footer_text:
             "Notfallkarte {name} | Überprüfen Sie regelmäßig, ob die Daten noch aktuell sind | Gedruckt am {date}",
+          location_label: "Fahrtgebiet",
+          location_flag: "🇳🇱",
+          info_what_body_location: "Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
+          footer_feedback: "Feedback? Schreib mir an",
         },
       }
 
@@ -2277,7 +2297,7 @@
       // ══ SOUND SIGNALS ════════════════════════════════════════════════════
       const SIGNAL_PATTERNS = [
         ["L"],
-        ["L", "L", "L"],
+        ["L", "L", "L", "L", "L", "L"],
         ["XS", "XS", "XS", "XS", "XS", "XS"],
         ["S", "L"],
         ["S"],
@@ -2315,6 +2335,59 @@
         })
       }
 
+      // ══ FORMATTERS ════════════════════════════════════════════════════════
+      function formatMMSI(v) {
+        const d = (v || "").replace(/\D/g, "")
+        if (d.length !== 9) return v || "—"
+        return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`
+      }
+      function formatENI(v) {
+        const d = (v || "").replace(/\D/g, "")
+        if (d.length !== 8) return v || "—"
+        return `${d.slice(0, 4)} ${d.slice(4)}`
+      }
+      function formatATIS(v) {
+        const d = (v || "").replace(/\D/g, "")
+        if (d.length === 9) return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`
+        if (d.length === 10) return `${d.slice(0, 4)} ${d.slice(4, 7)} ${d.slice(7)}`
+        return v || "—"
+      }
+      // Dutch 2-digit NDCs (area codes without leading 0, 7-digit subscriber)
+      const NL_2DIGIT_NDC = new Set([
+        10, 13, 15, 20, 23, 24, 26, 30, 33, 35, 36, 38,
+        40, 43, 45, 46, 50, 53, 55, 58,
+        70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+      ])
+      function formatPhone(v) {
+        if (!v) return "—"
+        const s = v.trim()
+        if (s.startsWith("+")) return s  // already international
+        const d = s.replace(/\D/g, "")
+        if (!d) return s
+        if (d.length !== 10 || !d.startsWith("0")) return s  // unexpected format, return as-is
+        // Mobile: 06-XXXXXXXX → +31 6 XX XX XX XX
+        if (d.startsWith("06"))
+          return `+31 6 ${d.slice(2, 4)} ${d.slice(4, 6)} ${d.slice(6, 8)} ${d.slice(8)}`
+        // Special (0800, 0900, etc.): keep as national
+        if (/^0[89]0/.test(d)) return s
+        // National (085, 088, etc.): +31 XX XXX XXXX
+        if (/^0(8[4-9])/.test(d)) {
+          const ndc = d.slice(1, 3), sub = d.slice(3)
+          return `+31 ${ndc} ${sub.slice(0, 3)} ${sub.slice(3)}`
+        }
+        // Geographic: detect area code length via NDC lookup
+        const nsn = d.slice(1)  // 9 digits without leading 0
+        const ndc2 = parseInt(nsn.slice(0, 2), 10)
+        if (NL_2DIGIT_NDC.has(ndc2)) {
+          // 2-digit area code, 7-digit subscriber: +31 XX XXX XX XX
+          const sub = nsn.slice(2)
+          return `+31 ${nsn.slice(0, 2)} ${sub.slice(0, 3)} ${sub.slice(3, 5)} ${sub.slice(5)}`
+        }
+        // 3-digit area code, 6-digit subscriber: +31 XXX XX XX XX
+        const sub = nsn.slice(3)
+        return `+31 ${nsn.slice(0, 3)} ${sub.slice(0, 2)} ${sub.slice(2, 4)} ${sub.slice(4)}`
+      }
+
       // ══ UPDATE ═══════════════════════════════════════════════════════════
       function update() {
         const t = T[currentLang]
@@ -2342,14 +2415,14 @@
 
         document.getElementById("r-name").textContent = dash(name)
         document.getElementById("r-type").textContent = dash(type)
-        document.getElementById("r-eni").textContent = dash(eni)
+        document.getElementById("r-eni").textContent = formatENI(eni)
         document.getElementById("r-length").textContent = fmt(length)
         document.getElementById("r-width").textContent = fmt(width)
         document.getElementById("r-draft").textContent = fmt(draft)
         document.getElementById("r-airdraft").textContent = fmt(airdraft)
         document.getElementById("r-callsign").textContent = dash(callsign)
-        document.getElementById("r-atis").textContent = dash(atis)
-        document.getElementById("r-mmsi").textContent = dash(mmsi)
+        document.getElementById("r-atis").textContent = formatATIS(atis)
+        document.getElementById("r-mmsi").textContent = formatMMSI(mmsi)
 
         // Crew — always 7 rows
         const tbl = document.getElementById("r-crew")
@@ -2366,7 +2439,7 @@
           tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
           if (i < allCrew.length) {
             const c = allCrew[i]
-            tr.innerHTML = `<td class="c30">${c.displayRole}</td><td class="c40" style="font-weight:700">${c.name || "—"}</td><td class="c30 right">${c.phone || "—"}</td>`
+            tr.innerHTML = `<td class="c30">${c.displayRole}</td><td class="c40" style="font-weight:700">${c.name || "—"}</td><td class="c30 right">${formatPhone(c.phone)}</td>`
           } else {
             tr.innerHTML = `<td class="c30" style="color:var(--lgray)">—</td><td class="c40" style="color:var(--lgray)">—</td><td class="c30 right" style="color:var(--lgray)">—</td>`
           }
@@ -2376,8 +2449,8 @@
         document.getElementById("r-insurer-name").textContent = dash(insName)
         document.getElementById("r-policy").textContent = dash(policy)
         document.getElementById("r-insurer-emergency").textContent =
-          dash(insEmerg)
-        document.getElementById("r-insurer-office").textContent = dash(insOff)
+          formatPhone(insEmerg)
+        document.getElementById("r-insurer-office").textContent = formatPhone(insOff)
         document.getElementById("r-insurer-badge1").textContent = insName || "—"
         document.getElementById("r-insurer-badge2").textContent = insName || "—"
 
@@ -2392,7 +2465,7 @@
         // Title + footer
         const displayName = name || "Noodkaart"
         document.getElementById("nk-title").textContent =
-          displayName.toUpperCase() + " — " + t.card_title
+          name ? name.toUpperCase() + " — " + t.card_title : t.card_title
 
         // Enable/disable save button based on whether any data has been entered
         const hasData = [
@@ -2419,14 +2492,14 @@
         document.getElementById("nk-footer").textContent = t.footer_text
           .replace("{name}", displayName)
           .replace("{date}", date)
-        document.title = `Binnenvaart Noodkaart - ${displayName} - ${dateISO}`
+        document.title = `Maritieme Noodkaart${name ? " — " + name : ""}`
 
         saveToStorage()
       }
 
       // ══ STORAGE ═══════════════════════════════════════════════════════════
-      const CURRENT_VERSION = 5
-      const STORAGE_KEY = "binnenvaart_noodkaart"
+      const CURRENT_VERSION = 6
+      const STORAGE_KEY = "maritieme_noodkaart"
 
       function getFormData() {
         return {
@@ -2540,7 +2613,7 @@
 
       function saveToStorage() {
         try {
-          ;["binnenvaart_noodkaart_v1"].forEach((k) =>
+          ;["binnenvaart_noodkaart", "binnenvaart_noodkaart_v1"].forEach((k) =>
             localStorage.removeItem(k),
           )
           localStorage.setItem(STORAGE_KEY, JSON.stringify(getFormData()))
@@ -2551,6 +2624,7 @@
         try {
           const raw =
             localStorage.getItem(STORAGE_KEY) ||
+            localStorage.getItem("binnenvaart_noodkaart") ||
             localStorage.getItem("binnenvaart_noodkaart_v1")
           if (raw) {
             applyFormData(JSON.parse(raw))
@@ -2569,7 +2643,7 @@
         })
         const a = document.createElement("a")
         a.href = URL.createObjectURL(blob)
-        a.download = `Binnenvaart Noodkaart v${CURRENT_VERSION} - ${name} - ${today}.json`
+        a.download = `Maritieme Noodkaart v${CURRENT_VERSION} - ${name} - ${today}.json`
         a.click()
         URL.revokeObjectURL(a.href)
         document.getElementById("version-warning").style.display = "none"
