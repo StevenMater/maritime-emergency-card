@@ -327,21 +327,44 @@
       .title-bar {
         background: var(--navy);
         border-radius: 4px;
-        padding: 7px 11px;
+        padding: 5px 11px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         margin-bottom: 10px;
         min-height: 34px;
       }
-      .title-bar h2 {
-        font-size: 15px;
+      .title-left {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+      }
+      #nk-vessel-name {
+        font-size: 13px;
         font-weight: 700;
         color: white;
+        line-height: 1.2;
       }
-      .title-bar small {
+      .title-bar h2 {
+        font-size: 8.5px;
+        font-weight: 600;
+        color: #a8c4e0;
+        letter-spacing: 0.06em;
+        line-height: 1.2;
+      }
+      .title-right {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 2px;
+        text-align: right;
+        flex-shrink: 0;
+        max-width: 200px;
+      }
+      .title-right small {
         font-size: 8.5px;
         color: #a8c4e0;
+        line-height: 1.2;
       }
 
       .sec-hdr {
@@ -655,7 +678,7 @@
       .nk-footer {
         font-size: 7px;
         font-style: italic;
-        color: var(--lgray);
+        color: var(--mid);
         text-align: center;
         margin-top: 7px;
       }
@@ -1214,8 +1237,14 @@
     <div class="a4-wrap" id="a4-wrap">
       <div class="noodkaart" id="noodkaart">
         <div class="title-bar">
-          <h2 id="nk-title">NOODKAART</h2>
-          <small data-i18n="card_subtitle"></small>
+          <div class="title-left">
+            <div id="nk-vessel-name"></div>
+            <h2 id="nk-title"></h2>
+          </div>
+          <div class="title-right">
+            <small data-i18n="card_subtitle"></small>
+            <small id="nk-location-display"></small>
+          </div>
         </div>
 
         <div
@@ -1586,7 +1615,7 @@
           role_child: "Kind",
           role_pet: "Huisdier",
           contact_placeholder: "Contact (optioneel)",
-          card_subtitle: "Houd dit document bereikbaar tijdens het varen — Vaargebied 🇳🇱",
+          card_subtitle: "Houd dit document bereikbaar tijdens het varen",
           card_ship: "SCHEEPSGEGEVENS",
           card_crew: "OPVARENDEN",
           card_insurer: "VERZEKERAAR",
@@ -1676,8 +1705,9 @@
             "Ik ga een haven in over bakboord",
           ],
           footer_text:
-            "Noodkaart {name} | Controleer regelmatig of gegevens nog actueel zijn | Afgedrukt op {date}",
+            "Controleer regelmatig of gegevens nog actueel zijn | Afgedrukt op {date} | www.maritiemenoodkaart.nl",
           location_label: "Vaargebied",
+          location_name: "Nederland",
           location_flag: "🇳🇱",
           info_what_body_location: "Deze kaart is ingericht voor het vaargebied Nederland.",
           footer_feedback: "Feedback? Mail me op",
@@ -1728,7 +1758,7 @@
           role_child: "Child",
           role_pet: "Pet",
           contact_placeholder: "Contact (optional)",
-          card_subtitle: "Keep this document accessible while sailing — Sailing area 🇳🇱",
+          card_subtitle: "Keep this document accessible while sailing",
           card_ship: "VESSEL DETAILS",
           card_crew: "PERSONS ON BOARD",
           card_insurer: "INSURER",
@@ -1818,8 +1848,9 @@
             "I am entering harbour via port",
           ],
           footer_text:
-            "Emergency card {name} | Check regularly that data is still current | Printed on {date}",
+            "Check regularly that data is still current | Printed on {date} | www.maritiemenoodkaart.nl",
           location_label: "Sailing area",
+          location_name: "Netherlands",
           location_flag: "🇳🇱",
           info_what_body_location: "This card is configured for the Netherlands.",
           footer_feedback: "Feedback? Mail me at",
@@ -1872,7 +1903,7 @@
           role_child: "Enfant",
           role_pet: "Animal",
           contact_placeholder: "Contact (optionnel)",
-          card_subtitle: "Gardez ce document accessible pendant la navigation — Zone de navigation 🇳🇱",
+          card_subtitle: "Gardez ce document accessible pendant la navigation",
           card_ship: "DONNÉES DU NAVIRE",
           card_crew: "PERSONNES À BORD",
           card_insurer: "ASSUREUR",
@@ -1962,8 +1993,9 @@
             "J'entre au port par bâbord",
           ],
           footer_text:
-            "Carte d'urgence {name} | Vérifiez régulièrement que les données sont à jour | Imprimé le {date}",
+            "Vérifiez régulièrement que les données sont à jour | Imprimé le {date} | www.maritiemenoodkaart.nl",
           location_label: "Zone de navigation",
+          location_name: "Pays-Bas",
           location_flag: "🇳🇱",
           info_what_body_location: "Cette carte est configurée pour les Pays-Bas.",
           footer_feedback: "Feedback? Écrivez-moi à",
@@ -2016,7 +2048,7 @@
           role_pet: "Haustier",
           contact_placeholder: "Kontakt (optional)",
           card_subtitle:
-            "Halten Sie dieses Dokument während der Fahrt griffbereit — Fahrtgebiet 🇳🇱",
+            "Halten Sie dieses Dokument während der Fahrt griffbereit",
           card_ship: "SCHIFFSDATEN",
           card_crew: "PERSONEN AN BORD",
           card_insurer: "VERSICHERER",
@@ -2107,8 +2139,9 @@
             "Ich laufe einen Hafen über Backbord an",
           ],
           footer_text:
-            "Notfallkarte {name} | Überprüfen Sie regelmäßig, ob die Daten noch aktuell sind | Gedruckt am {date}",
+            "Überprüfen Sie regelmäßig, ob die Daten noch aktuell sind | Gedruckt am {date} | www.maritiemenoodkaart.nl",
           location_label: "Fahrtgebiet",
+          location_name: "Niederlande",
           location_flag: "🇳🇱",
           info_what_body_location: "Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           footer_feedback: "Feedback? Schreib mir an",
@@ -2464,8 +2497,12 @@
 
         // Title + footer
         const displayName = name || "Noodkaart"
-        document.getElementById("nk-title").textContent =
-          name ? name.toUpperCase() + " — " + t.card_title : t.card_title
+        document.getElementById("nk-title").textContent = t.card_title
+        const vesselNameEl = document.getElementById("nk-vessel-name")
+        vesselNameEl.textContent = name ? name.toUpperCase() : ""
+        vesselNameEl.style.display = name ? "" : "none"
+        document.getElementById("nk-location-display").textContent =
+          t.location_label + ": " + t.location_name + " " + t.location_flag
 
         // Enable/disable save button based on whether any data has been entered
         const hasData = [
@@ -2490,7 +2527,6 @@
         )
         const dateISO = now.toISOString().slice(0, 10)
         document.getElementById("nk-footer").textContent = t.footer_text
-          .replace("{name}", displayName)
           .replace("{date}", date)
         document.title = `Maritieme Noodkaart${name ? " — " + name : ""}`
 
