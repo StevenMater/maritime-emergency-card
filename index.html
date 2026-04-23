@@ -25,8 +25,9 @@
         --dark: #111111;
         --mid: #444444;
         --lgray: #aaaaaa;
-        --brand-red: #7b241c;
-        --mob-blue: #1a5276;
+        --brand-red: #6b1212;
+        --mob-blue: #1a7fc4;
+        --insurer: #4a0970;
         --mob-bg: #eaf2f8;
         --mob-bg2: #d6eaf8;
         --white: #ffffff;
@@ -359,7 +360,7 @@
         gap: 2px;
         text-align: right;
         flex-shrink: 0;
-        max-width: 200px;
+        max-width: 260px;
       }
       .title-right small {
         font-size: 8.5px;
@@ -380,7 +381,7 @@
         letter-spacing: 0.03em;
       }
       .sec-hdr.green {
-        background: var(--green);
+        background: var(--insurer);
       }
       .sec-hdr.red {
         background: var(--red);
@@ -455,6 +456,13 @@
       }
 
       .oproepen-wrap {
+      }
+      .calls-lang-note {
+        font-size: 7.5px;
+        font-weight: 400;
+        font-style: italic;
+        opacity: 0.75;
+        margin-left: 8px;
       }
       .oproepen-grid {
         display: grid;
@@ -1375,13 +1383,11 @@
                   <td class="c25">
                     <span
                       class="pill"
-                      style="background: var(--navy)"
+                      style="background: var(--red)"
                       data-i18n="pill_emergency"></span>
                   </td>
                   <td class="c45" data-i18n="h_cg"></td>
-                  <td class="c30 right" style="color: var(--navy)">
-                    0900-0111
-                  </td>
+                  <td class="c30 right" style="color: var(--red)">0900-0111</td>
                 </tr>
                 <tr>
                   <td class="c25">
@@ -1409,7 +1415,7 @@
                   <td class="c25">
                     <span
                       class="pill"
-                      style="background: var(--orange)"
+                      style="background: var(--insurer)"
                       id="r-insurer-badge1"
                       >—</span
                     >
@@ -1417,7 +1423,7 @@
                   <td class="c45" data-i18n="h_insurer_emergency"></td>
                   <td
                     class="c30 right"
-                    style="color: var(--orange)"
+                    style="color: var(--insurer)"
                     id="r-insurer-emergency">
                     —
                   </td>
@@ -1426,7 +1432,7 @@
                   <td class="c25">
                     <span
                       class="pill"
-                      style="background: var(--mid)"
+                      style="background: var(--insurer)"
                       id="r-insurer-badge2"
                       >—</span
                     >
@@ -1434,7 +1440,7 @@
                   <td class="c45" data-i18n="h_insurer_office"></td>
                   <td
                     class="c30 right"
-                    style="color: var(--mid)"
+                    style="color: var(--insurer)"
                     id="r-insurer-office">
                     —
                   </td>
@@ -1444,7 +1450,12 @@
           </div>
 
           <div class="oproepen-wrap">
-            <div class="sec-hdr red" data-i18n="card_calls"></div>
+            <div class="sec-hdr red">
+              <span data-i18n="card_calls"></span>
+              <span
+                class="calls-lang-note"
+                data-i18n="calls_english_note"></span>
+            </div>
             <div class="oproepen-grid">
               <div class="oproep">
                 <div class="oproep-hdr mayday">
@@ -1456,20 +1467,23 @@
                     MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY
                   </div>
                   <div class="call-line">
-                    <span data-i18n="call_here"></span>
-                    <span id="m-name">—</span>,
-                    <span data-i18n="call_callsign"></span>
-                    <span id="m-callsign-fon">—</span>
+                    This is &nbsp;<span id="m-name">—</span> &nbsp;<span
+                      id="m-name2"
+                      >—</span
+                    >
+                    &nbsp;<span id="m-name3">—</span>
                   </div>
                   <div class="call-line bold-red">
-                    MAYDAY &nbsp; <span id="m-name2">—</span>
+                    MAYDAY &nbsp;—&nbsp; <span id="m-name4">—</span>
                   </div>
-                  <div class="call-line" data-i18n="call_pos"></div>
-                  <div class="call-line" data-i18n="call_mayday_sit"></div>
                   <div class="call-line">
-                    <span data-i18n="call_pob"></span> &nbsp;—&nbsp;
-                    <span data-i18n="call_help"></span> &nbsp;—&nbsp;
-                    <span data-i18n="call_over"></span>
+                    position [GPS coordinates or landmark]
+                  </div>
+                  <div class="call-line">
+                    [nature of distress: fire / sinking / man overboard]
+                  </div>
+                  <div class="call-line">
+                    [number of persons on board] &nbsp;—&nbsp; OVER
                   </div>
                 </div>
               </div>
@@ -1483,20 +1497,23 @@
                     PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN
                   </div>
                   <div class="call-line">
-                    <span data-i18n="call_here"></span>
-                    <span id="p-name">—</span>,
-                    <span data-i18n="call_callsign"></span>
-                    <span id="p-callsign-fon">—</span>
+                    This is &nbsp;<span id="p-name">—</span> &nbsp;<span
+                      id="p-name2"
+                      >—</span
+                    >
+                    &nbsp;<span id="p-name3">—</span>
                   </div>
                   <div class="call-line bold-orange">
-                    PAN PAN &nbsp; <span id="p-name2">—</span>
+                    PAN PAN &nbsp;—&nbsp; <span id="p-name4">—</span>
                   </div>
-                  <div class="call-line" data-i18n="call_pos"></div>
-                  <div class="call-line" data-i18n="call_panpan_sit"></div>
                   <div class="call-line">
-                    <span data-i18n="call_pob"></span> &nbsp;—&nbsp;
-                    <span data-i18n="call_assist"></span> &nbsp;—&nbsp;
-                    <span data-i18n="call_over"></span>
+                    position [GPS coordinates or landmark]
+                  </div>
+                  <div class="call-line">
+                    [nature of urgency: engine failure / medical situation]
+                  </div>
+                  <div class="call-line">
+                    [number of persons on board] &nbsp;—&nbsp; OVER
                   </div>
                 </div>
               </div>
@@ -1560,9 +1577,11 @@
       <span data-i18n="footer_made"></span>
       <span style="color: var(--mid); font-weight: 600">Steven de Lange</span>
       &nbsp;·&nbsp; v<span id="site-version"></span> &nbsp;·&nbsp; 2026
-      <br>
+      <br />
       <span data-i18n="footer_feedback"></span>
-      <a href="mailto:stevenmater@gmail.com" style="color: var(--mid)">stevenmater@gmail.com</a>
+      <a href="mailto:stevenmater@gmail.com" style="color: var(--mid)"
+        >stevenmater@gmail.com</a
+      >
     </footer>
 
     <script>
@@ -1625,6 +1644,8 @@
           card_title: "MARITIEME NOODKAART",
           site_title: "Maritieme Noodkaart Generator",
           card_calls: "NOODOPROEPEN",
+          calls_english_note:
+            "Noodoproepen worden internationaal in het Engels gedaan.",
           card_fire: "BRAND AAN BOORD — ACTIEPROTOCOL",
           card_mob: "MAN OVERBOORD — ACTIEPROTOCOL",
           card_signals: "GELUIDSSIGNALEN (BPR)",
@@ -1709,7 +1730,8 @@
           location_label: "Vaargebied",
           location_name: "Nederland",
           location_flag: "🇳🇱",
-          info_what_body_location: "Deze kaart is ingericht voor het vaargebied Nederland.",
+          info_what_body_location:
+            "Deze kaart is ingericht voor het vaargebied Nederland.",
           footer_feedback: "Feedback? Mail me op",
         },
         en: {
@@ -1768,6 +1790,8 @@
           card_title: "MARITIME EMERGENCY CARD",
           site_title: "Maritime Emergency Card Generator",
           card_calls: "EMERGENCY CALLS",
+          calls_english_note:
+            "Emergency calls are made internationally in English.",
           card_fire: "FIRE ON BOARD — ACTION PROTOCOL",
           card_mob: "MAN OVERBOARD — ACTION PROTOCOL",
           card_signals: "SOUND SIGNALS (BPR)",
@@ -1852,7 +1876,8 @@
           location_label: "Sailing area",
           location_name: "Netherlands",
           location_flag: "🇳🇱",
-          info_what_body_location: "This card is configured for the Netherlands.",
+          info_what_body_location:
+            "This card is configured for the Netherlands.",
           footer_feedback: "Feedback? Mail me at",
         },
         fr: {
@@ -1911,6 +1936,8 @@
           card_channels: "CANAUX D'URGENCE (VHF)",
           card_numbers: "NUMÉROS D'URGENCE",
           card_calls: "APPELS D'URGENCE",
+          calls_english_note:
+            "Les appels de détresse se font internationalement en anglais.",
           card_title: "CARTE D'URGENCE MARITIME",
           site_title: "Générateur de Carte Maritime",
           card_fire: "INCENDIE À BORD — PROTOCOLE D'ACTION",
@@ -1997,7 +2024,8 @@
           location_label: "Zone de navigation",
           location_name: "Pays-Bas",
           location_flag: "🇳🇱",
-          info_what_body_location: "Cette carte est configurée pour les Pays-Bas.",
+          info_what_body_location:
+            "Cette carte est configurée pour les Pays-Bas.",
           footer_feedback: "Feedback? Écrivez-moi à",
         },
         de: {
@@ -2058,6 +2086,8 @@
           card_title: "MARITIME NOTFALLKARTE",
           site_title: "Maritime Notfallkarte Generator",
           card_calls: "NOTRUFE",
+          calls_english_note:
+            "Notrufe werden international auf Englisch durchgeführt.",
           card_fire: "FEUER AN BORD — AKTIONSPROTOKOLL",
           card_mob: "MANN ÜBER BORD — AKTIONSPROTOKOLL",
           card_signals: "SCHALLZEICHEN (BPR)",
@@ -2143,7 +2173,8 @@
           location_label: "Fahrtgebiet",
           location_name: "Niederlande",
           location_flag: "🇳🇱",
-          info_what_body_location: "Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
+          info_what_body_location:
+            "Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           footer_feedback: "Feedback? Schreib mir an",
         },
       }
@@ -2214,16 +2245,16 @@
         X: "X-ray",
         Y: "Yankee",
         Z: "Zulu",
-        0: "nul",
-        1: "een",
-        2: "twee",
-        3: "drie",
-        4: "vier",
-        5: "vijf",
-        6: "zes",
-        7: "zeven",
-        8: "acht",
-        9: "negen",
+        0: "Zero",
+        1: "One",
+        2: "Two",
+        3: "Three",
+        4: "Four",
+        5: "Five",
+        6: "Six",
+        7: "Seven",
+        8: "Eight",
+        9: "Niner",
       }
       function toFonetic(s) {
         return s
@@ -2381,23 +2412,24 @@
       }
       function formatATIS(v) {
         const d = (v || "").replace(/\D/g, "")
-        if (d.length === 9) return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`
-        if (d.length === 10) return `${d.slice(0, 4)} ${d.slice(4, 7)} ${d.slice(7)}`
+        if (d.length === 9)
+          return `${d.slice(0, 3)} ${d.slice(3, 6)} ${d.slice(6)}`
+        if (d.length === 10)
+          return `${d.slice(0, 4)} ${d.slice(4, 7)} ${d.slice(7)}`
         return v || "—"
       }
       // Dutch 2-digit NDCs (area codes without leading 0, 7-digit subscriber)
       const NL_2DIGIT_NDC = new Set([
-        10, 13, 15, 20, 23, 24, 26, 30, 33, 35, 36, 38,
-        40, 43, 45, 46, 50, 53, 55, 58,
-        70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
+        10, 13, 15, 20, 23, 24, 26, 30, 33, 35, 36, 38, 40, 43, 45, 46, 50, 53,
+        55, 58, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
       ])
       function formatPhone(v) {
         if (!v) return "—"
         const s = v.trim()
-        if (s.startsWith("+")) return s  // already international
+        if (s.startsWith("+")) return s // already international
         const d = s.replace(/\D/g, "")
         if (!d) return s
-        if (d.length !== 10 || !d.startsWith("0")) return s  // unexpected format, return as-is
+        if (d.length !== 10 || !d.startsWith("0")) return s // unexpected format, return as-is
         // Mobile: 06-XXXXXXXX → +31 6 XX XX XX XX
         if (d.startsWith("06"))
           return `+31 6 ${d.slice(2, 4)} ${d.slice(4, 6)} ${d.slice(6, 8)} ${d.slice(8)}`
@@ -2405,11 +2437,12 @@
         if (/^0[89]0/.test(d)) return s
         // National (085, 088, etc.): +31 XX XXX XXXX
         if (/^0(8[4-9])/.test(d)) {
-          const ndc = d.slice(1, 3), sub = d.slice(3)
+          const ndc = d.slice(1, 3),
+            sub = d.slice(3)
           return `+31 ${ndc} ${sub.slice(0, 3)} ${sub.slice(3)}`
         }
         // Geographic: detect area code length via NDC lookup
-        const nsn = d.slice(1)  // 9 digits without leading 0
+        const nsn = d.slice(1) // 9 digits without leading 0
         const ndc2 = parseInt(nsn.slice(0, 2), 10)
         if (NL_2DIGIT_NDC.has(ndc2)) {
           // 2-digit area code, 7-digit subscriber: +31 XX XXX XX XX
@@ -2483,16 +2516,23 @@
         document.getElementById("r-policy").textContent = dash(policy)
         document.getElementById("r-insurer-emergency").textContent =
           formatPhone(insEmerg)
-        document.getElementById("r-insurer-office").textContent = formatPhone(insOff)
+        document.getElementById("r-insurer-office").textContent =
+          formatPhone(insOff)
         document.getElementById("r-insurer-badge1").textContent = insName || "—"
         document.getElementById("r-insurer-badge2").textContent = insName || "—"
 
         // Emergency calls
-        ;["m-name", "m-name2", "p-name", "p-name2"].forEach(
+        ;[
+          "m-name",
+          "m-name2",
+          "m-name3",
+          "m-name4",
+          "p-name",
+          "p-name2",
+          "p-name3",
+          "p-name4",
+        ].forEach(
           (id) => (document.getElementById(id).textContent = dash(name)),
-        )
-        ;["m-callsign-fon", "p-callsign-fon"].forEach(
-          (id) => (document.getElementById(id).textContent = fon),
         )
 
         // Title + footer
@@ -2526,8 +2566,8 @@
           { day: "numeric", month: "long", year: "numeric" },
         )
         const dateISO = now.toISOString().slice(0, 10)
-        document.getElementById("nk-footer").textContent = t.footer_text
-          .replace("{date}", date)
+        document.getElementById("nk-footer").textContent =
+          t.footer_text.replace("{date}", date)
         document.title = `Maritieme Noodkaart${name ? " — " + name : ""}`
 
         saveToStorage()
