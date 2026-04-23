@@ -306,17 +306,17 @@
         justify-content: center;
         padding: 0 16px 32px;
       }
-      .a4-wrap.scaled .noodkaart {
+      .a4-wrap.scaled .emergency-card {
         width: 794px;
         max-width: none;
       }
-      .noodkaart {
+      .emergency-card {
         width: 794px;
         max-width: 100%;
         background: white;
         border: 2px solid var(--navy);
         border-radius: 6px;
-        padding: 14px;
+        padding: 10px;
         font-family: var(--font-sans);
         font-size: 10.5px;
         line-height: 1.3;
@@ -332,7 +332,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-bottom: 10px;
+        margin-bottom: 2px;
         min-height: 34px;
       }
       .title-left {
@@ -340,7 +340,7 @@
         flex-direction: column;
         gap: 1px;
       }
-      #nk-vessel-name {
+      #vessel-name {
         font-size: 13px;
         font-weight: 700;
         color: white;
@@ -453,9 +453,6 @@
         text-align: right;
         font-weight: 700;
         font-size: 10px;
-      }
-
-      .oproepen-wrap {
       }
       .calls-lang-note {
         font-size: 7.5px;
@@ -683,7 +680,7 @@
         color: var(--dark);
         white-space: nowrap;
       }
-      .nk-footer {
+      .card-footer {
         font-size: 7px;
         font-style: italic;
         color: var(--mid);
@@ -846,7 +843,7 @@
           padding: 0;
           display: block;
         }
-        .noodkaart {
+        .emergency-card {
           width: 210mm !important;
           height: 297mm !important;
           overflow: hidden !important;
@@ -1243,15 +1240,15 @@
 
     <p class="preview-label" data-i18n="preview_label"></p>
     <div class="a4-wrap" id="a4-wrap">
-      <div class="noodkaart" id="noodkaart">
+      <div class="emergency-card" id="emergency-card">
         <div class="title-bar">
           <div class="title-left">
-            <div id="nk-vessel-name"></div>
-            <h2 id="nk-title"></h2>
+            <div id="vessel-name"></div>
+            <h2 id="card-title"></h2>
           </div>
           <div class="title-right">
             <small data-i18n="card_subtitle"></small>
-            <small id="nk-location-display"></small>
+            <small id="location-display"></small>
           </div>
         </div>
 
@@ -1473,9 +1470,11 @@
                     >
                     &nbsp;<span id="m-name3">—</span>
                   </div>
+                  <div class="call-line" id="m-callsign1">—</div>
                   <div class="call-line bold-red">
                     MAYDAY &nbsp;—&nbsp; <span id="m-name4">—</span>
                   </div>
+                  <div class="call-line" id="m-callsign2">—</div>
                   <div class="call-line">
                     position [GPS coordinates or landmark]
                   </div>
@@ -1503,9 +1502,11 @@
                     >
                     &nbsp;<span id="p-name3">—</span>
                   </div>
+                  <div class="call-line" id="p-callsign1">—</div>
                   <div class="call-line bold-orange">
                     PAN PAN &nbsp;—&nbsp; <span id="p-name4">—</span>
                   </div>
+                  <div class="call-line" id="p-callsign2">—</div>
                   <div class="call-line">
                     position [GPS coordinates or landmark]
                   </div>
@@ -1558,7 +1559,7 @@
           </div>
         </div>
         <!-- end space-between wrapper -->
-        <div class="nk-footer" id="nk-footer"></div>
+        <div class="card-footer" id="card-footer"></div>
       </div>
     </div>
 
@@ -2217,7 +2218,7 @@
         saveToStorage()
       }
 
-      // ══ NATO ════════════════════════════════════════════════════════════
+      // ══ NATO PHONETIC ═══════════════════════════════════════════════════
       const NATO = {
         A: "Alfa",
         B: "Bravo",
@@ -2256,7 +2257,7 @@
         8: "Eight",
         9: "Niner",
       }
-      function toFonetic(s) {
+      function toPhonetic(s) {
         return s
           .toUpperCase()
           .split("")
@@ -2266,6 +2267,7 @@
 
       // ══ CONTACTS ════════════════════════════════════════════════════════
       const MAX_EXTRA = 5
+      const CREW_ROWS = 7
       let fixedCrew = [
         { role: "skipper", name: "", phone: "" },
         { role: "mate", name: "", phone: "" },
@@ -2477,8 +2479,6 @@
           return isNaN(n) ? "0,00" : n.toFixed(2).replace(".", ",")
         }
         const dash = (v) => v || "—"
-        const fon = callsign ? toFonetic(callsign) : "—"
-
         document.getElementById("r-name").textContent = dash(name)
         document.getElementById("r-type").textContent = dash(type)
         document.getElementById("r-eni").textContent = formatENI(eni)
@@ -2490,7 +2490,7 @@
         document.getElementById("r-atis").textContent = formatATIS(atis)
         document.getElementById("r-mmsi").textContent = formatMMSI(mmsi)
 
-        // Crew — always 7 rows
+        // Crew — always CREW_ROWS rows
         const tbl = document.getElementById("r-crew")
         while (tbl.rows.length > 1) tbl.deleteRow(1)
         const allCrew = [
@@ -2500,7 +2500,7 @@
           })),
           ...extraCrew.map((c) => ({ ...c, displayRole: roleLabel(c.role) })),
         ]
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < CREW_ROWS; i++) {
           const tr = tbl.insertRow()
           tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
           if (i < allCrew.length) {
@@ -2534,14 +2534,17 @@
         ].forEach(
           (id) => (document.getElementById(id).textContent = dash(name)),
         )
+        const phonetic = callsign ? toPhonetic(callsign) : "—"
+        ;["m-callsign1", "m-callsign2", "p-callsign1", "p-callsign2"].forEach(
+          (id) => (document.getElementById(id).textContent = phonetic),
+        )
 
         // Title + footer
-        const displayName = name || "Noodkaart"
-        document.getElementById("nk-title").textContent = t.card_title
-        const vesselNameEl = document.getElementById("nk-vessel-name")
+        document.getElementById("card-title").textContent = t.card_title
+        const vesselNameEl = document.getElementById("vessel-name")
         vesselNameEl.textContent = name ? name.toUpperCase() : ""
         vesselNameEl.style.display = name ? "" : "none"
-        document.getElementById("nk-location-display").textContent =
+        document.getElementById("location-display").textContent =
           t.location_label + ": " + t.location_name + " " + t.location_flag
 
         // Enable/disable save button based on whether any data has been entered
@@ -2565,8 +2568,7 @@
           currentLang === "nl" ? "nl-NL" : currentLang,
           { day: "numeric", month: "long", year: "numeric" },
         )
-        const dateISO = now.toISOString().slice(0, 10)
-        document.getElementById("nk-footer").textContent =
+        document.getElementById("card-footer").textContent =
           t.footer_text.replace("{date}", date)
         document.title = `Maritieme Noodkaart${name ? " — " + name : ""}`
 
@@ -2712,7 +2714,7 @@
 
       function exportJSON() {
         const data = getFormData()
-        const name = data.name || "noodkaart"
+        const name = data.name || "emergency-card"
         const today = new Date().toISOString().slice(0, 10)
         const blob = new Blob([JSON.stringify(data, null, 2)], {
           type: "application/json",
@@ -2746,8 +2748,8 @@
           document.getElementById(id).value = ""
         })
         fixedCrew = [
-          { name: "", phone: "" },
-          { name: "", phone: "" },
+          { role: "skipper", name: "", phone: "" },
+          { role: "mate", name: "", phone: "" },
         ]
         extraCrew = []
         setLang(currentLang)
@@ -2775,7 +2777,7 @@
 
       function updatePreviewScale() {
         const wrap = document.getElementById("a4-wrap")
-        const card = document.getElementById("noodkaart")
+        const card = document.getElementById("emergency-card")
         const available = document.documentElement.clientWidth
 
         if (available >= CARD_W + CARD_MARGIN) {
