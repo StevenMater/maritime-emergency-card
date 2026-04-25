@@ -457,9 +457,10 @@
       .calls-lang-note {
         font-size: 7.5px;
         font-weight: 400;
-        font-style: italic;
+        font-style: normal;
         opacity: 0.75;
         margin-left: 8px;
+        text-transform: uppercase;
       }
       .oproepen-grid {
         display: grid;
@@ -505,6 +506,9 @@
       }
       .call-line {
         color: var(--dark);
+      }
+      .call-hint {
+        font-style: italic;
       }
       .call-line.bold-red {
         font-weight: 700;
@@ -1449,9 +1453,9 @@
           <div class="oproepen-wrap">
             <div class="sec-hdr red">
               <span data-i18n="card_calls"></span>
-              <span
-                class="calls-lang-note"
-                data-i18n="calls_english_note"></span>
+              <span class="calls-lang-note"
+                >⚠️ <span data-i18n="calls_english_note"></span
+              ></span>
             </div>
             <div class="oproepen-grid">
               <div class="oproep">
@@ -1476,13 +1480,15 @@
                   </div>
                   <div class="call-line" id="m-callsign2">—</div>
                   <div class="call-line">
-                    position [GPS coordinates or landmark]
+                    Position
+                    <span class="call-hint" data-i18n="call_pos"></span>
                   </div>
+                  <div
+                    class="call-line call-hint"
+                    data-i18n="call_mayday_sit"></div>
                   <div class="call-line">
-                    [nature of distress: fire / sinking / man overboard]
-                  </div>
-                  <div class="call-line">
-                    [number of persons on board] &nbsp;—&nbsp; OVER
+                    <span class="call-hint" data-i18n="call_pob"></span>
+                    &nbsp;—&nbsp; OVER
                   </div>
                 </div>
               </div>
@@ -1508,13 +1514,15 @@
                   </div>
                   <div class="call-line" id="p-callsign2">—</div>
                   <div class="call-line">
-                    position [GPS coordinates or landmark]
+                    Position
+                    <span class="call-hint" data-i18n="call_pos"></span>
                   </div>
+                  <div
+                    class="call-line call-hint"
+                    data-i18n="call_panpan_sit"></div>
                   <div class="call-line">
-                    [nature of urgency: engine failure / medical situation]
-                  </div>
-                  <div class="call-line">
-                    [number of persons on board] &nbsp;—&nbsp; OVER
+                    <span class="call-hint" data-i18n="call_pob"></span>
+                    &nbsp;—&nbsp; OVER
                   </div>
                 </div>
               </div>
@@ -1646,7 +1654,7 @@
           site_title: "Maritieme Noodkaart Generator",
           card_calls: "NOODOPROEPEN",
           calls_english_note:
-            "Noodoproepen worden internationaal in het Engels gedaan.",
+            "Noodoproepen worden internationaal in het Engels gedaan. — Zend <em>[tekst tussen haakjes]</em> in het Engels uit.",
           card_fire: "BRAND AAN BOORD — ACTIEPROTOCOL",
           card_mob: "MAN OVERBOORD — ACTIEPROTOCOL",
           card_signals: "GELUIDSSIGNALEN (BPR)",
@@ -1672,18 +1680,16 @@
           h_cg: "Kustwacht (geen marifoon)",
           h_112: "Ambulance / Brandweer",
           h_rmd: "RMD medisch advies (KNRM)",
-          h_insurer_emergency: "Verzekeraar spoed (24/7)",
+          h_insurer_emergency: "Verzekeraar nood (24/7)",
           h_insurer_office: "Verzekeraar kantoor",
           mayday_when: "Levensgevaar: zinken / brand / man overboord",
           panpan_when: "Spoed: motorpech / medisch niet-acuut",
           call_here: "Hier",
           call_callsign: "roepnaam",
-          call_pos: "Mijn positie is: [GPS-coordinaten of herkenningspunt]",
-          call_mayday_sit:
-            "Wat er aan de hand is: [brand / zinken / man overboord]",
-          call_panpan_sit:
-            "Wat er aan de hand is: [motorpech / medische situatie]",
-          call_pob: "[Personen + dieren aan boord]",
+          call_pos: "[GPS-coordinaten of herkenningspunt]",
+          call_mayday_sit: "[zinken / brand / man overboord]",
+          call_panpan_sit: "[motorpech / medische situatie]",
+          call_pob: "[personen + dieren aan boord]",
           call_help: "Hulp nodig",
           call_assist: "Assistentie",
           call_over: "Over",
@@ -1792,7 +1798,7 @@
           site_title: "Maritime Emergency Card Generator",
           card_calls: "EMERGENCY CALLS",
           calls_english_note:
-            "Emergency calls are made internationally in English.",
+            "Emergency calls are made internationally in English. — Broadcast <em>[bracketed text]</em> in English.",
           card_fire: "FIRE ON BOARD — ACTION PROTOCOL",
           card_mob: "MAN OVERBOARD — ACTION PROTOCOL",
           card_signals: "SOUND SIGNALS (BPR)",
@@ -1824,12 +1830,10 @@
           panpan_when: "Urgent: engine failure / medical non-critical",
           call_here: "This is",
           call_callsign: "call sign",
-          call_pos: "My position is: [GPS coordinates or landmark]",
-          call_mayday_sit:
-            "Nature of distress: [fire / sinking / man overboard]",
-          call_panpan_sit:
-            "Nature of urgency: [engine failure / medical situation]",
-          call_pob: "[Persons + animals on board]",
+          call_pos: "[GPS coordinates or landmark]",
+          call_mayday_sit: "[sinking / fire / man overboard]",
+          call_panpan_sit: "[engine failure / medical situation]",
+          call_pob: "[persons + animals on board]",
           call_help: "Require assistance",
           call_assist: "Require assistance",
           call_over: "Over",
@@ -1938,7 +1942,7 @@
           card_numbers: "NUMÉROS D'URGENCE",
           card_calls: "APPELS D'URGENCE",
           calls_english_note:
-            "Les appels de détresse se font internationalement en anglais.",
+            "Les appels de détresse se font internationalement en anglais. — Transmettez <em>[texte entre crochets]</em> en anglais.",
           card_title: "CARTE D'URGENCE MARITIME",
           site_title: "Générateur de Carte Maritime",
           card_fire: "INCENDIE À BORD — PROTOCOLE D'ACTION",
@@ -1972,12 +1976,10 @@
           panpan_when: "Urgence: panne moteur / médical non critique",
           call_here: "Ici",
           call_callsign: "indicatif",
-          call_pos: "Ma position est: [coordonnées GPS ou point de repère]",
-          call_mayday_sit:
-            "Nature du sinistre: [incendie / naufrage / homme à la mer]",
-          call_panpan_sit:
-            "Nature de l'urgence: [panne moteur / situation médicale]",
-          call_pob: "[Personnes + animaux à bord]",
+          call_pos: "[coordonnées GPS ou point de repère]",
+          call_mayday_sit: "[naufrage / incendie / homme à la mer]",
+          call_panpan_sit: "[panne moteur / situation médicale]",
+          call_pob: "[personnes + animaux à bord]",
           call_help: "Besoin d'aide",
           call_assist: "Besoin d'assistance",
           call_over: "Terminé",
@@ -2088,7 +2090,7 @@
           site_title: "Maritime Notfallkarte Generator",
           card_calls: "NOTRUFE",
           calls_english_note:
-            "Notrufe werden international auf Englisch durchgeführt.",
+            "Notrufe werden international auf Englisch durchgeführt. — Übermitteln Sie <em>[Text in Klammern]</em> auf Englisch.",
           card_fire: "FEUER AN BORD — AKTIONSPROTOKOLL",
           card_mob: "MANN ÜBER BORD — AKTIONSPROTOKOLL",
           card_signals: "SCHALLZEICHEN (BPR)",
@@ -2120,12 +2122,9 @@
           panpan_when: "Dringend: Motorausfall / medizinisch nicht kritisch",
           call_here: "Hier",
           call_callsign: "Rufzeichen",
-          call_pos:
-            "Meine Position ist: [GPS-Koordinaten oder Orientierungspunkt]",
-          call_mayday_sit:
-            "Art des Notfalls: [Feuer / sinken / Mann über Bord]",
-          call_panpan_sit:
-            "Art der Dringlichkeit: [Motorausfall / medizinische Situation]",
+          call_pos: "[GPS-Koordinaten oder Orientierungspunkt]",
+          call_mayday_sit: "[sinken / Feuer / Mann über Bord]",
+          call_panpan_sit: "[Motorausfall / medizinische Situation]",
           call_pob: "[Personen + Tiere an Bord]",
           call_help: "Benötige Hilfe",
           call_assist: "Benötige Assistenz",
@@ -2570,7 +2569,15 @@
         )
         document.getElementById("card-footer").textContent =
           t.footer_text.replace("{date}", date)
-        document.title = `Maritieme Noodkaart${name ? " — " + name : ""}`
+        const dateISO = now.toISOString().slice(0, 10)
+        document.title = [
+          "Maritieme Noodkaart",
+          name || null,
+          dateISO,
+          currentLang.toUpperCase(),
+        ]
+          .filter(Boolean)
+          .join(" - ")
 
         saveToStorage()
       }
