@@ -830,7 +830,8 @@
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
-        html, body {
+        html,
+        body {
           width: 210mm;
           margin: 0;
           padding: 0;
@@ -847,7 +848,6 @@
         .a4-wrap {
           display: block !important;
           width: 210mm !important;
-          height: 297mm !important;
           padding: 0 !important;
           margin: 0 !important;
           overflow: visible !important;
@@ -861,13 +861,11 @@
           padding: 10px !important;
           box-shadow: none !important;
           transform: none !important;
-          transform-origin: initial !important;
           page-break-inside: avoid;
           break-inside: avoid;
         }
         body.printing-ios .emergency-card {
-          transform: scale(0.90) !important;
-          transform-origin: top left !important;
+          zoom: 0.92 !important;
         }
         @page {
           size: A4 portrait;
