@@ -627,7 +627,7 @@
         })
         document.querySelectorAll("[data-tip-i18n]").forEach((el) => {
           const key = el.getAttribute("data-tip-i18n")
-          if (T[lang][key] !== undefined) el.setAttribute("data-tip", T[lang][key])
+          if (T[lang][key] !== undefined) el.setAttribute("title", T[lang][key])
         })
         document.querySelectorAll("[data-i18n-title]").forEach((el) => {
           const key = el.getAttribute("data-i18n-title")
