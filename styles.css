@@ -8,8 +8,8 @@
         --red: #a93226;
         --red-bg: #fdecea;
         --red-bg2: #f5c6c2;
-        --orange: #ca6f1e;
-        --org-bg: #fef3e8;
+        --amber: #a07000;
+        --org-bg: #fdf8ec;
         --green: #1e6b3c;
         --alt: #eef3f8;
         --dark: #111111;
@@ -25,6 +25,15 @@
         --input-bdr: #a8c4e0;
         --ui-bg: #f4f7fa;
         --ui-border: #d0dbe8;
+        --inp-font: var(--font-mono);
+        --inp-size: 13px;
+        --inp-pad: 7px 10px;
+        --inp-border: 1.5px solid var(--input-bdr);
+        --inp-radius: 4px;
+        --inp-bg: var(--input-bg);
+        --inp-color: var(--dark);
+        --inp-focus-color: var(--navy2);
+        --inp-focus-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
       }
       * {
         box-sizing: border-box;
@@ -86,7 +95,7 @@
         font-family: var(--font-sans);
         font-size: 12px;
         font-weight: 700;
-        background: var(--orange);
+        background: var(--amber);
         color: white;
         border: none;
         border-radius: 5px;
@@ -159,8 +168,8 @@
       }
       .editor-section-title {
         font-family: var(--font-mono);
-        font-size: 10px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: var(--navy);
@@ -195,55 +204,68 @@
         text-transform: uppercase;
         color: var(--navy2);
       }
-      .field-group input,
-      .field-group select {
-        font-family: var(--font-mono);
-        font-size: 13px;
-        padding: 7px 10px;
-        border: 1.5px solid var(--input-bdr);
-        border-radius: 4px;
-        background: var(--input-bg);
-        color: var(--dark);
+      .inp {
+        font-family: var(--inp-font);
+        font-size: var(--inp-size);
+        padding: var(--inp-pad);
+        border: var(--inp-border);
+        border-radius: var(--inp-radius);
+        background: var(--inp-bg);
+        color: var(--inp-color);
+        width: 100%;
         outline: none;
         transition: border-color 0.15s;
       }
-
-      .field-group input:not(.phone-field input):not(.input-m input):focus,
-      .field-group select:not(.phone-field .dial-sel):focus {
-        border-color: var(--navy2);
-        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      .inp:focus {
+        border-color: var(--inp-focus-color);
+        box-shadow: var(--inp-focus-shadow);
       }
-      .input-m:focus-within {
-        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      .inp-wrap .inp:focus {
+        box-shadow: none;
       }
-      .input-m:focus-within input,
-      .input-m:focus-within .m-suffix {
-        border-color: var(--navy2);
-      }
-
-      .input-m {
+      .inp-wrap {
         display: flex;
         align-items: stretch;
-        border-radius: 4px;
+        border-radius: var(--inp-radius);
         transition: box-shadow 0.15s;
       }
-      .input-m input {
-        border-right: none;
-        border-radius: 4px 0 0 4px;
-        width: 100%;
+      .inp-wrap:focus-within {
+        box-shadow: var(--inp-focus-shadow);
       }
-      .input-m .m-suffix {
-        font-family: var(--font-mono);
+      .inp-wrap:focus-within .inp,
+      .inp-wrap:focus-within .inp-badge {
+        border-color: var(--inp-focus-color);
+      }
+      .inp-wrap--m .inp {
+        border-right: none;
+        border-radius: var(--inp-radius) 0 0 var(--inp-radius);
+      }
+      .inp-badge {
+        font-family: var(--inp-font);
         font-size: 12px;
         color: var(--mid);
         background: var(--ui-border);
-        border: 1.5px solid var(--input-bdr);
+        border: var(--inp-border);
         border-left: none;
-        border-radius: 0 4px 4px 0;
+        border-radius: 0 var(--inp-radius) var(--inp-radius) 0;
         padding: 0 8px;
         display: flex;
         align-items: center;
         transition: border-color 0.15s;
+      }
+      .inp-wrap--phone .dial-sel {
+        flex: none;
+        width: 90px;
+        border-right: none;
+        border-radius: var(--inp-radius) 0 0 var(--inp-radius);
+        padding: 6px 5px;
+        cursor: pointer;
+      }
+      .inp-wrap--phone .inp:not(.dial-sel) {
+        flex: 1;
+        min-width: 0;
+        border-left: none;
+        border-radius: 0 var(--inp-radius) var(--inp-radius) 0;
       }
 
       .contact-rows {
@@ -256,64 +278,6 @@
         display: flex;
         align-items: center;
         gap: 8px;
-      }
-      .contact-row input {
-        font-family: var(--font-mono);
-        font-size: 13px;
-        padding: 6px 8px;
-        border: 1.5px solid var(--input-bdr);
-        border-radius: 4px;
-        background: var(--input-bg);
-        color: var(--dark);
-        outline: none;
-        flex: 1;
-        transition: border-color 0.15s;
-      }
-      .contact-row input:not(.phone-field input):focus {
-        border-color: var(--navy2);
-        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
-      }
-      .contact-row .dial-sel {
-        flex: none;
-        width: 90px;
-      }
-      .phone-field {
-        display: flex;
-        align-items: stretch;
-        gap: 0;
-        border-radius: 4px;
-        transition: box-shadow 0.15s;
-      }
-      .phone-field .dial-sel {
-        flex: none;
-        width: 90px;
-        border-right: none;
-        border-radius: 4px 0 0 4px;
-      }
-      .phone-field input {
-        flex: 1;
-        min-width: 0;
-        border-left: none;
-        border-radius: 0 4px 4px 0;
-      }
-      .dial-sel {
-        font-family: var(--font-mono);
-        font-size: 13px;
-        padding: 6px 5px;
-        border: 1.5px solid var(--input-bdr);
-        border-radius: 4px;
-        background: var(--input-bg);
-        color: var(--dark);
-        outline: none;
-        cursor: pointer;
-        transition: border-color 0.15s;
-      }
-      .phone-field:focus-within {
-        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
-      }
-      .phone-field:focus-within .dial-sel,
-      .phone-field:focus-within input {
-        border-color: var(--navy2);
       }
       .add-btn {
         font-family: var(--font-sans);
@@ -537,17 +501,18 @@
         background: var(--red);
       }
       .oproep-hdr.panpan {
-        background: var(--orange);
+        background: var(--amber);
       }
+
       .oproep-hdr .sein-lbl {
         font-size: 12px;
         font-weight: 700;
         color: white;
       }
       .oproep-hdr .when-lbl {
-        font-size: 8px;
-        font-style: italic;
-        color: rgba(255, 255, 255, 0.88);
+        font-size: 9px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.92);
       }
       .oproep-body {
         padding: 8px 10px;
@@ -573,7 +538,7 @@
       }
       .call-line.bold-orange {
         font-weight: 700;
-        color: var(--orange);
+        color: var(--amber);
         font-size: 10px;
       }
       .oproep-note {
@@ -749,11 +714,10 @@
       }
 
       .crew-inp {
-        font-size: 13px;
         flex: 1;
-        background: var(--input-bg);
-        color: var(--dark);
+        min-width: 0;
       }
+
 
       @media (max-width: 480px) {
         .save-load-bar,
@@ -763,12 +727,19 @@
         .save-load-bar .print-btn,
         .save-load-bar label.print-btn,
         .action-bar .print-btn {
+          flex: none;
           width: 100%;
           justify-content: center;
         }
       }
 
       @media (max-width: 650px) {
+        .save-load-bar .print-btn,
+        .save-load-bar label.print-btn,
+        .action-bar .print-btn {
+          flex: 1;
+          justify-content: center;
+        }
         .editor {
           padding: 10px 14px;
           gap: 8px;
@@ -789,25 +760,17 @@
         .fields-row.r3 > :last-child {
           grid-column: 1 / -1;
         }
-        .field-group input,
-        .field-group select {
-          font-size: 16px;
-        }
-        .crew-inp {
+        .inp {
           font-size: 16px;
         }
         .contact-row {
           flex-wrap: wrap;
           row-gap: 6px;
         }
-        .crew-inp {
-          flex: 1;
-          min-width: 0;
-        }
         .contact-row .crew-inp:first-child {
           min-width: 100%;
         }
-        .contact-row .phone-field {
+        .contact-row .inp-wrap--phone {
           flex: 1;
           min-width: 0;
         }
@@ -954,7 +917,7 @@
         display: flex;
       }
       .modal-panel {
-        background: var(--navy2);
+        background: var(--navy);
         border-radius: 10px;
         max-width: 760px;
         width: 100%;
@@ -974,11 +937,14 @@
       }
       .modal-hdr-title {
         font-family: var(--font-mono);
-        font-size: 10px;
-        font-weight: 600;
+        font-size: 13px;
+        font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: #a8c4e0;
+      }
+      .modal-hdr-title span {
+        color: white;
       }
       .modal-close-btn {
         background: none;
@@ -996,25 +962,23 @@
       .modal-body {
         display: grid;
         grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        padding: 12px 24px 24px;
+        background: var(--navy);
+        border-radius: 0 0 10px 10px;
       }
       .modal-section {
         padding: 20px 24px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-      }
-      .modal-section:nth-child(odd) {
-        border-right: 1px solid rgba(255, 255, 255, 0.07);
-      }
-      .modal-section:nth-last-child(-n + 2) {
-        border-bottom: none;
+        background: var(--navy2);
+        border-radius: 8px;
       }
       .modal-section--warn {
-        border-left: 3px solid rgba(169, 50, 38, 0.7);
-        padding-left: 21px;
+        border: 2px solid rgba(169, 50, 38, 0.75);
       }
       .modal-section-title {
         font-family: var(--font-mono);
-        font-size: 9px;
-        font-weight: 600;
+        font-size: 12px;
+        font-weight: 700;
         letter-spacing: 0.1em;
         text-transform: uppercase;
         color: #a8c4e0;
@@ -1025,7 +989,7 @@
       }
       .modal-section-body {
         font-family: var(--font-sans);
-        font-size: 12px;
+        font-size: 13px;
         color: white;
         line-height: 1.6;
       }
@@ -1038,18 +1002,6 @@
       @media (max-width: 540px) {
         .modal-body {
           grid-template-columns: 1fr;
-        }
-        .modal-section:nth-child(odd) {
-          border-right: none;
-        }
-        .modal-section--warn {
-          border-left: 3px solid rgba(169, 50, 38, 0.7);
-        }
-        .modal-section:nth-last-child(-n + 2) {
-          border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        }
-        .modal-section:last-child {
-          border-bottom: none;
         }
       }
 

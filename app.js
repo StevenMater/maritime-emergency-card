@@ -31,14 +31,30 @@
         }
       }
 
-      function iStyle() {
-        return "font-family:var(--font-mono);padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;outline:none"
-      }
-
       function dialOptions(selected) {
         return DIAL_CODES.map(({ code, flag }) =>
           `<option value="${code}"${code === selected ? " selected" : ""}>${flag} ${code}</option>`
         ).join("")
+      }
+
+      function makeInput({ type = "text", id, value = "", placeholder = "", maxlength, onChange = "update()", dialCode, number, dialId, numberId }) {
+        const v = value || ""
+        const ml = maxlength ? ` maxlength="${maxlength}"` : ""
+        const ph = placeholder ? ` placeholder="${placeholder}"` : ""
+
+        if (type === "measurement") {
+          return `<div class="inp-wrap inp-wrap--m"><input class="inp" type="text" inputmode="decimal" id="${id}" value="${v}"${ph} oninput="${onChange}"><span class="inp-badge">m</span></div>`
+        }
+        if (type === "number") {
+          return `<input class="inp" type="text" inputmode="numeric" id="${id}" value="${v}"${ml} oninput="numericOnly(this);${onChange}">`
+        }
+        if (type === "phone") {
+          const dc = dialCode || DEFAULT_DIAL_CODE
+          const did = dialId || id + "-code"
+          const nid = numberId || id + "-number"
+          return `<div class="inp-wrap inp-wrap--phone"><select class="inp dial-sel" id="${did}" onchange="${onChange}">${dialOptions(dc)}</select><input class="inp" type="text" inputmode="numeric" id="${nid}" value="${number || ""}" maxlength="15" oninput="numericOnly(this);${onChange}"></div>`
+        }
+        return `<input class="inp" type="text" id="${id}" value="${v}"${ph}${ml} oninput="${onChange}">`
       }
 
       function renderContactEditor() {
@@ -50,8 +66,8 @@
           const row = document.createElement("div")
           row.className = "contact-row"
           row.innerHTML = `
-      <input class="crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="contacts[${i}].label=this.value;update()">
-      <div class="phone-field" style="flex:1"><select class="dial-sel" onchange="contacts[${i}].dialCode=this.value;update()">${dialOptions(dc)}</select><input class="crew-inp" value="${c.number || ""}" maxlength="15" inputmode="numeric" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="numericOnly(this);contacts[${i}].number=this.value;update()"></div>
+      <input class="inp crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="contacts[${i}].label=this.value;update()">
+      <div class="inp-wrap inp-wrap--phone" style="flex:1"><select class="inp dial-sel" onchange="contacts[${i}].dialCode=this.value;update()">${dialOptions(dc)}</select><input class="inp" value="${c.number || ""}" maxlength="15" inputmode="numeric" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="numericOnly(this);contacts[${i}].number=this.value;update()"></div>
       <button class="del-btn" onclick="removeContact(${i})">×</button>`
           el.appendChild(row)
         })

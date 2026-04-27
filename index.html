@@ -217,6 +217,7 @@
               <div class="field-group">
                 <label data-i18n="f_name"></label
                 ><input
+                  class="inp"
                   id="f-name"
                   value=""
                   maxlength="30"
@@ -225,6 +226,7 @@
               <div class="field-group">
                 <label data-i18n="f_type"></label
                 ><input
+                  class="inp"
                   id="f-type"
                   value=""
                   maxlength="30"
@@ -232,52 +234,56 @@
               </div>
               <div class="field-group">
                 <label data-i18n="f_eni"></label
-                ><input id="f-eni" value="" maxlength="8" inputmode="numeric" oninput="numericOnly(this);update()" />
+                ><input class="inp" id="f-eni" value="" maxlength="8" inputmode="numeric" oninput="numericOnly(this);update()" />
               </div>
             </div>
             <div class="fields-row r4">
               <div class="field-group">
                 <label data-i18n="f_length"></label>
-                <div class="input-m">
+                <div class="inp-wrap inp-wrap--m">
                   <input
+                    class="inp"
                     id="f-length"
                     type="text"
                     inputmode="decimal"
                     value=""
-                    oninput="update()" /><span class="m-suffix">m</span>
+                    oninput="update()" /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <label data-i18n="f_width"></label>
-                <div class="input-m">
+                <div class="inp-wrap inp-wrap--m">
                   <input
+                    class="inp"
                     id="f-width"
                     type="text"
                     inputmode="decimal"
                     value=""
-                    oninput="update()" /><span class="m-suffix">m</span>
+                    oninput="update()" /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <label data-i18n="f_draft"></label>
-                <div class="input-m">
+                <div class="inp-wrap inp-wrap--m">
                   <input
+                    class="inp"
                     id="f-draft"
                     type="text"
                     inputmode="decimal"
                     value=""
-                    oninput="update()" /><span class="m-suffix">m</span>
+                    oninput="update()" /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <label data-i18n="f_airdraft"></label>
-                <div class="input-m">
+                <div class="inp-wrap inp-wrap--m">
                   <input
+                    class="inp"
                     id="f-airdraft"
                     type="text"
                     inputmode="decimal"
                     value=""
-                    oninput="update()" /><span class="m-suffix">m</span>
+                    oninput="update()" /><span class="inp-badge">m</span>
                 </div>
               </div>
             </div>
@@ -285,6 +291,7 @@
               <div class="field-group">
                 <label data-i18n="f_callsign"></label
                 ><input
+                  class="inp"
                   id="f-callsign"
                   value=""
                   maxlength="6"
@@ -293,6 +300,7 @@
               <div class="field-group">
                 <label>ATIS</label
                 ><input
+                  class="inp"
                   id="f-atis"
                   value=""
                   maxlength="10"
@@ -301,7 +309,7 @@
               </div>
               <div class="field-group">
                 <label>MMSI</label
-                ><input id="f-mmsi" value="" maxlength="9" inputmode="numeric" oninput="numericOnly(this);update()" />
+                ><input class="inp" id="f-mmsi" value="" maxlength="9" inputmode="numeric" oninput="numericOnly(this);update()" />
               </div>
             </div>
           </div>
@@ -323,6 +331,7 @@
               <div class="field-group">
                 <label data-i18n="f_insurer_name"></label
                 ><input
+                  class="inp"
                   id="f-insurer-name"
                   value=""
                   maxlength="15"
@@ -331,6 +340,7 @@
               <div class="field-group">
                 <label data-i18n="f_policy"></label
                 ><input
+                  class="inp"
                   id="f-policy"
                   value=""
                   maxlength="25"
@@ -340,8 +350,8 @@
             <div class="fields-row r2">
               <div class="field-group">
                 <label data-i18n="f_insurer_emergency"></label>
-                <div class="phone-field">
-                  <select id="f-insurer-emergency-code" class="dial-sel" onchange="update()">
+                <div class="inp-wrap inp-wrap--phone">
+                  <select id="f-insurer-emergency-code" class="inp dial-sel" onchange="update()">
                     <option value="+31">🇳🇱 +31</option>
                     <option value="+32">🇧🇪 +32</option>
                     <option value="+49">🇩🇪 +49</option>
@@ -353,6 +363,7 @@
                     <option value="+46">🇸🇪 +46</option>
                   </select
                   ><input
+                    class="inp"
                     id="f-insurer-emergency-number"
                     value=""
                     maxlength="15"
@@ -362,8 +373,8 @@
               </div>
               <div class="field-group">
                 <label data-i18n="f_insurer_office"></label>
-                <div class="phone-field">
-                  <select id="f-insurer-office-code" class="dial-sel" onchange="update()">
+                <div class="inp-wrap inp-wrap--phone">
+                  <select id="f-insurer-office-code" class="inp dial-sel" onchange="update()">
                     <option value="+31">🇳🇱 +31</option>
                     <option value="+32">🇧🇪 +32</option>
                     <option value="+49">🇩🇪 +49</option>
@@ -375,6 +386,7 @@
                     <option value="+46">🇸🇪 +46</option>
                   </select
                   ><input
+                    class="inp"
                     id="f-insurer-office-number"
                     value=""
                     maxlength="15"
