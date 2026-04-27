@@ -16,6 +16,7 @@
           btn_add_crew: "+ Contact toevoegen",
           contact_label_placeholder: "Persoon, schip, bedrijf…",
           contact_phone_placeholder: "Telefoonnummer",
+          digits_only: "Alleen cijfers",
           info_what_title: "Wat is dit?",
           info_what_body:
             "Een template voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water. Deze kaart is ingericht voor het vaargebied Nederland.",
@@ -160,6 +161,7 @@
           btn_add_crew: "+ Add contact",
           contact_label_placeholder: "Person, vessel, company…",
           contact_phone_placeholder: "Phone number",
+          digits_only: "Digits only",
           info_what_title: "What is this?",
           info_what_body:
             "A template for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water. This card is configured for the Netherlands.",
@@ -305,6 +307,7 @@
           btn_add_crew: "+ Ajouter un contact",
           contact_label_placeholder: "Personne, navire, entreprise…",
           contact_phone_placeholder: "Téléphone",
+          digits_only: "Chiffres uniquement",
           info_what_title: "À quoi sert cet outil?",
           info_what_body:
             "Un modèle de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau. Cette carte est configurée pour les Pays-Bas.",
@@ -451,6 +454,7 @@
           btn_add_crew: "+ Kontakt hinzufügen",
           contact_label_placeholder: "Person, Schiff, Unternehmen…",
           contact_phone_placeholder: "Telefon",
+          digits_only: "Nur Ziffern",
           info_what_title: "Was ist das?",
           info_what_body:
             "Eine Vorlage für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen. Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",

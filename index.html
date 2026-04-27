@@ -232,7 +232,7 @@
               </div>
               <div class="field-group">
                 <label data-i18n="f_eni"></label
-                ><input id="f-eni" value="" maxlength="8" oninput="update()" />
+                ><input id="f-eni" value="" maxlength="8" inputmode="numeric" oninput="numericOnly(this);update()" />
               </div>
             </div>
             <div class="fields-row r4">
@@ -296,11 +296,12 @@
                   id="f-atis"
                   value=""
                   maxlength="10"
-                  oninput="update()" />
+                  inputmode="numeric"
+                  oninput="numericOnly(this);update()" />
               </div>
               <div class="field-group">
                 <label>MMSI</label
-                ><input id="f-mmsi" value="" maxlength="9" oninput="update()" />
+                ><input id="f-mmsi" value="" maxlength="9" inputmode="numeric" oninput="numericOnly(this);update()" />
               </div>
             </div>
           </div>
@@ -338,20 +339,48 @@
             </div>
             <div class="fields-row r2">
               <div class="field-group">
-                <label data-i18n="f_insurer_emergency"></label
-                ><input
-                  id="f-insurer-emergency"
-                  value=""
-                  maxlength="17"
-                  oninput="update()" />
+                <label data-i18n="f_insurer_emergency"></label>
+                <div class="phone-field">
+                  <select id="f-insurer-emergency-code" class="dial-sel" onchange="update()">
+                    <option value="+31">🇳🇱 +31</option>
+                    <option value="+32">🇧🇪 +32</option>
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+45">🇩🇰 +45</option>
+                    <option value="+47">🇳🇴 +47</option>
+                    <option value="+46">🇸🇪 +46</option>
+                  </select
+                  ><input
+                    id="f-insurer-emergency-number"
+                    value=""
+                    maxlength="15"
+                    inputmode="numeric"
+                    oninput="numericOnly(this);update()" />
+                </div>
               </div>
               <div class="field-group">
-                <label data-i18n="f_insurer_office"></label
-                ><input
-                  id="f-insurer-office"
-                  value=""
-                  maxlength="17"
-                  oninput="update()" />
+                <label data-i18n="f_insurer_office"></label>
+                <div class="phone-field">
+                  <select id="f-insurer-office-code" class="dial-sel" onchange="update()">
+                    <option value="+31">🇳🇱 +31</option>
+                    <option value="+32">🇧🇪 +32</option>
+                    <option value="+49">🇩🇪 +49</option>
+                    <option value="+33">🇫🇷 +33</option>
+                    <option value="+44">🇬🇧 +44</option>
+                    <option value="+1">🇺🇸 +1</option>
+                    <option value="+45">🇩🇰 +45</option>
+                    <option value="+47">🇳🇴 +47</option>
+                    <option value="+46">🇸🇪 +46</option>
+                  </select
+                  ><input
+                    id="f-insurer-office-number"
+                    value=""
+                    maxlength="15"
+                    inputmode="numeric"
+                    oninput="numericOnly(this);update()" />
+                </div>
               </div>
             </div>
           </div>
@@ -785,5 +814,6 @@
 
     <script src="translations.js"></script>
     <script src="app.js"></script>
+    <div id="numeric-warn"></div>
   </body>
 </html>

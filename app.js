@@ -1,48 +1,78 @@
       // ══ CONTACTS ════════════════════════════════════════════════════════
-      const MAX_EXTRA = 6
+      const MAX_CONTACTS = 7
       const CREW_ROWS = 7
-      let fixedContact = { label: "", phone: "" }
-      let extraContacts = []
+      const DIAL_CODES = [
+        { code: "+31", flag: "🇳🇱", label: "NL" },
+        { code: "+32", flag: "🇧🇪", label: "BE" },
+        { code: "+49", flag: "🇩🇪", label: "DE" },
+        { code: "+33", flag: "🇫🇷", label: "FR" },
+        { code: "+44", flag: "🇬🇧", label: "GB" },
+        { code: "+1",  flag: "🇺🇸", label: "US" },
+        { code: "+45", flag: "🇩🇰", label: "DK" },
+        { code: "+47", flag: "🇳🇴", label: "NO" },
+        { code: "+46", flag: "🇸🇪", label: "SE" },
+      ]
+      const DEFAULT_DIAL_CODE = "+31"
+      let contacts = [{ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }]
+
+      let _numericWarnTimer = null
+      function numericOnly(input) {
+        const before = input.value
+        input.value = before.replace(/\D/g, "")
+        if (input.value !== before) {
+          clearTimeout(_numericWarnTimer)
+          const warn = document.getElementById("numeric-warn")
+          warn.textContent = T[currentLang].digits_only
+          const rect = input.getBoundingClientRect()
+          warn.style.top = (rect.bottom + 6) + "px"
+          warn.style.left = rect.left + "px"
+          warn.classList.add("visible")
+          _numericWarnTimer = setTimeout(() => warn.classList.remove("visible"), 1500)
+        }
+      }
 
       function iStyle() {
         return "font-family:var(--font-mono);padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;outline:none"
+      }
+
+      function dialOptions(selected) {
+        return DIAL_CODES.map(({ code, flag }) =>
+          `<option value="${code}"${code === selected ? " selected" : ""}>${flag} ${code}</option>`
+        ).join("")
       }
 
       function renderContactEditor() {
         const el = document.getElementById("contact-rows")
         el.innerHTML = ""
 
-        const fixed = document.createElement("div")
-        fixed.className = "contact-row"
-        fixed.innerHTML = `
-      <input class="crew-inp" value="${fixedContact.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="fixedContact.label=this.value;update()" style="${iStyle()}">
-      <input class="crew-inp" value="${fixedContact.phone}" maxlength="17" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="fixedContact.phone=this.value;update()" style="${iStyle()};max-width:170px">
-      <button class="del-btn" onclick="fixedContact={label:'',phone:''};renderContactEditor();update()">×</button>`
-        el.appendChild(fixed)
-
-        extraContacts.forEach((c, i) => {
+        contacts.forEach((c, i) => {
+          const dc = c.dialCode || DEFAULT_DIAL_CODE
           const row = document.createElement("div")
           row.className = "contact-row"
           row.innerHTML = `
-      <input class="crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="extraContacts[${i}].label=this.value;update()" style="${iStyle()}">
-      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="extraContacts[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
-      <button class="del-btn" onclick="removeExtra(${i})">×</button>`
+      <input class="crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="contacts[${i}].label=this.value;update()">
+      <div class="phone-field" style="flex:1"><select class="dial-sel" onchange="contacts[${i}].dialCode=this.value;update()">${dialOptions(dc)}</select><input class="crew-inp" value="${c.number || ""}" maxlength="15" inputmode="numeric" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="numericOnly(this);contacts[${i}].number=this.value;update()"></div>
+      <button class="del-btn" onclick="removeContact(${i})">×</button>`
           el.appendChild(row)
         })
 
         const addBtn = document.querySelector(".add-btn")
-        addBtn.style.display = extraContacts.length >= MAX_EXTRA ? "none" : ""
         addBtn.textContent = T[currentLang].btn_add_crew
       }
 
       function addContact() {
-        if (extraContacts.length >= MAX_EXTRA) return
-        extraContacts.push({ label: "", phone: "" })
+        const hasEmpty = contacts.some((c) => !c.label && !c.number)
+        if (contacts.length >= MAX_CONTACTS || hasEmpty) return
+        contacts.push({ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" })
         renderContactEditor()
         update()
       }
-      function removeExtra(i) {
-        extraContacts.splice(i, 1)
+      function removeContact(i) {
+        if (contacts.length <= 1) {
+          contacts[0] = { label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }
+        } else {
+          contacts.splice(i, 1)
+        }
         renderContactEditor()
         update()
       }
@@ -125,33 +155,28 @@
         10, 13, 15, 20, 23, 24, 26, 30, 33, 35, 36, 38, 40, 43, 45, 46, 50, 53,
         55, 58, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
       ])
-      function formatPhone(v) {
-        if (!v) return "—"
-        const s = v.trim()
-        if (s.startsWith("+")) return s // already international
-        const d = s.replace(/\D/g, "")
-        if (!d) return s
-        if (d.length !== 10 || !d.startsWith("0")) return s // unexpected format, return as-is
-        // Mobile: 06-XXXXXXXX → +31 6 XX XX XX XX
+      function formatPhone(dialCode, number) {
+        const n = (number || "").trim()
+        if (!n) return "—"
+        const dc = dialCode || DEFAULT_DIAL_CODE
+        if (dc !== "+31") return `${dc} ${n.replace(/^0+/, "")}`
+        // Dutch formatting
+        const d = n.replace(/\D/g, "")
+        if (!d) return n
+        if (d.length !== 10 || !d.startsWith("0")) return `${dc} ${n}`
         if (d.startsWith("06"))
           return `+31 6 ${d.slice(2, 4)} ${d.slice(4, 6)} ${d.slice(6, 8)} ${d.slice(8)}`
-        // Special (0800, 0900, etc.): keep as national
-        if (/^0[89]0/.test(d)) return s
-        // National (085, 088, etc.): +31 XX XXX XXXX
+        if (/^0[89]0/.test(d)) return `${dc} ${n}`
         if (/^0(8[4-9])/.test(d)) {
-          const ndc = d.slice(1, 3),
-            sub = d.slice(3)
+          const ndc = d.slice(1, 3), sub = d.slice(3)
           return `+31 ${ndc} ${sub.slice(0, 3)} ${sub.slice(3)}`
         }
-        // Geographic: detect area code length via NDC lookup
-        const nsn = d.slice(1) // 9 digits without leading 0
+        const nsn = d.slice(1)
         const ndc2 = parseInt(nsn.slice(0, 2), 10)
         if (NL_2DIGIT_NDC.has(ndc2)) {
-          // 2-digit area code, 7-digit subscriber: +31 XX XXX XX XX
           const sub = nsn.slice(2)
           return `+31 ${nsn.slice(0, 2)} ${sub.slice(0, 3)} ${sub.slice(3, 5)} ${sub.slice(5)}`
         }
-        // 3-digit area code, 6-digit subscriber: +31 XXX XX XX XX
         const sub = nsn.slice(3)
         return `+31 ${nsn.slice(0, 3)} ${sub.slice(0, 2)} ${sub.slice(2, 4)} ${sub.slice(4)}`
       }
@@ -171,8 +196,10 @@
         const mmsi = document.getElementById("f-mmsi").value
         const insName = document.getElementById("f-insurer-name").value
         const policy = document.getElementById("f-policy").value
-        const insEmerg = document.getElementById("f-insurer-emergency").value
-        const insOff = document.getElementById("f-insurer-office").value
+        const insEmergCode = document.getElementById("f-insurer-emergency-code").value
+        const insEmergNum  = document.getElementById("f-insurer-emergency-number").value
+        const insOffCode   = document.getElementById("f-insurer-office-code").value
+        const insOffNum    = document.getElementById("f-insurer-office-number").value
 
         const fmt = (v) => {
           const n = parseFloat(String(v).replace(",", "."))
@@ -193,25 +220,29 @@
         // Contacts — always CREW_ROWS rows
         const tbl = document.getElementById("r-crew")
         while (tbl.rows.length > 1) tbl.deleteRow(1)
-        const allContacts = [fixedContact, ...extraContacts]
         for (let i = 0; i < CREW_ROWS; i++) {
-          const c = allContacts[i]
+          const c = contacts[i]
           const tr = tbl.insertRow()
           tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
-          if (c?.label || c?.phone) {
-            tr.innerHTML = `<td class="c50" style="font-weight:700">${c.label}</td><td class="c50 right">${formatPhone(c.phone)}</td>`
+          if (c?.label || c?.number) {
+            tr.innerHTML = `<td class="c50" style="font-weight:700">${c.label}</td><td class="c50 right">${formatPhone(c.dialCode, c.number)}</td>`
           } else {
             tr.innerHTML = `<td class="c50"></td><td class="c50 right"></td>`
           }
         }
 
+        // Add-contact button state
+        const addBtn = document.querySelector(".add-btn")
+        const hasEmpty = contacts.some((c) => !c.label && !c.number)
+        addBtn.disabled = contacts.length >= MAX_CONTACTS || hasEmpty
+
         // Insurer
         document.getElementById("r-insurer-name").textContent = dash(insName)
         document.getElementById("r-policy").textContent = dash(policy)
         document.getElementById("r-insurer-emergency").textContent =
-          formatPhone(insEmerg)
+          formatPhone(insEmergCode, insEmergNum)
         document.getElementById("r-insurer-office").textContent =
-          formatPhone(insOff)
+          formatPhone(insOffCode, insOffNum)
         document.getElementById("r-insurer-badge1").textContent = insName || "—"
         document.getElementById("r-insurer-badge2").textContent = insName || "—"
 
@@ -250,7 +281,7 @@
           atis,
           mmsi,
           document.getElementById("f-insurer-name").value,
-          ...[fixedContact, ...extraContacts].map((c) => c.label + c.phone),
+          ...contacts.map((c) => c.label + (c.number || "")),
         ].some((v) => v && v.trim() !== "")
         const saveBtn = document.getElementById("btn-save")
         saveBtn.disabled = !hasData
@@ -277,7 +308,7 @@
       }
 
       // ══ STORAGE ═══════════════════════════════════════════════════════════
-      const CURRENT_VERSION = 7
+      const CURRENT_VERSION = 9
       const STORAGE_KEY = "maritieme_noodkaart"
 
       function getFormData() {
@@ -296,17 +327,34 @@
           mmsi: document.getElementById("f-mmsi").value,
           insurerName: document.getElementById("f-insurer-name").value,
           policyNumber: document.getElementById("f-policy").value,
-          insurerEmergencyPhone: document.getElementById("f-insurer-emergency")
-            .value,
-          insurerOfficePhone: document.getElementById("f-insurer-office").value,
-          fixedContact,
-          extraContacts,
+          insurerEmergencyDialCode: document.getElementById("f-insurer-emergency-code").value,
+          insurerEmergencyNumber:   document.getElementById("f-insurer-emergency-number").value,
+          insurerOfficeDialCode:    document.getElementById("f-insurer-office-code").value,
+          insurerOfficeNumber:      document.getElementById("f-insurer-office-number").value,
+          contacts: contacts.filter((c) => c.label || c.number),
         }
       }
 
       function migrateData(d) {
         const version = d.version || 1
         if (version >= CURRENT_VERSION) return { data: d, outdated: false }
+
+        function splitLegacyPhone(raw) {
+          const s = (raw || "").trim()
+          if (!s) return { dialCode: DEFAULT_DIAL_CODE, number: "" }
+          for (const { code } of DIAL_CODES) {
+            if (s.startsWith(code)) {
+              return { dialCode: code, number: s.slice(code.length).trim() }
+            }
+          }
+          return { dialCode: DEFAULT_DIAL_CODE, number: s }
+        }
+
+        function toContact(c) {
+          if (c.dialCode !== undefined) return c
+          const split = splitLegacyPhone(c.phone || "")
+          return { label: c.label || "", dialCode: split.dialCode, number: split.number }
+        }
 
         const m = {
           version: CURRENT_VERSION,
@@ -323,22 +371,29 @@
           mmsi: d.mmsi || "",
           insurerName: d.insurerName || d.verzNaam || "",
           policyNumber: d.policyNumber || d.verzPolis || "",
-          insurerEmergencyPhone: d.insurerEmergencyPhone || d.verzNood || "",
-          insurerOfficePhone: d.insurerOfficePhone || d.verzKantoor || "",
         }
 
+        const emerg = splitLegacyPhone(d.insurerEmergencyPhone || d.insurerEmergencyNumber || d.verzNood || "")
+        const off   = splitLegacyPhone(d.insurerOfficePhone    || d.insurerOfficeNumber    || d.verzKantoor || "")
+        m.insurerEmergencyDialCode = d.insurerEmergencyDialCode || emerg.dialCode
+        m.insurerEmergencyNumber   = d.insurerEmergencyNumber !== undefined ? d.insurerEmergencyNumber : emerg.number
+        m.insurerOfficeDialCode    = d.insurerOfficeDialCode   || off.dialCode
+        m.insurerOfficeNumber      = d.insurerOfficeNumber     !== undefined ? d.insurerOfficeNumber    : off.number
+
+        let rawContacts = []
         if (version < 7) {
-          // v1–v6: combine fixedCrew + extraCrew into flat fixedContact + extraContacts
-          const old = [
+          rawContacts = [
             ...(d.fixedCrew || d.fixed || []),
             ...(d.extraCrew || d.extras || []),
           ].map((c) => ({ label: c.name || c.naam || "", phone: c.phone || c.tel || "" }))
-          m.fixedContact = old[0] || { label: "", phone: "" }
-          m.extraContacts = old.slice(1)
+        } else if (version < 8) {
+          const fixed  = d.fixedContact || { label: "", phone: "" }
+          const extras = d.extraContacts || []
+          rawContacts = [fixed, ...extras].filter((c) => c.label || c.phone)
         } else {
-          m.fixedContact = d.fixedContact || { label: "", phone: "" }
-          m.extraContacts = d.extraContacts || []
+          rawContacts = (d.contacts || []).filter((c) => c.label || c.phone || c.number)
         }
+        m.contacts = rawContacts.map(toContact)
 
         return { data: m, outdated: true }
       }
@@ -371,10 +426,18 @@
         s("f-mmsi", data.mmsi)
         s("f-insurer-name", data.insurerName)
         s("f-policy", data.policyNumber)
-        s("f-insurer-emergency", data.insurerEmergencyPhone)
-        s("f-insurer-office", data.insurerOfficePhone)
-        if (data.fixedContact) fixedContact = data.fixedContact
-        if (Array.isArray(data.extraContacts)) extraContacts = data.extraContacts
+        s("f-insurer-emergency-code",   data.insurerEmergencyDialCode || DEFAULT_DIAL_CODE)
+        s("f-insurer-emergency-number", data.insurerEmergencyNumber   || "")
+        s("f-insurer-office-code",      data.insurerOfficeDialCode    || DEFAULT_DIAL_CODE)
+        s("f-insurer-office-number",    data.insurerOfficeNumber      || "")
+        const loaded = Array.isArray(data.contacts)
+          ? data.contacts
+              .filter((c) => c.label || c.number || c.phone)
+              .map((c) => c.dialCode !== undefined
+                ? c
+                : { label: c.label || "", dialCode: DEFAULT_DIAL_CODE, number: c.phone || "" })
+          : []
+        contacts = loaded.length > 0 ? loaded : [{ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }]
         document
           .querySelectorAll(".lang-btn")
           .forEach((b) =>
@@ -440,13 +503,14 @@
           "f-mmsi",
           "f-insurer-name",
           "f-policy",
-          "f-insurer-emergency",
-          "f-insurer-office",
+          "f-insurer-emergency-number",
+          "f-insurer-office-number",
         ].forEach((id) => {
           document.getElementById(id).value = ""
         })
-        fixedContact = { label: "", phone: "" }
-        extraContacts = []
+        document.getElementById("f-insurer-emergency-code").value = DEFAULT_DIAL_CODE
+        document.getElementById("f-insurer-office-code").value    = DEFAULT_DIAL_CODE
+        contacts = [{ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }]
         setLang(currentLang)
       }
 

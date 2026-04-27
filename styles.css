@@ -208,15 +208,24 @@
         transition: border-color 0.15s;
       }
 
-      .field-group input:focus,
-      .field-group select:focus {
+      .field-group input:not(.phone-field input):not(.input-m input):focus,
+      .field-group select:not(.phone-field .dial-sel):focus {
         border-color: var(--navy2);
         box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      }
+      .input-m:focus-within {
+        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      }
+      .input-m:focus-within input,
+      .input-m:focus-within .m-suffix {
+        border-color: var(--navy2);
       }
 
       .input-m {
         display: flex;
         align-items: stretch;
+        border-radius: 4px;
+        transition: box-shadow 0.15s;
       }
       .input-m input {
         border-right: none;
@@ -234,6 +243,7 @@
         padding: 0 8px;
         display: flex;
         align-items: center;
+        transition: border-color 0.15s;
       }
 
       .contact-rows {
@@ -257,8 +267,52 @@
         color: var(--dark);
         outline: none;
         flex: 1;
+        transition: border-color 0.15s;
       }
-      .contact-row input:focus {
+      .contact-row input:not(.phone-field input):focus {
+        border-color: var(--navy2);
+        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      }
+      .contact-row .dial-sel {
+        flex: none;
+        width: 90px;
+      }
+      .phone-field {
+        display: flex;
+        align-items: stretch;
+        gap: 0;
+        border-radius: 4px;
+        transition: box-shadow 0.15s;
+      }
+      .phone-field .dial-sel {
+        flex: none;
+        width: 90px;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+      }
+      .phone-field input {
+        flex: 1;
+        min-width: 0;
+        border-left: none;
+        border-radius: 0 4px 4px 0;
+      }
+      .dial-sel {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        padding: 6px 5px;
+        border: 1.5px solid var(--input-bdr);
+        border-radius: 4px;
+        background: var(--input-bg);
+        color: var(--dark);
+        outline: none;
+        cursor: pointer;
+        transition: border-color 0.15s;
+      }
+      .phone-field:focus-within {
+        box-shadow: 0 0 0 3px rgba(44, 82, 130, 0.15);
+      }
+      .phone-field:focus-within .dial-sel,
+      .phone-field:focus-within input {
         border-color: var(--navy2);
       }
       .add-btn {
@@ -272,8 +326,12 @@
         padding: 5px 12px;
         cursor: pointer;
       }
-      .add-btn:hover {
+      .add-btn:hover:not(:disabled) {
         background: #d6e4f5;
+      }
+      .add-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
       }
       .del-btn {
         font-size: 14px;
@@ -746,6 +804,17 @@
           flex: 1;
           min-width: 0;
         }
+        .contact-row .crew-inp:first-child {
+          min-width: 100%;
+        }
+        .contact-row .phone-field {
+          flex: 1;
+          min-width: 0;
+        }
+        .contact-row .dial-sel {
+          width: 82px;
+          font-size: 14px;
+        }
       }
 
       @media (max-width: 480px) {
@@ -982,4 +1051,23 @@
         .modal-section:last-child {
           border-bottom: none;
         }
+      }
+
+      #numeric-warn {
+        position: fixed;
+        background: var(--navy2);
+        color: #fff;
+        font-family: var(--font-sans);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 4px;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.15s ease;
+        z-index: 9999;
+        white-space: nowrap;
+      }
+      #numeric-warn.visible {
+        opacity: 1;
       }
