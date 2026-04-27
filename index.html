@@ -192,16 +192,21 @@
 
     <div class="fields-wrap">
       <div class="save-load-bar">
+        <button class="tip-btn" data-tip-i18n="tip_saveload" type="button">
+          ?
+        </button>
         <button
           id="btn-save"
           class="print-btn sec"
           onclick="exportJSON()"
-          data-i18n="btn_save"
           data-tip-i18n="tip_save">
-          💾 Gegevens opslaan
+          <span>💾</span><span data-i18n="btn_save"></span>
         </button>
-        <label class="print-btn sec" style="cursor: pointer" data-tip-i18n="tip_load">
-          <span data-i18n="btn_load">📂 Gegevens laden</span>
+        <label
+          class="print-btn sec"
+          style="cursor: pointer"
+          data-tip-i18n="tip_load">
+          <span>📂</span><span data-i18n="btn_load"></span>
           <input
             type="file"
             accept=".json"
@@ -215,8 +220,16 @@
           <div style="display: flex; flex-direction: column; gap: 8px">
             <div class="fields-row r3">
               <div class="field-group">
-                <label data-i18n="f_name"></label
-                ><input
+                <div class="label-wrap">
+                  <label data-i18n="f_name"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_name"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-name"
                   value=""
@@ -224,8 +237,16 @@
                   oninput="update()" />
               </div>
               <div class="field-group">
-                <label data-i18n="f_type"></label
-                ><input
+                <div class="label-wrap">
+                  <label data-i18n="f_type"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_type"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-type"
                   value=""
@@ -233,13 +254,38 @@
                   oninput="update()" />
               </div>
               <div class="field-group">
-                <label data-i18n="f_eni"></label
-                ><input class="inp" id="f-eni" value="" maxlength="8" inputmode="numeric" oninput="numericOnly(this);update()" />
+                <div class="label-wrap">
+                  <label data-i18n="f_eni"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_eni"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
+                  class="inp"
+                  id="f-eni"
+                  value=""
+                  maxlength="8"
+                  inputmode="numeric"
+                  oninput="
+                    numericOnly(this)
+                    update()
+                  " />
               </div>
             </div>
             <div class="fields-row r4">
               <div class="field-group">
-                <label data-i18n="f_length"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_length"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_length"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--m">
                   <input
                     class="inp"
@@ -251,7 +297,15 @@
                 </div>
               </div>
               <div class="field-group">
-                <label data-i18n="f_width"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_width"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_width"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--m">
                   <input
                     class="inp"
@@ -263,7 +317,15 @@
                 </div>
               </div>
               <div class="field-group">
-                <label data-i18n="f_draft"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_draft"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_draft"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--m">
                   <input
                     class="inp"
@@ -275,7 +337,15 @@
                 </div>
               </div>
               <div class="field-group">
-                <label data-i18n="f_airdraft"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_airdraft"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_airdraft"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--m">
                   <input
                     class="inp"
@@ -289,8 +359,16 @@
             </div>
             <div class="fields-row r3">
               <div class="field-group">
-                <label data-i18n="f_callsign"></label
-                ><input
+                <div class="label-wrap">
+                  <label data-i18n="f_callsign"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_callsign"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-callsign"
                   value=""
@@ -298,18 +376,46 @@
                   oninput="update()" />
               </div>
               <div class="field-group">
-                <label>ATIS</label
-                ><input
+                <div class="label-wrap">
+                  <label>ATIS</label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_atis"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-atis"
                   value=""
                   maxlength="10"
                   inputmode="numeric"
-                  oninput="numericOnly(this);update()" />
+                  oninput="
+                    numericOnly(this)
+                    update()
+                  " />
               </div>
               <div class="field-group">
-                <label>MMSI</label
-                ><input class="inp" id="f-mmsi" value="" maxlength="9" inputmode="numeric" oninput="numericOnly(this);update()" />
+                <div class="label-wrap">
+                  <label>MMSI</label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_mmsi"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
+                  class="inp"
+                  id="f-mmsi"
+                  value=""
+                  maxlength="9"
+                  inputmode="numeric"
+                  oninput="
+                    numericOnly(this)
+                    update()
+                  " />
               </div>
             </div>
           </div>
@@ -329,8 +435,16 @@
           <div style="display: flex; flex-direction: column; gap: 8px">
             <div class="fields-row r2">
               <div class="field-group">
-                <label data-i18n="f_insurer_name"></label
-                ><input
+                <div class="label-wrap">
+                  <label data-i18n="f_insurer_name"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_insurer_name"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-insurer-name"
                   value=""
@@ -338,8 +452,16 @@
                   oninput="update()" />
               </div>
               <div class="field-group">
-                <label data-i18n="f_policy"></label
-                ><input
+                <div class="label-wrap">
+                  <label data-i18n="f_policy"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_policy"
+                    type="button">
+                    ?
+                  </button>
+                </div>
+                <input
                   class="inp"
                   id="f-policy"
                   value=""
@@ -349,9 +471,20 @@
             </div>
             <div class="fields-row r2">
               <div class="field-group">
-                <label data-i18n="f_insurer_emergency"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_insurer_emergency"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_insurer_emergency"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--phone">
-                  <select id="f-insurer-emergency-code" class="inp dial-sel" onchange="update()">
+                  <select
+                    id="f-insurer-emergency-code"
+                    class="inp dial-sel"
+                    onchange="update()">
                     <option value="+31">🇳🇱 +31</option>
                     <option value="+32">🇧🇪 +32</option>
                     <option value="+49">🇩🇪 +49</option>
@@ -360,21 +493,34 @@
                     <option value="+1">🇺🇸 +1</option>
                     <option value="+45">🇩🇰 +45</option>
                     <option value="+47">🇳🇴 +47</option>
-                    <option value="+46">🇸🇪 +46</option>
-                  </select
+                    <option value="+46">🇸🇪 +46</option></select
                   ><input
                     class="inp"
                     id="f-insurer-emergency-number"
                     value=""
                     maxlength="15"
                     inputmode="numeric"
-                    oninput="numericOnly(this);update()" />
+                    oninput="
+                      numericOnly(this)
+                      update()
+                    " />
                 </div>
               </div>
               <div class="field-group">
-                <label data-i18n="f_insurer_office"></label>
+                <div class="label-wrap">
+                  <label data-i18n="f_insurer_office"></label
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_insurer_office"
+                    type="button">
+                    ?
+                  </button>
+                </div>
                 <div class="inp-wrap inp-wrap--phone">
-                  <select id="f-insurer-office-code" class="inp dial-sel" onchange="update()">
+                  <select
+                    id="f-insurer-office-code"
+                    class="inp dial-sel"
+                    onchange="update()">
                     <option value="+31">🇳🇱 +31</option>
                     <option value="+32">🇧🇪 +32</option>
                     <option value="+49">🇩🇪 +49</option>
@@ -383,15 +529,17 @@
                     <option value="+1">🇺🇸 +1</option>
                     <option value="+45">🇩🇰 +45</option>
                     <option value="+47">🇳🇴 +47</option>
-                    <option value="+46">🇸🇪 +46</option>
-                  </select
+                    <option value="+46">🇸🇪 +46</option></select
                   ><input
                     class="inp"
                     id="f-insurer-office-number"
                     value=""
                     maxlength="15"
                     inputmode="numeric"
-                    oninput="numericOnly(this);update()" />
+                    oninput="
+                      numericOnly(this)
+                      update()
+                    " />
                 </div>
               </div>
             </div>
@@ -401,20 +549,24 @@
         <div class="editor-section">
           <div class="action-bar">
             <button
+              class="tip-btn"
+              data-tip-i18n="tip_printclear"
+              type="button">
+              ?
+            </button>
+            <button
               class="print-btn"
               style="background: #2a9d5c"
               onclick="window.print()"
-              data-i18n="btn_print"
               data-tip-i18n="tip_print">
-              🖨 Afdrukken / PDF
+              <span>🖨</span><span data-i18n="btn_print"></span>
             </button>
             <button
               class="print-btn"
               style="background: var(--red)"
               onclick="clearAll()"
-              data-i18n="btn_clear"
               data-tip-i18n="tip_clear">
-              🗑 Alles wissen
+              <span>🗑</span><span data-i18n="btn_clear"></span>
             </button>
           </div>
         </div>
@@ -824,6 +976,7 @@
       </div>
     </div>
 
+    <div id="tip-popup" role="tooltip"></div>
     <script src="translations.js"></script>
     <script src="app.js"></script>
     <div id="numeric-warn"></div>

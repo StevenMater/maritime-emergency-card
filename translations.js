@@ -1,16 +1,32 @@
       // ══ TRANSLATIONS ════════════════════════════════════════════════════
       const T = {
         nl: {
-          btn_save: "💾 Gegevens opslaan",
-          btn_load: "📂 Gegevens laden",
-          btn_print: "🖨 Afdrukken / PDF",
-          btn_clear: "🗑 Alles wissen",
+          btn_save: "Gegevens opslaan",
+          btn_load: "Gegevens laden",
+          btn_print: "Afdrukken / PDF",
+          btn_clear: "Alles wissen",
           modal_title: "Maritieme Noodkaart <span>Template</span>",
           tip_info_btn: "Informatie & uitleg",
           tip_save: "Download je gegevens als JSON-bestand. Zo herstel je de kaart op elk apparaat.",
           tip_load: "Laad een eerder opgeslagen JSON-bestand om al je gegevens te herstellen.",
           tip_print: "Opent het afdrukdialoog. Kies 'Opslaan als PDF' en zet 'Achtergronden afdrukken' aan.",
           tip_clear: "Wist alle velden. Dit kan niet ongedaan worden gemaakt.",
+          tip_saveload: "Sla je gegevens op als JSON-bestand of laad een eerder opgeslagen bestand.",
+          tip_printclear: "Druk de kaart af (kies 'Opslaan als PDF') of wis alle velden.",
+          tip_f_name: "Officiële scheepsnaam zoals geregistreerd.",
+          tip_f_type: "Type vaartuig, bijv. motorjacht, zeilboot, binnenvaartschip.",
+          tip_f_eni: "8-cijferig Europees Scheepsidentificatienummer (alleen binnenvaart).",
+          tip_f_length: "Totale lengte over alles in meters.",
+          tip_f_width: "Maximale breedte in meters.",
+          tip_f_draft: "Diepgang bij normale belading in meters.",
+          tip_f_airdraft: "Hoogte boven water in meters (relevant voor bruggen).",
+          tip_f_callsign: "VHF marifoonroepnaam (1–6 letters/cijfers).",
+          tip_atis: "9- of 10-cijferige ATIS-code (alleen binnenvaart).",
+          tip_mmsi: "9-cijferig MMSI-nummer voor DSC en AIS.",
+          tip_f_insurer_name: "Naam van je scheepsvaartverzekering.",
+          tip_f_policy: "Polisnummer van je verzekering.",
+          tip_f_insurer_emergency: "24/7 noodnummer van je verzekeraar.",
+          tip_f_insurer_office: "Kantoornummer voor niet-spoedeisende zaken.",
           clear_confirm:
             "Alle gegevens wissen? Dit kan niet ongedaan worden gemaakt.",
           btn_add_crew: "+ Contact toevoegen",
@@ -147,16 +163,32 @@
           footer_feedback: "Feedback? Mail me op",
         },
         en: {
-          btn_save: "💾 Save data",
-          btn_load: "📂 Load data",
-          btn_print: "🖨 Print / PDF",
-          btn_clear: "🗑 Clear all",
+          btn_save: "Save data",
+          btn_load: "Load data",
+          btn_print: "Print / PDF",
+          btn_clear: "Clear all",
           modal_title: "Maritime Emergency Card <span>Template</span>",
           tip_info_btn: "Information & help",
           tip_save: "Downloads your data as a JSON file. Use it to restore your card on any device.",
           tip_load: "Load a previously saved JSON file to restore all your data.",
           tip_print: "Opens the print dialog. Choose 'Save as PDF' and enable 'Print backgrounds'.",
           tip_clear: "Clears all fields. This cannot be undone.",
+          tip_saveload: "Save your data as a JSON file or load a previously saved file.",
+          tip_printclear: "Print the card (choose 'Save as PDF') or clear all fields.",
+          tip_f_name: "Official vessel name as registered.",
+          tip_f_type: "Type of vessel, e.g. motor yacht, sailboat, inland barge.",
+          tip_f_eni: "8-digit European Vessel Identification Number (inland waterways only).",
+          tip_f_length: "Total length overall in metres.",
+          tip_f_width: "Maximum beam in metres.",
+          tip_f_draft: "Draught at normal load in metres.",
+          tip_f_airdraft: "Height above water in metres (relevant for bridges).",
+          tip_f_callsign: "VHF radio call sign (1–6 letters/digits).",
+          tip_atis: "9- or 10-digit ATIS code (inland waterways only).",
+          tip_mmsi: "9-digit MMSI number for DSC and AIS.",
+          tip_f_insurer_name: "Name of your marine insurer.",
+          tip_f_policy: "Your insurance policy number.",
+          tip_f_insurer_emergency: "24/7 emergency number of your insurer.",
+          tip_f_insurer_office: "Office number for non-urgent matters.",
           clear_confirm: "Clear all data? This cannot be undone.",
           btn_add_crew: "+ Add contact",
           contact_label_placeholder: "Person, vessel, company…",
@@ -292,16 +324,32 @@
           footer_feedback: "Feedback? Mail me at",
         },
         fr: {
-          btn_save: "💾 Enregistrer",
-          btn_load: "📂 Charger",
-          btn_print: "🖨 Imprimer / PDF",
-          btn_clear: "🗑 Tout effacer",
+          btn_save: "Enregistrer",
+          btn_load: "Charger",
+          btn_print: "Imprimer / PDF",
+          btn_clear: "Tout effacer",
           modal_title: "Modèle de Carte <span>Maritime</span>",
           tip_info_btn: "Informations & aide",
           tip_save: "Télécharge vos données en fichier JSON. Permet de restaurer la carte sur n'importe quel appareil.",
           tip_load: "Chargez un fichier JSON précédemment enregistré pour restaurer toutes vos données.",
           tip_print: "Ouvre la boîte d'impression. Choisissez 'Enregistrer en PDF' et activez 'Imprimer les arrière-plans'.",
           tip_clear: "Efface tous les champs. Cette action est irréversible.",
+          tip_saveload: "Enregistrez vos données en JSON ou chargez un fichier précédemment enregistré.",
+          tip_printclear: "Imprimez la carte (choisissez 'Enregistrer en PDF') ou effacez tous les champs.",
+          tip_f_name: "Nom officiel du navire tel qu'enregistré.",
+          tip_f_type: "Type de navire, ex. yacht à moteur, voilier, péniche.",
+          tip_f_eni: "Numéro d'identification européen à 8 chiffres (voies intérieures uniquement).",
+          tip_f_length: "Longueur totale hors tout en mètres.",
+          tip_f_width: "Largeur maximale en mètres.",
+          tip_f_draft: "Tirant d'eau en charge normale en mètres.",
+          tip_f_airdraft: "Hauteur au-dessus de l'eau en mètres (pertinent pour les ponts).",
+          tip_f_callsign: "Indicatif radio VHF (1–6 lettres/chiffres).",
+          tip_atis: "Code ATIS à 9 ou 10 chiffres (voies intérieures uniquement).",
+          tip_mmsi: "Numéro MMSI à 9 chiffres pour DSC et AIS.",
+          tip_f_insurer_name: "Nom de votre assureur maritime.",
+          tip_f_policy: "Numéro de police de votre assurance.",
+          tip_f_insurer_emergency: "Numéro d'urgence 24h/24 de votre assureur.",
+          tip_f_insurer_office: "Numéro de bureau pour les questions non urgentes.",
           clear_confirm:
             "Effacer toutes les données ? Cette action est irréversible.",
           btn_add_crew: "+ Ajouter un contact",
@@ -439,16 +487,32 @@
           footer_feedback: "Feedback? Écrivez-moi à",
         },
         de: {
-          btn_save: "💾 Daten speichern",
-          btn_load: "📂 Daten laden",
-          btn_print: "🖨 Drucken / PDF",
-          btn_clear: "🗑 Alles löschen",
+          btn_save: "Daten speichern",
+          btn_load: "Daten laden",
+          btn_print: "Drucken / PDF",
+          btn_clear: "Alles löschen",
           modal_title: "Maritime Notfallkarte <span>Vorlage</span>",
           tip_info_btn: "Informationen & Hilfe",
           tip_save: "Lädt Ihre Daten als JSON-Datei herunter. So können Sie die Karte auf jedem Gerät wiederherstellen.",
           tip_load: "Laden Sie eine zuvor gespeicherte JSON-Datei, um alle Ihre Daten wiederherzustellen.",
           tip_print: "Öffnet den Druckdialog. Wählen Sie 'Als PDF speichern' und aktivieren Sie 'Hintergründe drucken'.",
           tip_clear: "Löscht alle Felder. Diese Aktion kann nicht rückgängig gemacht werden.",
+          tip_saveload: "Daten als JSON-Datei speichern oder eine zuvor gespeicherte Datei laden.",
+          tip_printclear: "Karte drucken (wählen Sie 'Als PDF speichern') oder alle Felder löschen.",
+          tip_f_name: "Offizieller Schiffsname wie eingetragen.",
+          tip_f_type: "Schiffstyp, z.B. Motorjacht, Segelboot, Binnenschiff.",
+          tip_f_eni: "8-stellige Europäische Schiffsidentifikationsnummer (nur Binnenschifffahrt).",
+          tip_f_length: "Gesamtlänge über alles in Metern.",
+          tip_f_width: "Maximale Breite in Metern.",
+          tip_f_draft: "Tiefgang bei normaler Beladung in Metern.",
+          tip_f_airdraft: "Höhe über Wasser in Metern (relevant für Brücken).",
+          tip_f_callsign: "UKW-Sprechfunkrufzeichen (1–6 Buchstaben/Ziffern).",
+          tip_atis: "9- oder 10-stelliger ATIS-Code (nur Binnenschifffahrt).",
+          tip_mmsi: "9-stellige MMSI-Nummer für DSC und AIS.",
+          tip_f_insurer_name: "Name Ihrer Schiffsversicherung.",
+          tip_f_policy: "Ihre Versicherungspolice-Nummer.",
+          tip_f_insurer_emergency: "24/7-Notrufnummer Ihrer Versicherung.",
+          tip_f_insurer_office: "Büronummer für nicht dringende Angelegenheiten.",
           clear_confirm:
             "Alle Daten löschen? Dies kann nicht rückgängig gemacht werden.",
           btn_add_crew: "+ Kontakt hinzufügen",
@@ -603,11 +667,19 @@
           )
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.getAttribute("data-i18n")
-          if (T[lang][key] !== undefined) el.innerHTML = T[lang][key]
+          if (T[lang][key] !== undefined) {
+            el.innerHTML = T[lang][key]
+          }
         })
         document.querySelectorAll("[data-tip-i18n]").forEach((el) => {
           const key = el.getAttribute("data-tip-i18n")
-          if (T[lang][key] !== undefined) el.setAttribute("title", T[lang][key])
+          if (T[lang][key] !== undefined) {
+            if (el.classList.contains("tip-btn")) {
+              el.setAttribute("data-tip", T[lang][key])
+            } else {
+              el.setAttribute("title", T[lang][key])
+            }
+          }
         })
         document.querySelectorAll("[data-i18n-title]").forEach((el) => {
           const key = el.getAttribute("data-i18n-title")
