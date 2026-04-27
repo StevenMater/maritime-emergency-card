@@ -1,81 +1,48 @@
       // ══ CONTACTS ════════════════════════════════════════════════════════
-      const MAX_EXTRA = 5
+      const MAX_EXTRA = 6
       const CREW_ROWS = 7
-      let fixedCrew = [
-        { role: "skipper", name: "", phone: "" },
-        { role: "mate", name: "", phone: "" },
-      ]
-      let extraCrew = []
+      let fixedContact = { label: "", phone: "" }
+      let extraContacts = []
 
       function iStyle() {
         return "font-family:var(--font-mono);padding:6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;outline:none"
-      }
-      function sStyle(dis) {
-        const arrow = dis
-          ? `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23aaaaaa'/%3E%3C/svg%3E")`
-          : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23444444'/%3E%3C/svg%3E")`
-        return `font-family:var(--font-mono);padding:6px 16px 6px 8px;border:1.5px solid var(--input-bdr);border-radius:4px;background-color:${dis ? "var(--ui-border)" : "var(--input-bg)"};background-image:${arrow};background-repeat:no-repeat;background-position:right 8px center;-webkit-appearance:none;appearance:none;color:${dis ? "var(--mid)" : "var(--dark)"};outline:none`
-      }
-
-      function extraRoleKeys() {
-        return ["passenger", "child", "pet"]
-      }
-      function roleLabel(key) {
-        return T[currentLang][`role_${key}`] || key
-      }
-      function fixedRoleLabel(i) {
-        return i === 0 ? roleLabel("skipper") : roleLabel("mate")
       }
 
       function renderContactEditor() {
         const el = document.getElementById("contact-rows")
         el.innerHTML = ""
-        fixedCrew.forEach((c, i) => {
+
+        const fixed = document.createElement("div")
+        fixed.className = "contact-row"
+        fixed.innerHTML = `
+      <input class="crew-inp" value="${fixedContact.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="fixedContact.label=this.value;update()" style="${iStyle()}">
+      <input class="crew-inp" value="${fixedContact.phone}" maxlength="17" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="fixedContact.phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <button class="del-btn" onclick="fixedContact={label:'',phone:''};renderContactEditor();update()">×</button>`
+        el.appendChild(fixed)
+
+        extraContacts.forEach((c, i) => {
           const row = document.createElement("div")
           row.className = "contact-row"
           row.innerHTML = `
-      <select class="crew-sel" disabled style="${sStyle(true)}"><option>${fixedRoleLabel(i)}</option></select>
-      <input class="crew-inp" value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="fixedCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="fixedCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
-      <button class="del-btn" onclick="clearFixed(${i})">×</button>`
-          el.appendChild(row)
-        })
-        extraCrew.forEach((c, i) => {
-          const row = document.createElement("div")
-          row.className = "contact-row"
-          row.innerHTML = `
-      <select class="crew-sel" onchange="extraCrew[${i}].role=this.value;update()" style="${sStyle(false)}">
-        ${extraRoleKeys()
-          .map(
-            (k) =>
-              `<option value="${k}"${c.role === k ? " selected" : ""}>${roleLabel(k)}</option>`,
-          )
-          .join("")}
-      </select>
-      <input class="crew-inp" value="${c.name}" maxlength="25" placeholder="${T[currentLang].crew_name_placeholder}" oninput="extraCrew[${i}].name=this.value;update()" style="${iStyle()}">
-      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_placeholder}" oninput="extraCrew[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
+      <input class="crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="extraContacts[${i}].label=this.value;update()" style="${iStyle()}">
+      <input class="crew-inp" value="${c.phone}" maxlength="17" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="extraContacts[${i}].phone=this.value;update()" style="${iStyle()};max-width:170px">
       <button class="del-btn" onclick="removeExtra(${i})">×</button>`
           el.appendChild(row)
         })
+
         const addBtn = document.querySelector(".add-btn")
-        addBtn.style.display = extraCrew.length >= MAX_EXTRA ? "none" : ""
+        addBtn.style.display = extraContacts.length >= MAX_EXTRA ? "none" : ""
         addBtn.textContent = T[currentLang].btn_add_crew
       }
 
-      function clearFixed(i) {
-        fixedCrew[i].name = ""
-        fixedCrew[i].phone = ""
-        renderContactEditor()
-        update()
-      }
       function addContact() {
-        if (extraCrew.length >= MAX_EXTRA) return
-        extraCrew.push({ role: "passenger", name: "", phone: "" })
+        if (extraContacts.length >= MAX_EXTRA) return
+        extraContacts.push({ label: "", phone: "" })
         renderContactEditor()
         update()
       }
       function removeExtra(i) {
-        extraCrew.splice(i, 1)
+        extraContacts.splice(i, 1)
         renderContactEditor()
         update()
       }
@@ -223,24 +190,18 @@
         document.getElementById("r-atis").textContent = formatATIS(atis)
         document.getElementById("r-mmsi").textContent = formatMMSI(mmsi)
 
-        // Crew — always CREW_ROWS rows
+        // Contacts — always CREW_ROWS rows
         const tbl = document.getElementById("r-crew")
         while (tbl.rows.length > 1) tbl.deleteRow(1)
-        const allCrew = [
-          ...fixedCrew.map((c, i) => ({
-            ...c,
-            displayRole: fixedRoleLabel(i),
-          })),
-          ...extraCrew.map((c) => ({ ...c, displayRole: roleLabel(c.role) })),
-        ]
+        const allContacts = [fixedContact, ...extraContacts]
         for (let i = 0; i < CREW_ROWS; i++) {
+          const c = allContacts[i]
           const tr = tbl.insertRow()
           tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
-          if (i < allCrew.length) {
-            const c = allCrew[i]
-            tr.innerHTML = `<td class="c30">${c.displayRole}</td><td class="c40" style="font-weight:700">${c.name || "—"}</td><td class="c30 right">${formatPhone(c.phone)}</td>`
+          if (c?.label || c?.phone) {
+            tr.innerHTML = `<td class="c50" style="font-weight:700">${c.label}</td><td class="c50 right">${formatPhone(c.phone)}</td>`
           } else {
-            tr.innerHTML = `<td class="c30" style="color:var(--lgray)">—</td><td class="c40" style="color:var(--lgray)">—</td><td class="c30 right" style="color:var(--lgray)">—</td>`
+            tr.innerHTML = `<td class="c50"></td><td class="c50 right"></td>`
           }
         }
 
@@ -289,8 +250,7 @@
           atis,
           mmsi,
           document.getElementById("f-insurer-name").value,
-          ...fixedCrew.map((c) => c.name + c.phone),
-          ...extraCrew.map((c) => c.name),
+          ...[fixedContact, ...extraContacts].map((c) => c.label + c.phone),
         ].some((v) => v && v.trim() !== "")
         const saveBtn = document.getElementById("btn-save")
         saveBtn.disabled = !hasData
@@ -317,7 +277,7 @@
       }
 
       // ══ STORAGE ═══════════════════════════════════════════════════════════
-      const CURRENT_VERSION = 6
+      const CURRENT_VERSION = 7
       const STORAGE_KEY = "maritieme_noodkaart"
 
       function getFormData() {
@@ -339,8 +299,8 @@
           insurerEmergencyPhone: document.getElementById("f-insurer-emergency")
             .value,
           insurerOfficePhone: document.getElementById("f-insurer-office").value,
-          fixedCrew,
-          extraCrew,
+          fixedContact,
+          extraContacts,
         }
       }
 
@@ -348,7 +308,6 @@
         const version = d.version || 1
         if (version >= CURRENT_VERSION) return { data: d, outdated: false }
 
-        // v1/v2 used Dutch field names and fixedCrew as 'fixed', extraCrew as 'extras'
         const m = {
           version: CURRENT_VERSION,
           lang: d.lang || "nl",
@@ -366,23 +325,21 @@
           policyNumber: d.policyNumber || d.verzPolis || "",
           insurerEmergencyPhone: d.insurerEmergencyPhone || d.verzNood || "",
           insurerOfficePhone: d.insurerOfficePhone || d.verzKantoor || "",
-          fixedCrew: (d.fixedCrew || d.fixed || []).map((c) => ({
-            role:
-              c.role ||
-              (c.rol === "Schipper"
-                ? "skipper"
-                : c.rol === "Maat"
-                  ? "mate"
-                  : "skipper"),
-            name: c.name || c.naam || "",
-            phone: c.phone || c.tel || "",
-          })),
-          extraCrew: (d.extraCrew || d.extras || []).map((c) => ({
-            role: c.role || "passenger",
-            name: c.name || c.naam || "",
-            phone: c.phone || c.tel || "",
-          })),
         }
+
+        if (version < 7) {
+          // v1–v6: combine fixedCrew + extraCrew into flat fixedContact + extraContacts
+          const old = [
+            ...(d.fixedCrew || d.fixed || []),
+            ...(d.extraCrew || d.extras || []),
+          ].map((c) => ({ label: c.name || c.naam || "", phone: c.phone || c.tel || "" }))
+          m.fixedContact = old[0] || { label: "", phone: "" }
+          m.extraContacts = old.slice(1)
+        } else {
+          m.fixedContact = d.fixedContact || { label: "", phone: "" }
+          m.extraContacts = d.extraContacts || []
+        }
+
         return { data: m, outdated: true }
       }
 
@@ -416,8 +373,8 @@
         s("f-policy", data.policyNumber)
         s("f-insurer-emergency", data.insurerEmergencyPhone)
         s("f-insurer-office", data.insurerOfficePhone)
-        if (Array.isArray(data.fixedCrew)) fixedCrew = data.fixedCrew
-        if (Array.isArray(data.extraCrew)) extraCrew = data.extraCrew
+        if (data.fixedContact) fixedContact = data.fixedContact
+        if (Array.isArray(data.extraContacts)) extraContacts = data.extraContacts
         document
           .querySelectorAll(".lang-btn")
           .forEach((b) =>
@@ -488,11 +445,8 @@
         ].forEach((id) => {
           document.getElementById(id).value = ""
         })
-        fixedCrew = [
-          { role: "skipper", name: "", phone: "" },
-          { role: "mate", name: "", phone: "" },
-        ]
-        extraCrew = []
+        fixedContact = { label: "", phone: "" }
+        extraContacts = []
         setLang(currentLang)
       }
 

@@ -30,6 +30,10 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+        user-select: none;
+      }
+      input, textarea {
+        user-select: text;
       }
       body {
         font-family: var(--font-sans);
@@ -65,17 +69,18 @@
         color: white;
       }
 
-      .btn-group {
+      .save-load-bar {
         display: flex;
         gap: 8px;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
+        max-width: calc(794px * 1.5);
+        width: 100%;
+        margin-bottom: 8px;
       }
-      .btn-group-left {
+      .action-bar {
         display: flex;
         gap: 8px;
-        flex-wrap: wrap;
+        justify-content: flex-end;
       }
       .print-btn {
         font-family: var(--font-sans);
@@ -130,7 +135,8 @@
 
       .fields-wrap {
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
         padding: 20px 16px 8px;
         background: var(--ui-bg);
       }
@@ -684,13 +690,6 @@
         margin-top: 7px;
       }
 
-      .crew-sel {
-        font-size: 12px;
-        width: 120px;
-        min-width: 120px;
-        background: var(--input-bg);
-        color: var(--dark);
-      }
       .crew-inp {
         font-size: 13px;
         flex: 1;
@@ -698,23 +697,16 @@
         color: var(--dark);
       }
 
-      @media (max-width: 700px) {
-        .editor-section .btn-group {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-        }
-        .editor-section .btn-group .btn-group-left {
-          display: contents;
-        }
-      }
-
       @media (max-width: 480px) {
-        .editor-section .btn-group {
-          display: flex;
+        .save-load-bar,
+        .action-bar {
           flex-direction: column;
         }
-        .editor-section .btn-group .btn-group-left {
-          display: contents;
+        .save-load-bar .print-btn,
+        .save-load-bar label.print-btn,
+        .action-bar .print-btn {
+          width: 100%;
+          justify-content: center;
         }
       }
 
@@ -743,18 +735,12 @@
         .field-group select {
           font-size: 16px;
         }
-        .crew-inp,
-        .crew-sel {
+        .crew-inp {
           font-size: 16px;
         }
         .contact-row {
           flex-wrap: wrap;
           row-gap: 6px;
-        }
-        .crew-sel {
-          flex: 1 1 100%;
-          width: auto;
-          min-width: 0;
         }
         .crew-inp {
           flex: 1;
@@ -774,12 +760,6 @@
         }
         .lang-btns {
           margin-left: auto;
-        }
-        .editor-section .btn-group .print-btn,
-        .editor-section .btn-group label.print-btn {
-          width: 100%;
-          text-align: center;
-          box-sizing: border-box;
         }
       }
 

@@ -191,6 +191,24 @@
     <!-- /.sticky-header -->
 
     <div class="fields-wrap">
+      <div class="save-load-bar">
+        <button
+          id="btn-save"
+          class="print-btn sec"
+          onclick="exportJSON()"
+          data-i18n="btn_save"
+          data-tip-i18n="tip_save">
+          💾 Gegevens opslaan
+        </button>
+        <label class="print-btn sec" style="cursor: pointer" data-tip-i18n="tip_load">
+          <span data-i18n="btn_load">📂 Gegevens laden</span>
+          <input
+            type="file"
+            accept=".json"
+            onchange="importJSON(event)"
+            style="display: none" />
+        </label>
+      </div>
       <div class="fields-grid">
         <div class="editor-section">
           <div class="editor-section-title" data-i18n="sec_ship"></div>
@@ -289,19 +307,7 @@
         </div>
 
         <div class="editor-section">
-          <div class="editor-section-title">
-            <span data-i18n="sec_crew"></span>
-            <span
-              style="
-                font-weight: 400;
-                color: var(--lgray);
-                letter-spacing: 0;
-                text-transform: none;
-                font-size: 10px;
-              "
-              >— max. 7</span
-            >
-          </div>
+          <div class="editor-section-title" data-i18n="sec_crew"></div>
           <div class="contact-rows" id="contact-rows"></div>
           <button
             class="add-btn"
@@ -352,28 +358,7 @@
         </div>
 
         <div class="editor-section">
-          <div class="btn-group">
-            <div class="btn-group-left">
-              <button
-                id="btn-save"
-                class="print-btn sec"
-                onclick="exportJSON()"
-                data-i18n="btn_save"
-                data-tip-i18n="tip_save">
-                💾 Gegevens opslaan
-              </button>
-              <label
-                class="print-btn sec"
-                style="cursor: pointer"
-                data-tip-i18n="tip_load">
-                <span data-i18n="btn_load">📂 Gegevens laden</span>
-                <input
-                  type="file"
-                  accept=".json"
-                  onchange="importJSON(event)"
-                  style="display: none" />
-              </label>
-            </div>
+          <div class="action-bar">
             <button
               class="print-btn"
               style="background: #2a9d5c"
@@ -468,9 +453,8 @@
                 <div class="sec-hdr" data-i18n="card_crew"></div>
                 <table class="dtable" id="r-crew">
                   <tr class="sub-hdr">
-                    <td class="c30" data-i18n="th_role"></td>
-                    <td class="c40" data-i18n="th_name"></td>
-                    <td class="c30 right" data-i18n="th_contact"></td>
+                    <td class="c50" data-i18n="th_name"></td>
+                    <td class="c50 right" data-i18n="th_contact"></td>
                   </tr>
                 </table>
               </div>
