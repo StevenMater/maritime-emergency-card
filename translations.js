@@ -19,13 +19,13 @@
             "Een template voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water. Deze kaart is ingericht voor het vaargebied Nederland.",
           info_save_title: "Gegevens opslaan & laden",
           info_save_body:
-            'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong style="color:#FBD38D">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong style="color:#FBD38D">Gegevens laden</strong>.',
+            'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong class="hl">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong class="hl">Gegevens laden</strong>.',
           info_print_title: "Afdrukken / PDF maken",
           info_print_body:
-            'Klik op <strong style="color:#FBD38D">Afdrukken / PDF</strong> onderaan het formulier. Kies <strong style="color:#FBD38D">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong style="color:#FBD38D">Achtergronden afdrukken</strong> is ingeschakeld.',
+            'Klik op <strong class="hl">Afdrukken / PDF</strong> onderaan het formulier. Kies <strong class="hl">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong class="hl">Achtergronden afdrukken</strong> is ingeschakeld.',
           warn_title: "Let op — automatisch opslaan is niet 100% veilig",
           warn_body:
-            'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong style="color:#FBD38D">handmatig op te slaan</strong> via <strong style="color:#FBD38D">Gegevens opslaan</strong> onderaan het formulier.',
+            'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong class="hl">handmatig op te slaan</strong> via <strong class="hl">Gegevens opslaan</strong> onderaan het formulier.',
           vw_title: "Verouderde versie geladen",
           vw_body:
             "Je hebt een oudere opgeslagen versie geladen. Alle beschikbare gegevens zijn ingeladen. Sla je gegevens op om te updaten naar de huidige versie.",
@@ -169,13 +169,13 @@
             "A template for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water. This card is configured for the Netherlands.",
           info_save_title: "Save & load data",
           info_save_body:
-            'Your data is automatically saved in this browser. Use <strong style="color:#FBD38D">Save data</strong> to download a backup and load it on another device via <strong style="color:#FBD38D">Load data</strong>.',
+            'Your data is automatically saved in this browser. Use <strong class="hl">Save data</strong> to download a backup and load it on another device via <strong class="hl">Load data</strong>.',
           info_print_title: "Print / make PDF",
           info_print_body:
-            'Click <strong style="color:#FBD38D">Print / PDF</strong> at the bottom of the form. Choose <strong style="color:#FBD38D">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong style="color:#FBD38D">Print backgrounds</strong> is enabled for colours.',
+            'Click <strong class="hl">Print / PDF</strong> at the bottom of the form. Choose <strong class="hl">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong class="hl">Print backgrounds</strong> is enabled for colours.',
           warn_title: "Warning — auto-save is not 100% reliable",
           warn_body:
-            'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong style="color:#FBD38D">saving your data manually</strong> via <strong style="color:#FBD38D">Save data</strong> at the bottom of the form.',
+            'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong class="hl">saving your data manually</strong> via <strong class="hl">Save data</strong> at the bottom of the form.',
           vw_title: "Outdated version loaded",
           vw_body:
             "You have loaded an older saved version. All available data has been loaded. Save your data to update to the current version.",
@@ -320,14 +320,14 @@
             "Un modèle de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau. Cette carte est configurée pour les Pays-Bas.",
           info_save_title: "Enregistrer & charger",
           info_save_body:
-            'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong style="color:#FBD38D">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong style="color:#FBD38D">Charger</strong>.',
+            'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong class="hl">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong class="hl">Charger</strong>.',
           info_print_title: "Imprimer / créer un PDF",
           info_print_body:
-            'Cliquez sur <strong style="color:#FBD38D">Imprimer / PDF</strong> en bas du formulaire. Choisissez <strong style="color:#FBD38D">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong style="color:#FBD38D">Imprimer les arrière-plans</strong> est activé.',
+            'Cliquez sur <strong class="hl">Imprimer / PDF</strong> en bas du formulaire. Choisissez <strong class="hl">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong class="hl">Imprimer les arrière-plans</strong> est activé.',
           warn_title:
             "Attention — la sauvegarde automatique n'est pas fiable à 100%",
           warn_body:
-            "Le navigateur peut perdre des données lors d'une mise à jour ou d'un effacement. Nous recommandons toujours de <strong style=\"color:#FBD38D\">sauvegarder manuellement</strong> via <strong style=\"color:#FBD38D\">Enregistrer</strong> en bas du formulaire.",
+            "Le navigateur peut perdre des données lors d'une mise à jour ou d'un effacement. Nous recommandons toujours de <strong class=\"hl\">sauvegarder manuellement</strong> via <strong class=\"hl\">Enregistrer</strong> en bas du formulaire.",
           vw_title: "Version obsolète chargée",
           vw_body:
             "Vous avez chargé une ancienne version sauvegardée. Toutes les données disponibles ont été chargées. Enregistrez vos données pour passer à la version actuelle.",
@@ -472,13 +472,13 @@
             "Eine Vorlage für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen. Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           info_save_title: "Daten speichern & laden",
           info_save_body:
-            'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong style="color:#FBD38D">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong style="color:#FBD38D">Daten laden</strong> einzulesen.',
+            'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong class="hl">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong class="hl">Daten laden</strong> einzulesen.',
           info_print_title: "Drucken / PDF erstellen",
           info_print_body:
-            'Klicken Sie unten im Formular auf <strong style="color:#FBD38D">Drucken / PDF</strong>. Wählen Sie <strong style="color:#FBD38D">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong style="color:#FBD38D">Hintergründe drucken</strong> aktiviert ist.',
+            'Klicken Sie unten im Formular auf <strong class="hl">Drucken / PDF</strong>. Wählen Sie <strong class="hl">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong class="hl">Hintergründe drucken</strong> aktiviert ist.',
           warn_title: "Achtung — automatisches Speichern ist nicht 100% sicher",
           warn_body:
-            'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong style="color:#FBD38D">manuell zu speichern</strong> über <strong style="color:#FBD38D">Daten speichern</strong> unten im Formular.',
+            'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong class="hl">manuell zu speichern</strong> über <strong class="hl">Daten speichern</strong> unten im Formular.',
           vw_title: "Veraltete Version geladen",
           vw_body:
             "Sie haben eine ältere gespeicherte Version geladen. Alle verfügbaren Daten wurden geladen. Speichern Sie Ihre Daten, um auf die aktuelle Version zu aktualisieren.",

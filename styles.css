@@ -993,6 +993,9 @@
       .modal-section--warn .modal-section-body {
         color: rgba(255, 255, 255, 0.85);
       }
+      .hl {
+        color: #fbd38d;
+      }
       @media (max-width: 540px) {
         .modal-body {
           grid-template-columns: 1fr;
