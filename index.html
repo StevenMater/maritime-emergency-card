@@ -3,46 +3,43 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Maritieme Noodkaart</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚓</text></svg>" />
+    <title>MareSafe</title>
+    <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="sticky-header">
       <div class="editor">
         <div style="display: flex; align-items: center; gap: 8px">
+          <img src="assets/logo.svg" alt="" aria-hidden="true" style="height: 30px; width: 30px; flex-shrink: 0" />
           <h1 id="site-title">
-            <span class="title-text"
-              >Maritieme Noodkaart <span>Template</span></span
-            >
+            <span class="title-text">Mare<span>Safe</span></span><span class="title-short">M<span>S</span></span>
           </h1>
-          <button
-            class="info-btn"
-            onclick="openInfoModal()"
-            data-i18n-title="tip_info_btn"
-            title="Info">
-            ?
-          </button>
         </div>
         <div class="lang-btns">
           <button
             class="lang-btn active"
             onclick="setLang('nl')"
-            title="Nederlands">
+            aria-label="Nederlands">
             🇳🇱
           </button>
-          <button class="lang-btn" onclick="setLang('en')" title="English">
+          <button class="lang-btn" onclick="setLang('en')" aria-label="English">
             🇬🇧
           </button>
-          <button class="lang-btn" onclick="setLang('fr')" title="Français">
+          <button class="lang-btn" onclick="setLang('fr')" aria-label="Français">
             🇫🇷
           </button>
-          <button class="lang-btn" onclick="setLang('de')" title="Deutsch">
+          <button class="lang-btn" onclick="setLang('de')" aria-label="Deutsch">
             🇩🇪
           </button>
         </div>
+        <button
+          class="info-btn"
+          onclick="openInfoModal()"
+          data-i18n-aria="tip_info_btn"
+          aria-label="Info">
+          ?
+        </button>
       </div>
 
       <!-- VERSION WARNING (red banner, same style as original warn banner, hidden by default) -->
@@ -930,21 +927,22 @@
       onclick="if (event.target === this) closeInfoModal()">
       <div class="modal-panel" role="dialog" aria-modal="true">
         <div class="modal-hdr">
+          <img src="assets/logo.svg" alt="" aria-hidden="true" style="height: 28px; width: 28px; flex-shrink: 0; margin-right: 8px" />
           <div class="modal-hdr-title" data-i18n="modal_title"></div>
           <div class="lang-btns" style="margin-left: auto; margin-right: 12px">
             <button
               class="lang-btn active"
               onclick="setLang('nl')"
-              title="Nederlands">
+              aria-label="Nederlands">
               🇳🇱
             </button>
-            <button class="lang-btn" onclick="setLang('en')" title="English">
+            <button class="lang-btn" onclick="setLang('en')" aria-label="English">
               🇬🇧
             </button>
-            <button class="lang-btn" onclick="setLang('fr')" title="Français">
+            <button class="lang-btn" onclick="setLang('fr')" aria-label="Français">
               🇫🇷
             </button>
-            <button class="lang-btn" onclick="setLang('de')" title="Deutsch">
+            <button class="lang-btn" onclick="setLang('de')" aria-label="Deutsch">
               🇩🇪
             </button>
           </div>

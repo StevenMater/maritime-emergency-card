@@ -5,7 +5,7 @@
           btn_load: "Gegevens laden",
           btn_print: "Afdrukken / PDF",
           btn_clear: "Alles wissen",
-          modal_title: "Maritieme Noodkaart <span>Template</span>",
+          modal_title: "Mare<span>Safe</span>",
           tip_info_btn: "Informatie & uitleg",
           tip_save: "Download je gegevens als JSON-bestand. Zo herstel je de kaart op elk apparaat.",
           tip_load: "Laad een eerder opgeslagen JSON-bestand om al je gegevens te herstellen.",
@@ -73,7 +73,7 @@
           card_channels: "NOODKANALEN (MARIFOON)",
           card_numbers: "HULPNUMMERS",
           card_title: "MARITIEME NOODKAART",
-          site_title: "Maritieme Noodkaart Template",
+          site_title: "Mare Safe",
           card_calls: "NOODOPROEPEN",
           calls_english_note:
             "Noodoproepen worden internationaal in het Engels gedaan.",
@@ -167,7 +167,7 @@
           btn_load: "Load data",
           btn_print: "Print / PDF",
           btn_clear: "Clear all",
-          modal_title: "Maritime Emergency Card <span>Template</span>",
+          modal_title: "Mare<span>Safe</span>",
           tip_info_btn: "Information & help",
           tip_save: "Downloads your data as a JSON file. Use it to restore your card on any device.",
           tip_load: "Load a previously saved JSON file to restore all your data.",
@@ -234,7 +234,7 @@
           card_channels: "EMERGENCY CHANNELS (VHF)",
           card_numbers: "EMERGENCY NUMBERS",
           card_title: "MARITIME EMERGENCY CARD",
-          site_title: "Maritime Emergency Card Template",
+          site_title: "Mare Safe",
           card_calls: "EMERGENCY CALLS",
           calls_english_note:
             "Emergency calls are made internationally in English.",
@@ -328,7 +328,7 @@
           btn_load: "Charger",
           btn_print: "Imprimer / PDF",
           btn_clear: "Tout effacer",
-          modal_title: "Modèle de Carte <span>Maritime</span>",
+          modal_title: "Mare<span>Safe</span>",
           tip_info_btn: "Informations & aide",
           tip_save: "Télécharge vos données en fichier JSON. Permet de restaurer la carte sur n'importe quel appareil.",
           tip_load: "Chargez un fichier JSON précédemment enregistré pour restaurer toutes vos données.",
@@ -400,7 +400,7 @@
           calls_english_note:
             "Les appels de détresse se font internationalement en anglais.",
           card_title: "CARTE D'URGENCE MARITIME",
-          site_title: "Modèle de Carte Maritime",
+          site_title: "Mare Safe",
           card_fire: "INCENDIE À BORD — PROTOCOLE D'ACTION",
           card_mob: "HOMME À LA MER — PROTOCOLE D'ACTION",
           card_signals: "SIGNAUX SONORES (BPR)",
@@ -491,7 +491,7 @@
           btn_load: "Daten laden",
           btn_print: "Drucken / PDF",
           btn_clear: "Alles löschen",
-          modal_title: "Maritime Notfallkarte <span>Vorlage</span>",
+          modal_title: "Mare<span>Safe</span>",
           tip_info_btn: "Informationen & Hilfe",
           tip_save: "Lädt Ihre Daten als JSON-Datei herunter. So können Sie die Karte auf jedem Gerät wiederherstellen.",
           tip_load: "Laden Sie eine zuvor gespeicherte JSON-Datei, um alle Ihre Daten wiederherzustellen.",
@@ -560,7 +560,7 @@
           card_channels: "NOTFUNKKANÄLE (UKW)",
           card_numbers: "NOTRUFNUMMERN",
           card_title: "MARITIME NOTFALLKARTE",
-          site_title: "Maritime Notfallkarte Vorlage",
+          site_title: "Mare Safe",
           card_calls: "NOTRUFE",
           calls_english_note:
             "Notrufe werden international auf Englisch durchgeführt.",
@@ -677,25 +677,16 @@
             if (el.classList.contains("tip-btn")) {
               el.setAttribute("data-tip", T[lang][key])
             } else {
-              el.setAttribute("title", T[lang][key])
+              el.setAttribute("aria-label", T[lang][key])
             }
           }
         })
-        document.querySelectorAll("[data-i18n-title]").forEach((el) => {
-          const key = el.getAttribute("data-i18n-title")
-          if (T[lang][key] !== undefined) el.setAttribute("title", T[lang][key])
+        document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+          const key = el.getAttribute("data-i18n-aria")
+          if (T[lang][key] !== undefined) el.setAttribute("aria-label", T[lang][key])
         })
-        // Site title (has a <span> inside so we handle it separately)
-        const siteTitle =
-          T[lang].site_title || "Maritime Emergency Card Template"
-        const parts = siteTitle.split(" ")
-        const last = parts.pop()
         document.getElementById("site-title").innerHTML =
-          '<span class="title-text">' +
-          parts.join(" ") +
-          " <span>" +
-          last +
-          "</span></span>"
+          '<span class="title-text">Mare<span>Safe</span></span><span class="title-short">M<span>S</span></span>'
         renderContactEditor()
         buildProtocols()
         buildSignals()

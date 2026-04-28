@@ -329,7 +329,7 @@ function update() {
   )
   const dateISO = now.toISOString().slice(0, 10)
   document.title = [
-    "Maritieme Noodkaart",
+    "MareSafe",
     name || null,
     dateISO,
     currentLang.toUpperCase(),
@@ -550,7 +550,7 @@ function exportJSON() {
   })
   const a = document.createElement("a")
   a.href = URL.createObjectURL(blob)
-  a.download = `Maritieme Noodkaart v${CURRENT_VERSION} - ${name} - ${today}.json`
+  a.download = `MareSafe v${CURRENT_VERSION} - ${name} - ${today}.json`
   a.click()
   URL.revokeObjectURL(a.href)
   document.getElementById("version-warning").style.display = "none"
