@@ -13,7 +13,7 @@
         <div style="display: flex; align-items: center; gap: 8px">
           <img src="assets/logo.svg" alt="" aria-hidden="true" style="height: 30px; width: 30px; flex-shrink: 0" />
           <h1 id="site-title">
-            <span class="title-text">Mare<span>Safe</span></span><span class="title-short">M<span>S</span></span>
+            <span class="brand-title-text">Mare<span>Safe</span></span><span class="brand-title-short">M<span>S</span></span>
           </h1>
         </div>
         <div class="lang-btns">
@@ -189,27 +189,29 @@
 
     <div class="fields-wrap">
       <div class="save-load-bar">
+        <div class="btn-stack">
+          <button
+            id="btn-save"
+            class="print-btn sec"
+            onclick="exportJSON()"
+            data-tip-i18n="tip_save">
+            <span>💾</span><span data-i18n="btn_save"></span>
+          </button>
+          <label
+            class="print-btn sec"
+            style="cursor: pointer"
+            data-tip-i18n="tip_load">
+            <span>📂</span><span data-i18n="btn_load"></span>
+            <input
+              type="file"
+              accept=".json"
+              onchange="importJSON(event)"
+              style="display: none" />
+          </label>
+        </div>
         <button class="tip-btn" data-tip-i18n="tip_saveload" type="button">
           ?
         </button>
-        <button
-          id="btn-save"
-          class="print-btn sec"
-          onclick="exportJSON()"
-          data-tip-i18n="tip_save">
-          <span>💾</span><span data-i18n="btn_save"></span>
-        </button>
-        <label
-          class="print-btn sec"
-          style="cursor: pointer"
-          data-tip-i18n="tip_load">
-          <span>📂</span><span data-i18n="btn_load"></span>
-          <input
-            type="file"
-            accept=".json"
-            onchange="importJSON(event)"
-            style="display: none" />
-        </label>
       </div>
       <div class="fields-grid">
         <div class="editor-section">
@@ -272,88 +274,6 @@
                   " />
               </div>
             </div>
-            <div class="fields-row r4">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_length"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_length"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-length"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="update()" /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_width"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_width"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-width"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="update()" /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_draft"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_draft"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-draft"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="update()" /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_airdraft"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_airdraft"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-airdraft"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="update()" /><span class="inp-badge">m</span>
-                </div>
-              </div>
-            </div>
             <div class="fields-row r3">
               <div class="field-group">
                 <div class="label-wrap">
@@ -413,6 +333,63 @@
                     numericOnly(this)
                     update()
                   " />
+              </div>
+            </div>
+            <hr class="form-sep" />
+            <div class="meas-grid">
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_length"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_length" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-length" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_alt_length"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_alt_length" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-alt-length" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_width"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_width" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-width" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_draft"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_draft" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-draft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_airdraft"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_airdraft" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-airdraft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
+              </div>
+              <div class="field-group">
+                <div class="label-wrap">
+                  <label data-i18n="f_alt_airdraft"></label
+                  ><button class="tip-btn" data-tip-i18n="tip_f_alt_airdraft" type="button">?</button>
+                </div>
+                <div class="inp-wrap inp-wrap--m">
+                  <input class="inp" id="f-alt-airdraft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                </div>
               </div>
             </div>
           </div>
@@ -545,25 +522,27 @@
 
         <div class="editor-section">
           <div class="action-bar">
+            <div class="btn-stack">
+              <button
+                class="print-btn"
+                style="background: #2a9d5c"
+                onclick="window.print()"
+                data-tip-i18n="tip_print">
+                <span>🖨</span><span data-i18n="btn_print"></span>
+              </button>
+              <button
+                class="print-btn"
+                style="background: var(--red)"
+                onclick="clearAll()"
+                data-tip-i18n="tip_clear">
+                <span>🗑</span><span data-i18n="btn_clear"></span>
+              </button>
+            </div>
             <button
               class="tip-btn"
               data-tip-i18n="tip_printclear"
               type="button">
               ?
-            </button>
-            <button
-              class="print-btn"
-              style="background: #2a9d5c"
-              onclick="window.print()"
-              data-tip-i18n="tip_print">
-              <span>🖨</span><span data-i18n="btn_print"></span>
-            </button>
-            <button
-              class="print-btn"
-              style="background: var(--red)"
-              onclick="clearAll()"
-              data-tip-i18n="tip_clear">
-              <span>🗑</span><span data-i18n="btn_clear"></span>
             </button>
           </div>
         </div>
@@ -609,8 +588,22 @@
                   <td class="val" id="r-eni">—</td>
                 </tr>
                 <tr>
-                  <td class="lbl" data-i18n="f_length"></td>
-                  <td class="val"><span id="r-length">0,00</span> m</td>
+                  <td class="lbl" data-i18n="f_callsign"></td>
+                  <td class="val" id="r-callsign">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl">ATIS</td>
+                  <td class="val" id="r-atis">—</td>
+                </tr>
+                <tr class="card-sep-row">
+                  <td class="lbl">MMSI</td>
+                  <td class="val" id="r-mmsi">—</td>
+                </tr>
+                <tr>
+                  <td class="lbl">
+                    <span data-i18n="f_length"></span><span id="r-alt-length-sep" class="alt-sep" style="display:none"> | <span data-i18n="f_alt_length"></span></span>
+                  </td>
+                  <td class="val"><span id="r-length">0,00</span> m<span id="r-alt-length-inline" class="alt-val" style="display:none"> | <span id="r-alt-length">—</span> m</span></td>
                 </tr>
                 <tr>
                   <td class="lbl" data-i18n="f_width"></td>
@@ -621,20 +614,10 @@
                   <td class="val"><span id="r-draft">0,00</span> m</td>
                 </tr>
                 <tr>
-                  <td class="lbl" data-i18n="f_airdraft"></td>
-                  <td class="val"><span id="r-airdraft">0,00</span> m</td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_callsign"></td>
-                  <td class="val" id="r-callsign">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl">ATIS</td>
-                  <td class="val" id="r-atis">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl">MMSI</td>
-                  <td class="val" id="r-mmsi">—</td>
+                  <td class="lbl">
+                    <span data-i18n="f_airdraft"></span><span id="r-alt-airdraft-sep" class="alt-sep" style="display:none"> | <span data-i18n="f_alt_airdraft"></span></span>
+                  </td>
+                  <td class="val"><span id="r-airdraft">0,00</span> m<span id="r-alt-airdraft-inline" class="alt-val" style="display:none"> | <span id="r-alt-airdraft">—</span> m</span></td>
                 </tr>
               </table>
             </div>
@@ -961,6 +944,7 @@
           <div class="modal-section">
             <div class="modal-section-title" data-i18n="info_print_title"></div>
             <div class="modal-section-body" data-i18n="info_print_body"></div>
+            <div class="modal-section-body modal-disclaimer" data-i18n="info_print_mobile"></div>
           </div>
           <div class="modal-section">
             <div class="modal-section-title" data-i18n="info_save_title"></div>

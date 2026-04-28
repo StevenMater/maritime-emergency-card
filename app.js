@@ -16,6 +16,28 @@ const DEFAULT_DIAL_CODE = "+31"
 let contacts = [{ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }]
 
 let _numericWarnTimer = null
+function decimalOnly(input) {
+  const before = input.value
+  const hasInvalidChar = /[^\d.,]/.test(before)
+  let v = before.replace(/[^\d.,]/g, "")
+  const sepIdx = v.search(/[.,]/)
+  if (sepIdx !== -1) {
+    const decimals = v.slice(sepIdx + 1).replace(/[.,]/g, "")
+    v = v.slice(0, sepIdx + 1) + decimals.slice(0, 2)
+  }
+  input.value = v
+  if (hasInvalidChar) {
+    clearTimeout(_numericWarnTimer)
+    const warn = document.getElementById("numeric-warn")
+    warn.textContent = T[currentLang].digits_only
+    const rect = input.getBoundingClientRect()
+    warn.style.top = rect.bottom + 6 + "px"
+    warn.style.left = rect.left + "px"
+    warn.classList.add("visible")
+    _numericWarnTimer = setTimeout(() => warn.classList.remove("visible"), 1500)
+  }
+}
+
 function numericOnly(input) {
   const before = input.value
   input.value = before.replace(/\D/g, "")
@@ -218,6 +240,8 @@ function update() {
   const width = document.getElementById("f-width").value
   const draft = document.getElementById("f-draft").value
   const airdraft = document.getElementById("f-airdraft").value
+  const altLength = document.getElementById("f-alt-length").value
+  const altAirdraft = document.getElementById("f-alt-airdraft").value
   const callsign = document.getElementById("f-callsign").value
   const atis = document.getElementById("f-atis").value
   const mmsi = document.getElementById("f-mmsi").value
@@ -242,6 +266,20 @@ function update() {
   document.getElementById("r-width").textContent = fmt(width)
   document.getElementById("r-draft").textContent = fmt(draft)
   document.getElementById("r-airdraft").textContent = fmt(airdraft)
+  const fmtOpt = (v) => {
+    const n = parseFloat(String(v).replace(",", "."))
+    return v && v.trim() && !isNaN(n) && n > 0 ? n.toFixed(2).replace(".", ",") : null
+  }
+  const altLengthFmt = fmtOpt(altLength)
+  const altAirdraftFmt = fmtOpt(altAirdraft)
+  const showAltLen = !!altLengthFmt
+  document.getElementById("r-alt-length-sep").style.display = showAltLen ? "" : "none"
+  document.getElementById("r-alt-length-inline").style.display = showAltLen ? "" : "none"
+  document.getElementById("r-alt-length").textContent = altLengthFmt || "—"
+  const showAltAir = !!altAirdraftFmt
+  document.getElementById("r-alt-airdraft-sep").style.display = showAltAir ? "" : "none"
+  document.getElementById("r-alt-airdraft-inline").style.display = showAltAir ? "" : "none"
+  document.getElementById("r-alt-airdraft").textContent = altAirdraftFmt || "—"
   document.getElementById("r-callsign").textContent = dash(callsign)
   document.getElementById("r-atis").textContent = formatATIS(atis)
   document.getElementById("r-mmsi").textContent = formatMMSI(mmsi)
@@ -341,7 +379,7 @@ function update() {
 }
 
 // ══ STORAGE ═══════════════════════════════════════════════════════════
-const CURRENT_VERSION = 9
+const CURRENT_VERSION = 20
 const STORAGE_KEY = "maritieme_noodkaart"
 
 function getFormData() {
@@ -355,6 +393,8 @@ function getFormData() {
     width: document.getElementById("f-width").value,
     draft: document.getElementById("f-draft").value,
     airDraft: document.getElementById("f-airdraft").value,
+    altLength: document.getElementById("f-alt-length").value,
+    altAirDraft: document.getElementById("f-alt-airdraft").value,
     callSign: document.getElementById("f-callsign").value,
     atis: document.getElementById("f-atis").value,
     mmsi: document.getElementById("f-mmsi").value,
@@ -477,6 +517,8 @@ function applyFormData(d) {
   s("f-width", data.width)
   s("f-draft", data.draft)
   s("f-airdraft", data.airDraft)
+  s("f-alt-length", data.altLength)
+  s("f-alt-airdraft", data.altAirDraft)
   s("f-callsign", data.callSign)
   s("f-atis", data.atis)
   s("f-mmsi", data.mmsi)
@@ -550,7 +592,7 @@ function exportJSON() {
   })
   const a = document.createElement("a")
   a.href = URL.createObjectURL(blob)
-  a.download = `MareSafe v${CURRENT_VERSION} - ${name} - ${today}.json`
+  a.download = `MareSafe v2.0 - ${name} - ${today}.json`
   a.click()
   URL.revokeObjectURL(a.href)
   document.getElementById("version-warning").style.display = "none"
@@ -566,6 +608,8 @@ function clearAll() {
     "f-width",
     "f-draft",
     "f-airdraft",
+    "f-alt-length",
+    "f-alt-airdraft",
     "f-callsign",
     "f-atis",
     "f-mmsi",
@@ -720,7 +764,7 @@ document.addEventListener("scroll", hideTip, true)
 window.addEventListener("resize", hideTip)
 
 // ══ INIT ════════════════════════════════════════════════════════════
-document.getElementById("site-version").textContent = CURRENT_VERSION
+document.getElementById("site-version").textContent = "2.0"
 buildProtocols()
 buildSignals()
 if (!loadFromStorage()) setLang("nl")

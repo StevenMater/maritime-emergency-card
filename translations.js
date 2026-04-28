@@ -5,7 +5,7 @@
           btn_load: "Gegevens laden",
           btn_print: "Afdrukken / PDF",
           btn_clear: "Alles wissen",
-          modal_title: "Mare<span>Safe</span>",
+          modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informatie & uitleg",
           tip_save: "Download je gegevens als JSON-bestand. Zo herstel je de kaart op elk apparaat.",
           tip_load: "Laad een eerder opgeslagen JSON-bestand om al je gegevens te herstellen.",
@@ -20,6 +20,8 @@
           tip_f_width: "Maximale breedte in meters.",
           tip_f_draft: "Diepgang bij normale belading in meters.",
           tip_f_airdraft: "Hoogte boven water in meters (relevant voor bruggen).",
+          tip_f_alt_length: "Totale lengte inclusief neergelegde mast in meters.",
+          tip_f_alt_airdraft: "Hoogte boven water met opgerichte mast in meters.",
           tip_f_callsign: "VHF marifoonroepnaam (1–6 letters/cijfers).",
           tip_atis: "9- of 10-cijferige ATIS-code (alleen binnenvaart).",
           tip_mmsi: "9-cijferig MMSI-nummer voor DSC en AIS.",
@@ -33,15 +35,17 @@
           contact_label_placeholder: "Persoon, schip, bedrijf…",
           contact_phone_placeholder: "Telefoonnummer",
           digits_only: "Alleen cijfers",
-          info_what_title: "Wat is dit?",
+          info_what_title: "Wat is MareSafe?",
           info_what_body:
-            "Een template voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water. Deze kaart is ingericht voor het vaargebied Nederland.",
+            "MareSafe levert een template voor een persoonlijke noodkaart op A4-formaat. Vul de scheepsgegevens in en druk af — de kaart bevat alle informatie die je nodig hebt in een noodsituatie op het water. Deze kaart is ingericht voor het vaargebied Nederland.",
           info_save_title: "Gegevens opslaan & laden",
           info_save_body:
             'Je gegevens worden automatisch opgeslagen in deze browser. Gebruik <strong class="hl">Gegevens opslaan</strong> om een back-up te downloaden en op een ander apparaat in te laden via <strong class="hl">Gegevens laden</strong>.',
           info_print_title: "Afdrukken / PDF maken",
           info_print_body:
             'Klik op <strong class="hl">Afdrukken / PDF</strong> onderaan het formulier. Kies <strong class="hl">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong class="hl">Achtergronden afdrukken</strong> is ingeschakeld.',
+          info_print_mobile:
+            '⚠️ Afdrukken en PDF maken vanuit mobiel is nog niet volledig ondersteund. Op een <strong class="hl">Mac of pc</strong> werkt dit perfect.',
           warn_title: "Let op — automatisch opslaan is niet 100% veilig",
           warn_body:
             'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong class="hl">handmatig op te slaan</strong> via <strong class="hl">Gegevens opslaan</strong> onderaan het formulier.',
@@ -60,6 +64,8 @@
           f_width: "Breedte",
           f_draft: "Diepgang",
           f_airdraft: "Kruiphoogte",
+          f_alt_length: "Alt. lengte",
+          f_alt_airdraft: "Alt. kruiphoogte",
           f_callsign: "Roepnaam",
           f_insurer_name: "Naam",
           f_policy: "Polisnummer",
@@ -117,7 +123,7 @@
           call_note:
             "Let op: alleen de schipper mag opdracht geven tot MAYDAY of PAN PAN — of dat laten doen — tenzij de schipper zelf niet meer in staat is om opdracht te geven.",
           fire: [
-            "Motor uit",
+            "Motor uit — brandstoftoevoer afsluiten",
             "Ventilatie dicht (luiken, patrijspoorten, ventilatieopeningen)",
             "Marifoon: PAN PAN — of MAYDAY bij levensgevaar",
             "Reddingsvesten aan voor iedereen aan boord",
@@ -167,7 +173,7 @@
           btn_load: "Load data",
           btn_print: "Print / PDF",
           btn_clear: "Clear all",
-          modal_title: "Mare<span>Safe</span>",
+          modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Information & help",
           tip_save: "Downloads your data as a JSON file. Use it to restore your card on any device.",
           tip_load: "Load a previously saved JSON file to restore all your data.",
@@ -182,6 +188,8 @@
           tip_f_width: "Maximum beam in metres.",
           tip_f_draft: "Draught at normal load in metres.",
           tip_f_airdraft: "Height above water in metres (relevant for bridges).",
+          tip_f_alt_length: "Total length including lowered mast in metres.",
+          tip_f_alt_airdraft: "Height above water with raised mast in metres.",
           tip_f_callsign: "VHF radio call sign (1–6 letters/digits).",
           tip_atis: "9- or 10-digit ATIS code (inland waterways only).",
           tip_mmsi: "9-digit MMSI number for DSC and AIS.",
@@ -194,15 +202,17 @@
           contact_label_placeholder: "Person, vessel, company…",
           contact_phone_placeholder: "Phone number",
           digits_only: "Digits only",
-          info_what_title: "What is this?",
+          info_what_title: "What is MareSafe?",
           info_what_body:
-            "A template for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water. This card is configured for the Netherlands.",
+            "MareSafe provides a template for a personal emergency card in A4 format. Fill in your vessel details and print — the card contains all information you need in an emergency on the water. This card is configured for the Netherlands.",
           info_save_title: "Save & load data",
           info_save_body:
             'Your data is automatically saved in this browser. Use <strong class="hl">Save data</strong> to download a backup and load it on another device via <strong class="hl">Load data</strong>.',
           info_print_title: "Print / make PDF",
           info_print_body:
             'Click <strong class="hl">Print / PDF</strong> at the bottom of the form. Choose <strong class="hl">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong class="hl">Print backgrounds</strong> is enabled for colours.',
+          info_print_mobile:
+            '⚠️ Printing and creating a PDF from mobile is not fully supported yet. On a <strong class="hl">Mac or PC</strong> it works perfectly.',
           warn_title: "Warning — auto-save is not 100% reliable",
           warn_body:
             'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong class="hl">saving your data manually</strong> via <strong class="hl">Save data</strong> at the bottom of the form.',
@@ -221,6 +231,8 @@
           f_width: "Width",
           f_draft: "Draft",
           f_airdraft: "Air draft",
+          f_alt_length: "Alt. length",
+          f_alt_airdraft: "Alt. air draft",
           f_callsign: "Call sign",
           f_insurer_name: "Name",
           f_policy: "Policy number",
@@ -278,7 +290,7 @@
           call_note:
             "Note: only the skipper may order a MAYDAY or PAN PAN call — or instruct someone to do so — unless the skipper is no longer able to give orders.",
           fire: [
-            "Stop engine",
+            "Stop engine — turn off fuel supply",
             "Close ventilation (hatches, portholes, air vents)",
             "Radio: PAN PAN — or MAYDAY if lives are at risk",
             "Life jackets on for everyone on board",
@@ -328,7 +340,7 @@
           btn_load: "Charger",
           btn_print: "Imprimer / PDF",
           btn_clear: "Tout effacer",
-          modal_title: "Mare<span>Safe</span>",
+          modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informations & aide",
           tip_save: "Télécharge vos données en fichier JSON. Permet de restaurer la carte sur n'importe quel appareil.",
           tip_load: "Chargez un fichier JSON précédemment enregistré pour restaurer toutes vos données.",
@@ -343,6 +355,8 @@
           tip_f_width: "Largeur maximale en mètres.",
           tip_f_draft: "Tirant d'eau en charge normale en mètres.",
           tip_f_airdraft: "Hauteur au-dessus de l'eau en mètres (pertinent pour les ponts).",
+          tip_f_alt_length: "Longueur totale mât couché en mètres.",
+          tip_f_alt_airdraft: "Hauteur au-dessus de l'eau avec mât levé en mètres.",
           tip_f_callsign: "Indicatif radio VHF (1–6 lettres/chiffres).",
           tip_atis: "Code ATIS à 9 ou 10 chiffres (voies intérieures uniquement).",
           tip_mmsi: "Numéro MMSI à 9 chiffres pour DSC et AIS.",
@@ -356,15 +370,17 @@
           contact_label_placeholder: "Personne, navire, entreprise…",
           contact_phone_placeholder: "Téléphone",
           digits_only: "Chiffres uniquement",
-          info_what_title: "À quoi sert cet outil?",
+          info_what_title: "Qu'est-ce que MareSafe?",
           info_what_body:
-            "Un modèle de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau. Cette carte est configurée pour les Pays-Bas.",
+            "MareSafe propose un modèle de carte d'urgence personnelle au format A4. Remplissez les informations du navire et imprimez — la carte contient toutes les informations nécessaires en cas d'urgence sur l'eau. Cette carte est configurée pour les Pays-Bas.",
           info_save_title: "Enregistrer & charger",
           info_save_body:
             'Vos données sont automatiquement sauvegardées dans ce navigateur. Utilisez <strong class="hl">Enregistrer</strong> pour télécharger une sauvegarde et la charger sur un autre appareil via <strong class="hl">Charger</strong>.',
           info_print_title: "Imprimer / créer un PDF",
           info_print_body:
             'Cliquez sur <strong class="hl">Imprimer / PDF</strong> en bas du formulaire. Choisissez <strong class="hl">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong class="hl">Imprimer les arrière-plans</strong> est activé.',
+          info_print_mobile:
+            '⚠️ L\'impression et la création de PDF depuis un mobile ne sont pas encore entièrement supportées. Sur un <strong class="hl">Mac ou PC</strong> cela fonctionne parfaitement.',
           warn_title:
             "Attention — la sauvegarde automatique n'est pas fiable à 100%",
           warn_body:
@@ -384,6 +400,8 @@
           f_width: "Largeur",
           f_draft: "Tirant d'eau",
           f_airdraft: "Tirant d'air",
+          f_alt_length: "Long. alt.",
+          f_alt_airdraft: "Hauteur alt.",
           f_callsign: "Indicatif d'appel",
           f_insurer_name: "Nom",
           f_policy: "Numéro de police",
@@ -441,7 +459,7 @@
           call_note:
             "Attention: seul le capitaine peut ordonner un appel MAYDAY ou PAN PAN — ou demander à quelqu'un de le faire — sauf si le capitaine n'est plus en mesure de donner des ordres.",
           fire: [
-            "Couper le moteur",
+            "Couper le moteur — couper l'alimentation en carburant",
             "Fermer la ventilation (écoutilles, hublots, aérations)",
             "Radio: PAN PAN — ou MAYDAY si des vies sont en danger",
             "Gilets de sauvetage pour tous à bord",
@@ -491,7 +509,7 @@
           btn_load: "Daten laden",
           btn_print: "Drucken / PDF",
           btn_clear: "Alles löschen",
-          modal_title: "Mare<span>Safe</span>",
+          modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informationen & Hilfe",
           tip_save: "Lädt Ihre Daten als JSON-Datei herunter. So können Sie die Karte auf jedem Gerät wiederherstellen.",
           tip_load: "Laden Sie eine zuvor gespeicherte JSON-Datei, um alle Ihre Daten wiederherzustellen.",
@@ -506,6 +524,8 @@
           tip_f_width: "Maximale Breite in Metern.",
           tip_f_draft: "Tiefgang bei normaler Beladung in Metern.",
           tip_f_airdraft: "Höhe über Wasser in Metern (relevant für Brücken).",
+          tip_f_alt_length: "Gesamtlänge bei gelegtem Mast in Metern.",
+          tip_f_alt_airdraft: "Höhe über Wasser bei aufgerichtetem Mast in Metern.",
           tip_f_callsign: "UKW-Sprechfunkrufzeichen (1–6 Buchstaben/Ziffern).",
           tip_atis: "9- oder 10-stelliger ATIS-Code (nur Binnenschifffahrt).",
           tip_mmsi: "9-stellige MMSI-Nummer für DSC und AIS.",
@@ -519,15 +539,17 @@
           contact_label_placeholder: "Person, Schiff, Unternehmen…",
           contact_phone_placeholder: "Telefon",
           digits_only: "Nur Ziffern",
-          info_what_title: "Was ist das?",
+          info_what_title: "Was ist MareSafe?",
           info_what_body:
-            "Eine Vorlage für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen. Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
+            "MareSafe bietet eine Vorlage für eine persönliche Notfallkarte im A4-Format. Füllen Sie die Schiffsdaten aus und drucken Sie — die Karte enthält alle Informationen, die Sie in einem Notfall auf dem Wasser benötigen. Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           info_save_title: "Daten speichern & laden",
           info_save_body:
             'Ihre Daten werden automatisch in diesem Browser gespeichert. Verwenden Sie <strong class="hl">Daten speichern</strong>, um ein Backup herunterzuladen und es auf einem anderen Gerät über <strong class="hl">Daten laden</strong> einzulesen.',
           info_print_title: "Drucken / PDF erstellen",
           info_print_body:
             'Klicken Sie unten im Formular auf <strong class="hl">Drucken / PDF</strong>. Wählen Sie <strong class="hl">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong class="hl">Hintergründe drucken</strong> aktiviert ist.',
+          info_print_mobile:
+            '⚠️ Drucken und PDF erstellen vom Mobilgerät wird noch nicht vollständig unterstützt. Auf einem <strong class="hl">Mac oder PC</strong> funktioniert es einwandfrei.',
           warn_title: "Achtung — automatisches Speichern ist nicht 100% sicher",
           warn_body:
             'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong class="hl">manuell zu speichern</strong> über <strong class="hl">Daten speichern</strong> unten im Formular.',
@@ -546,6 +568,8 @@
           f_width: "Breite",
           f_draft: "Tiefgang",
           f_airdraft: "Durchfahrtshöhe",
+          f_alt_length: "Alt. Länge",
+          f_alt_airdraft: "Alt. Lufttiefgang",
           f_callsign: "Rufzeichen",
           f_insurer_name: "Name",
           f_policy: "Policennummer",
@@ -604,7 +628,7 @@
           call_note:
             "Achtung: Nur der Schiffsführer darf einen MAYDAY- oder PAN PAN-Ruf anordnen — oder jemanden damit beauftragen — es sei denn, er ist nicht mehr in der Lage, Anweisungen zu geben.",
           fire: [
-            "Motor abstellen",
+            "Motor abstellen — Kraftstoffzufuhr absperren",
             "Belüftung schließen (Luken, Bullaugen, Lüftungsöffnungen)",
             "Funk: PAN PAN — oder MAYDAY bei Lebensgefahr",
             "Rettungswesten für alle an Bord anlegen",
@@ -686,7 +710,7 @@
           if (T[lang][key] !== undefined) el.setAttribute("aria-label", T[lang][key])
         })
         document.getElementById("site-title").innerHTML =
-          '<span class="title-text">Mare<span>Safe</span></span><span class="title-short">M<span>S</span></span>'
+          '<span class="brand-title-text">Mare<span>Safe</span></span><span class="brand-title-short">M<span>S</span></span>'
         renderContactEditor()
         buildProtocols()
         buildSignals()

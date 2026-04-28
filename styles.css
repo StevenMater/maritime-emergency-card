@@ -75,16 +75,20 @@ body {
   display: flex;
   align-items: center;
 }
-.editor h1 .title-text {
+.brand-title-text {
   color: #a8c4e0;
 }
-.editor h1 .title-text span,
-.editor h1 .title-short span {
+.brand-title-text span,
+.brand-title-short span {
   color: white;
 }
-.editor h1 .title-short {
+.brand-title-short {
   display: none;
   color: #a8c4e0;
+}
+@media (max-width: 480px) {
+  .brand-title-text { display: none; }
+  .brand-title-short { display: inline; }
 }
 
 .save-load-bar {
@@ -202,6 +206,38 @@ body {
 }
 .fields-row.r4 {
   grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.meas-grid {
+  display: grid;
+  gap: 10px 16px;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+.form-sep {
+  border: none;
+  border-top: 1px solid var(--navy2);
+  margin: 2px 0;
+}
+.card-sep-row td {
+  border-bottom: 1px solid var(--navy2);
+  padding-bottom: 4px;
+}
+@media (max-width: 650px) {
+  .meas-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.alt-sep {
+  font-weight: 400;
+  opacity: 0.7;
+}
+.alt-val {
+  font-weight: 400;
+  opacity: 0.7;
+  margin-left: 4px;
+}
+.alt-val > span {
+  margin-left: 4px;
 }
 
 .field-group {
@@ -731,14 +767,14 @@ body {
 }
 
 @media (max-width: 480px) {
-  .save-load-bar,
-  .action-bar {
+  .save-load-bar .btn-stack,
+  .action-bar .btn-stack {
     flex-direction: column;
+    flex: 1;
   }
   .save-load-bar .print-btn,
   .save-load-bar label.print-btn,
   .action-bar .print-btn {
-    flex: none;
     width: 100%;
     justify-content: center;
   }
@@ -773,6 +809,7 @@ body {
   }
   .inp {
     font-size: 16px;
+    padding: 5px 8px;
   }
   .contact-row {
     flex-wrap: wrap;
@@ -792,12 +829,6 @@ body {
 }
 
 @media (max-width: 480px) {
-  .editor h1 .title-text {
-    display: none;
-  }
-  .editor h1 .title-short {
-    display: inline;
-  }
   .lang-btns {
     margin-left: auto;
   }
@@ -923,10 +954,15 @@ body {
   background: rgba(44, 82, 130, 0.16);
   border-color: rgba(44, 82, 130, 0.55);
 }
+.btn-stack {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
 .save-load-bar .tip-btn,
 .action-bar .tip-btn {
   align-self: center;
-  margin-right: 4px;
+  flex-shrink: 0;
 }
 
 /* ── TOOLTIP POPUP ────────────────────────────────────────────── */
@@ -1009,9 +1045,8 @@ body {
   text-transform: uppercase;
   color: #a8c4e0;
   line-height: 1;
-}
-.modal-hdr-title span {
-  color: white;
+  display: flex;
+  align-items: center;
 }
 .modal-close-btn {
   background: none;
@@ -1062,6 +1097,11 @@ body {
 }
 .modal-section--warn .modal-section-body {
   color: rgba(255, 255, 255, 0.85);
+}
+.modal-disclaimer {
+  margin-top: 8px;
+  opacity: 0.75;
+  font-style: italic;
 }
 .hl {
   color: #fbd38d;
