@@ -743,7 +743,10 @@ window.addEventListener("resize", updatePreviewScale)
 function initRenderMode() {
   if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
 
-  // Remove everything from body except the card wrapper
+  // Apply data first while all form elements still exist
+  applyFormData(window.__CARD_DATA__)
+
+  // Then strip everything except the card wrapper
   Array.from(document.body.children).forEach((el) => {
     if (el.id !== "a4-wrap") el.remove()
   })
@@ -756,8 +759,6 @@ function initRenderMode() {
 
   const card = document.getElementById("emergency-card")
   if (card) card.style.cssText = "width:794px;height:1123px;box-shadow:none;border:none;"
-
-  applyFormData(window.__CARD_DATA__)
 
   const ready = document.createElement("div")
   ready.id = "render-ready"
