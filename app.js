@@ -842,7 +842,7 @@ function handleDownloadClick() {
     requestPDF({ type: "code", code: _validCode }, langs)
   } else {
     localStorage.setItem("maresafe_langs", JSON.stringify(langs))
-    window.open(STRIPE_PAYMENT_LINK, "_blank")
+    window.location.href = STRIPE_PAYMENT_LINK
   }
 }
 
