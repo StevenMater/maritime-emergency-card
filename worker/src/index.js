@@ -205,10 +205,12 @@ async function renderPdf(pageHtml, cardData, env) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         html: injected,
-        viewport: { width: 794, height: 1123 },
+        addStyleTag: [
+          { content: "@page { size: 794px 1123px; margin: 0; }" },
+        ],
         options: {
           printBackground: true,
-          format: "A4",
+          preferCSSPageSize: true,
           margin: { top: "0", right: "0", bottom: "0", left: "0" },
         },
         waitForSelector: { selector: "#render-ready", timeout: 30000 },
