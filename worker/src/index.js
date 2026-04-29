@@ -205,6 +205,7 @@ async function renderPdf(pageHtml, cardData, env) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         html: injected,
+        viewport: { width: 794, height: 1123 },
         options: {
           printBackground: true,
           format: "A4",
