@@ -743,10 +743,8 @@ window.addEventListener("resize", updatePreviewScale)
 function initRenderMode() {
   if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
 
-  // Apply data first while all form elements still exist
   applyFormData(window.__CARD_DATA__)
 
-  // Then strip everything except the card wrapper
   Array.from(document.body.children).forEach((el) => {
     if (el.id !== "a4-wrap") el.remove()
   })

@@ -150,7 +150,7 @@ async function handleGeneratePdf(request, env) {
     if (type === "stripe" && stripeEmail) {
       await sendRetryEmail(stripeEmail, session, env)
     }
-    return corsResponse({ error: "PDF generation failed", detail: err.message }, 503, env)
+    return corsResponse({ error: "PDF generation failed" }, 503, env)
   }
 
   // ── Write Stripe session to KV + save email to D1 ─────────────
