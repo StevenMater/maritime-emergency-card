@@ -57,7 +57,7 @@ body {
 }
 .editor {
   background: var(--navy);
-  padding: 14px 24px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -86,9 +86,27 @@ body {
   display: none;
   color: #a8c4e0;
 }
+.site-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.site-subtitle {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(168, 196, 224, 0.65);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
 @media (max-width: 480px) {
-  .brand-title-text { display: none; }
-  .brand-title-short { display: inline; }
+  .brand-title-text {
+    display: none;
+  }
+  .brand-title-short {
+    display: inline;
+  }
 }
 
 .save-load-bar {
@@ -404,6 +422,17 @@ body {
   min-height: 34px;
 }
 .title-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.card-logo {
+  height: 28px;
+  width: 28px;
+  flex-shrink: 0;
+}
+.title-text {
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -761,7 +790,7 @@ body {
   margin-top: 7px;
 }
 
-.crew-inp {
+.contact-inp {
   flex: 1;
   min-width: 0;
 }
@@ -815,7 +844,7 @@ body {
     flex-wrap: wrap;
     row-gap: 6px;
   }
-  .contact-row .crew-inp:first-child {
+  .contact-row .contact-inp:first-child {
     min-width: 100%;
   }
   .contact-row .inp-wrap--phone {
@@ -845,54 +874,72 @@ body {
   }
 }
 
-@media print {
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-  html,
-  body {
-    width: 210mm;
-    margin: 0;
-    padding: 0;
-    background: white;
-  }
-  .editor,
-  .sticky-header,
-  .fields-wrap,
-  .preview-label,
-  .info-block,
-  .modal-overlay,
-  .site-footer,
-  #version-warning {
-    display: none !important;
-  }
-  .a4-wrap {
-    display: block !important;
-    width: 210mm !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    overflow: visible !important;
-  }
-  .emergency-card {
-    width: 210mm !important;
-    height: 297mm !important;
-    overflow: hidden !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 10px !important;
-    box-shadow: none !important;
-    transform: none !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-  body.printing-ios .emergency-card {
-    zoom: 0.92 !important;
-  }
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
+/* ── LANGUAGE MULTISELECT DROPDOWN ───────────────────────────────── */
+.ms-dropdown {
+  position: relative;
+}
+.ms-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  min-width: 110px;
+  text-align: left;
+}
+.ms-arrow {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 2px;
+}
+.ms-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: white;
+  border: var(--inp-border);
+  border-radius: var(--inp-radius);
+  padding: 4px 0;
+  min-width: 150px;
+  z-index: 50;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+.ms-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--dark);
+}
+.ms-option:hover {
+  background: var(--input-bg);
+}
+.ms-option input[type="checkbox"] {
+  accent-color: var(--navy2);
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+/* ── CODE INPUT + STATUS FEEDBACK ────────────────────────────────── */
+.ms-code-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+#code-feedback,
+#pdf-status {
+  font-size: 10px;
+  min-height: 14px;
+  font-family: var(--font-sans);
+  color: var(--mid);
+  transition: color 0.2s;
+  padding: 0 2px;
 }
 
 /* ── INFO BUTTON ──────────────────────────────────────────────── */
@@ -1031,6 +1078,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
   padding: 14px 20px;
   background: var(--navy);
   border-radius: 10px 10px 0 0;

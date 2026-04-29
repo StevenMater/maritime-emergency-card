@@ -1,6 +1,11 @@
+// ══ CONFIG ══════════════════════════════════════════════════════════
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/XXXXXXXX" // fill after Stripe setup
+const PDF_WORKER_URL      = "https://api.maresafe.eu/generate-pdf"
+const CHECK_CODE_URL      = "https://api.maresafe.eu/check-code"
+
 // ══ CONTACTS ════════════════════════════════════════════════════════
 const MAX_CONTACTS = 7
-const CREW_ROWS = 7
+const CONTACT_ROWS = 7
 const DIAL_CODES = [
   { code: "+31", flag: "🇳🇱", label: "NL" },
   { code: "+32", flag: "🇧🇪", label: "BE" },
@@ -100,14 +105,14 @@ function renderContactEditor() {
     const row = document.createElement("div")
     row.className = "contact-row"
     row.innerHTML = `
-      <input class="inp crew-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="contacts[${i}].label=this.value;update()">
+      <input class="inp contact-inp" value="${c.label}" maxlength="20" placeholder="${T[currentLang].contact_label_placeholder}" oninput="contacts[${i}].label=this.value;update()">
       <div class="inp-wrap inp-wrap--phone" style="flex:1"><select class="inp dial-sel" onchange="contacts[${i}].dialCode=this.value;update()">${dialOptions(dc)}</select><input class="inp" value="${c.number || ""}" maxlength="15" inputmode="numeric" placeholder="${T[currentLang].contact_phone_placeholder}" oninput="numericOnly(this);contacts[${i}].number=this.value;update()"></div>
       <button class="del-btn" onclick="removeContact(${i})">×</button>`
     el.appendChild(row)
   })
 
   const addBtn = document.querySelector(".add-btn")
-  addBtn.textContent = T[currentLang].btn_add_crew
+  addBtn.textContent = T[currentLang].btn_add_contact
 }
 
 function addContact() {
@@ -284,10 +289,10 @@ function update() {
   document.getElementById("r-atis").textContent = formatATIS(atis)
   document.getElementById("r-mmsi").textContent = formatMMSI(mmsi)
 
-  // Contacts — always CREW_ROWS rows
-  const tbl = document.getElementById("r-crew")
+  // Contacts — always CONTACT_ROWS rows
+  const tbl = document.getElementById("r-contacts")
   while (tbl.rows.length > 1) tbl.deleteRow(1)
-  for (let i = 0; i < CREW_ROWS; i++) {
+  for (let i = 0; i < CONTACT_ROWS; i++) {
     const c = contacts[i]
     const tr = tbl.insertRow()
     tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
@@ -679,14 +684,152 @@ function updatePreviewScale() {
 
 window.addEventListener("resize", updatePreviewScale)
 
-const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent)
-window.addEventListener("beforeprint", () => {
-  if (isIOS) document.body.classList.add("printing-ios")
+// ══ RENDER MODE (Browserless PDF generation) ════════════════════════
+function initRenderMode() {
+  if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
+  ;["site-header", "fields-wrap", "preview-label", "site-footer"].forEach((id) => {
+    const el = document.getElementById(id)
+    if (el) el.style.display = "none"
+  })
+  document.querySelector(".editor")?.style.setProperty("display", "none")
+  applyFormData(window.__CARD_DATA__)
+  const ready = document.createElement("div")
+  ready.id = "render-ready"
+  ready.style.display = "none"
+  document.body.appendChild(ready)
+  return true
+}
+
+// ══ DOWNLOAD / PAYMENT ══════════════════════════════════════════════
+let _validCode = null
+
+function getSelectedLanguages() {
+  return [...document.querySelectorAll(".lang-check:checked")].map((el) => el.value)
+}
+
+document.addEventListener("click", (e) => {
+  if (!document.getElementById("lang-dropdown").contains(e.target))
+    document.getElementById("lang-menu").style.display = "none"
 })
-window.addEventListener("afterprint", () => {
-  document.body.classList.remove("printing-ios")
-  updatePreviewScale()
-})
+
+function toggleLangMenu(e) {
+  e.stopPropagation()
+  const menu = document.getElementById("lang-menu")
+  menu.style.display = menu.style.display === "none" ? "block" : "none"
+}
+
+function onLangChange() {
+  const langs = getSelectedLanguages()
+  document.getElementById("lang-trigger-label").textContent =
+    langs.length ? langs.map((l) => l.toUpperCase()).join(", ") : "—"
+  updateDownloadLabel()
+}
+
+function updateDownloadLabel() {
+  const count = getSelectedLanguages().length
+  const price = _validCode !== null ? T[currentLang].label_free : "€2"
+  document.getElementById("btn-download-label").textContent =
+    count === 0
+      ? T[currentLang].btn_download_pdf_zero
+      : `Download ${count} PDF${count > 1 ? "'s" : ""} — ${price}`
+}
+
+async function checkCode() {
+  const code = document.getElementById("bypass-code-input").value.trim()
+  const feedback = document.getElementById("code-feedback")
+  _validCode = null
+  updateDownloadLabel()
+  if (!code) { feedback.textContent = ""; return }
+
+  feedback.style.color = "var(--mid)"
+  feedback.textContent = "…"
+  try {
+    const res = await fetch(CHECK_CODE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code }),
+    })
+    const data = await res.json()
+    if (data.valid) {
+      _validCode = code
+      const usesText =
+        data.uses === "unlimited"
+          ? T[currentLang].code_uses_unlimited
+          : T[currentLang].code_uses_remaining.replace("{n}", data.uses)
+      feedback.style.color = "var(--green)"
+      feedback.textContent = "✓ " + usesText
+    } else {
+      feedback.style.color = "var(--red)"
+      feedback.textContent = T[currentLang].code_invalid
+    }
+  } catch {
+    feedback.textContent = ""
+  }
+  updateDownloadLabel()
+}
+
+function handleDownloadClick() {
+  const langs = getSelectedLanguages()
+  if (!langs.length) { alert(T[currentLang].pdf_no_lang); return }
+  if (_validCode) {
+    requestPDF({ type: "code", code: _validCode }, langs)
+  } else {
+    localStorage.setItem("maresafe_langs", JSON.stringify(langs))
+    window.location.href = STRIPE_PAYMENT_LINK
+  }
+}
+
+async function handlePaymentReturn(sessionId) {
+  const langs = JSON.parse(localStorage.getItem("maresafe_langs") || '["nl","en"]')
+  await requestPDF({ type: "stripe", session: sessionId }, langs)
+  localStorage.removeItem("maresafe_langs")
+  window.history.replaceState({}, "", window.location.pathname)
+}
+
+async function requestPDF(authPayload, languages) {
+  const btn    = document.getElementById("btn-download")
+  const status = document.getElementById("pdf-status")
+  btn.disabled = true
+  status.style.color = "var(--mid)"
+  status.textContent = T[currentLang].pdf_loading
+
+  const formData = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}")
+
+  let response
+  try {
+    response = await fetch(PDF_WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...authPayload, formData, languages, area: "netherlands" }),
+    })
+  } catch {
+    status.style.color = "var(--red)"
+    status.textContent = T[currentLang].pdf_error
+    btn.disabled = false
+    return
+  }
+
+  if (!response.ok) {
+    const msgs = { 402: "pdf_error_402", 403: "pdf_error_403", 503: "pdf_error_503" }
+    status.style.color = "var(--red)"
+    status.textContent = T[currentLang][msgs[response.status] || "pdf_error"]
+    btn.disabled = false
+    return
+  }
+
+  const blob = await response.blob()
+  const url  = URL.createObjectURL(blob)
+  const a    = document.createElement("a")
+  const name = formData.name || "card"
+  a.href     = url
+  a.download = `MareSafe - ${name} - Netherlands.zip`
+  a.click()
+  URL.revokeObjectURL(url)
+
+  status.style.color = "var(--green)"
+  status.textContent = T[currentLang].pdf_success
+  btn.disabled = false
+}
 
 // ══ INFO MODAL ══════════════════════════════════════════════════════
 function openInfoModal() {
@@ -767,8 +910,16 @@ window.addEventListener("resize", hideTip)
 document.getElementById("site-version").textContent = "2.0"
 buildProtocols()
 buildSignals()
-if (!loadFromStorage()) setLang("nl")
-updatePreviewScale()
-if (!localStorage.getItem("maritieme_seen_info")) {
-  setTimeout(openInfoModal, 400)
+
+if (!initRenderMode()) {
+  if (!loadFromStorage()) setLang("nl")
+  updatePreviewScale()
+  updateDownloadLabel()
+
+  const sessionId = new URLSearchParams(window.location.search).get("session")
+  if (sessionId) setTimeout(() => handlePaymentReturn(sessionId), 100)
+
+  if (!localStorage.getItem("maritieme_seen_info")) {
+    setTimeout(openInfoModal, 400)
+  }
 }

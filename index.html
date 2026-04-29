@@ -10,11 +10,19 @@
   <body>
     <div class="sticky-header">
       <div class="editor">
-        <div style="display: flex; align-items: center; gap: 8px">
-          <img src="assets/logo.svg" alt="" aria-hidden="true" style="height: 30px; width: 30px; flex-shrink: 0" />
-          <h1 id="site-title">
-            <span class="brand-title-text">Mare<span>Safe</span></span><span class="brand-title-short">M<span>S</span></span>
-          </h1>
+        <div style="display: flex; align-items: center; gap: 12px">
+          <img
+            src="assets/logo.svg"
+            alt=""
+            aria-hidden="true"
+            style="height: 30px; width: 30px; flex-shrink: 0" />
+          <div class="site-title-wrap">
+            <h1 id="site-title">
+              <span class="brand-title-text">Mare<span>Safe</span></span>
+              <span class="brand-title-short">M<span>S</span></span>
+            </h1>
+            <div class="site-subtitle" data-i18n="product_name"></div>
+          </div>
         </div>
         <div class="lang-btns">
           <button
@@ -26,7 +34,10 @@
           <button class="lang-btn" onclick="setLang('en')" aria-label="English">
             🇬🇧
           </button>
-          <button class="lang-btn" onclick="setLang('fr')" aria-label="Français">
+          <button
+            class="lang-btn"
+            onclick="setLang('fr')"
+            aria-label="Français">
             🇫🇷
           </button>
           <button class="lang-btn" onclick="setLang('de')" aria-label="Deutsch">
@@ -340,55 +351,139 @@
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_length"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_length" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_length"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-length" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-length"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_alt_length"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_alt_length" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_alt_length"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-alt-length" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-alt-length"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_width"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_width" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_width"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-width" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-width"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_draft"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_draft" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_draft"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-draft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-draft"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_airdraft"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_airdraft" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_airdraft"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-airdraft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-airdraft"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
               <div class="field-group">
                 <div class="label-wrap">
                   <label data-i18n="f_alt_airdraft"></label
-                  ><button class="tip-btn" data-tip-i18n="tip_f_alt_airdraft" type="button">?</button>
+                  ><button
+                    class="tip-btn"
+                    data-tip-i18n="tip_f_alt_airdraft"
+                    type="button">
+                    ?
+                  </button>
                 </div>
                 <div class="inp-wrap inp-wrap--m">
-                  <input class="inp" id="f-alt-airdraft" type="text" inputmode="decimal" value="" oninput="decimalOnly(this);update()" /><span class="inp-badge">m</span>
+                  <input
+                    class="inp"
+                    id="f-alt-airdraft"
+                    type="text"
+                    inputmode="decimal"
+                    value=""
+                    oninput="
+                      decimalOnly(this)
+                      update()
+                    " /><span class="inp-badge">m</span>
                 </div>
               </div>
             </div>
@@ -396,12 +491,12 @@
         </div>
 
         <div class="editor-section">
-          <div class="editor-section-title" data-i18n="sec_crew"></div>
+          <div class="editor-section-title" data-i18n="sec_contacts"></div>
           <div class="contact-rows" id="contact-rows"></div>
           <button
             class="add-btn"
             onclick="addContact()"
-            data-i18n="btn_add_crew"></button>
+            data-i18n="btn_add_contact"></button>
         </div>
 
         <div class="editor-section">
@@ -522,14 +617,95 @@
 
         <div class="editor-section">
           <div class="action-bar">
-            <div class="btn-stack">
-              <button
-                class="print-btn"
-                style="background: #2a9d5c"
-                onclick="window.print()"
-                data-tip-i18n="tip_print">
-                <span>🖨</span><span data-i18n="btn_print"></span>
-              </button>
+            <div
+              id="download-bar"
+              style="
+                display: flex;
+                gap: 8px;
+                align-items: flex-start;
+                flex-wrap: wrap;
+              ">
+              <!-- Language multiselect dropdown -->
+              <div id="lang-dropdown" class="ms-dropdown">
+                <button
+                  class="ms-trigger inp"
+                  type="button"
+                  id="lang-trigger"
+                  onclick="toggleLangMenu(event)">
+                  <span id="lang-trigger-label">NL, EN</span
+                  ><span class="ms-arrow">▾</span>
+                </button>
+                <div id="lang-menu" class="ms-menu">
+                  <label class="ms-option"
+                    ><input
+                      type="checkbox"
+                      value="nl"
+                      class="lang-check"
+                      checked
+                      onchange="onLangChange()" />
+                    Nederlands</label
+                  >
+                  <label class="ms-option"
+                    ><input
+                      type="checkbox"
+                      value="en"
+                      class="lang-check"
+                      checked
+                      onchange="onLangChange()" />
+                    English</label
+                  >
+                  <label class="ms-option"
+                    ><input
+                      type="checkbox"
+                      value="fr"
+                      class="lang-check"
+                      onchange="onLangChange()" />
+                    Français</label
+                  >
+                  <label class="ms-option"
+                    ><input
+                      type="checkbox"
+                      value="de"
+                      class="lang-check"
+                      onchange="onLangChange()" />
+                    Deutsch</label
+                  >
+                </div>
+              </div>
+
+              <!-- Code input with feedback -->
+              <div class="ms-code-wrap">
+                <input
+                  class="inp"
+                  id="bypass-code-input"
+                  type="text"
+                  maxlength="20"
+                  style="
+                    text-transform: uppercase;
+                    font-family: var(--font-mono);
+                    min-width: 130px;
+                  "
+                  oninput="this.value = this.value.toUpperCase()"
+                  onblur="checkCode()"
+                  onkeydown="if (event.key === 'Enter') checkCode()"
+                  data-i18n-placeholder="placeholder_code" />
+                <span id="code-feedback"></span>
+              </div>
+
+              <!-- Download button with status -->
+              <div class="ms-code-wrap">
+                <button
+                  class="print-btn"
+                  id="btn-download"
+                  style="background: #2a9d5c"
+                  onclick="handleDownloadClick()"
+                  data-tip-i18n="tip_download_pdf">
+                  <span id="btn-download-label"></span>
+                </button>
+                <span id="pdf-status"></span>
+              </div>
+
+              <!-- Clear button -->
               <button
                 class="print-btn"
                 style="background: var(--red)"
@@ -540,7 +716,7 @@
             </div>
             <button
               class="tip-btn"
-              data-tip-i18n="tip_printclear"
+              data-tip-i18n="tip_download_pdf"
               type="button">
               ?
             </button>
@@ -554,8 +730,11 @@
       <div class="emergency-card" id="emergency-card">
         <div class="title-bar">
           <div class="title-left">
-            <div id="vessel-name"></div>
-            <h2 id="card-title"></h2>
+            <img src="assets/logo.svg" class="card-logo" alt="MareSafe" />
+            <div class="title-text">
+              <div id="vessel-name"></div>
+              <h2 id="card-title"></h2>
+            </div>
           </div>
           <div class="title-right">
             <small data-i18n="card_subtitle"></small>
@@ -601,9 +780,22 @@
                 </tr>
                 <tr>
                   <td class="lbl">
-                    <span data-i18n="f_length"></span><span id="r-alt-length-sep" class="alt-sep" style="display:none"> | <span data-i18n="f_alt_length"></span></span>
+                    <span data-i18n="f_length"></span
+                    ><span
+                      id="r-alt-length-sep"
+                      class="alt-sep"
+                      style="display: none">
+                      | <span data-i18n="f_alt_length"></span
+                    ></span>
                   </td>
-                  <td class="val"><span id="r-length">0,00</span> m<span id="r-alt-length-inline" class="alt-val" style="display:none"> | <span id="r-alt-length">—</span> m</span></td>
+                  <td class="val">
+                    <span id="r-length">0,00</span> m<span
+                      id="r-alt-length-inline"
+                      class="alt-val"
+                      style="display: none">
+                      | <span id="r-alt-length">—</span> m</span
+                    >
+                  </td>
                 </tr>
                 <tr>
                   <td class="lbl" data-i18n="f_width"></td>
@@ -615,16 +807,29 @@
                 </tr>
                 <tr>
                   <td class="lbl">
-                    <span data-i18n="f_airdraft"></span><span id="r-alt-airdraft-sep" class="alt-sep" style="display:none"> | <span data-i18n="f_alt_airdraft"></span></span>
+                    <span data-i18n="f_airdraft"></span
+                    ><span
+                      id="r-alt-airdraft-sep"
+                      class="alt-sep"
+                      style="display: none">
+                      | <span data-i18n="f_alt_airdraft"></span
+                    ></span>
                   </td>
-                  <td class="val"><span id="r-airdraft">0,00</span> m<span id="r-alt-airdraft-inline" class="alt-val" style="display:none"> | <span id="r-alt-airdraft">—</span> m</span></td>
+                  <td class="val">
+                    <span id="r-airdraft">0,00</span> m<span
+                      id="r-alt-airdraft-inline"
+                      class="alt-val"
+                      style="display: none">
+                      | <span id="r-alt-airdraft">—</span> m</span
+                    >
+                  </td>
                 </tr>
               </table>
             </div>
             <div class="right-col">
               <div>
-                <div class="sec-hdr" data-i18n="card_crew"></div>
-                <table class="dtable" id="r-crew">
+                <div class="sec-hdr" data-i18n="card_contacts"></div>
+                <table class="dtable" id="r-contacts">
                   <tr class="sub-hdr">
                     <td class="c50" data-i18n="th_name"></td>
                     <td class="c50 right" data-i18n="th_contact"></td>
@@ -910,8 +1115,20 @@
       onclick="if (event.target === this) closeInfoModal()">
       <div class="modal-panel" role="dialog" aria-modal="true">
         <div class="modal-hdr">
-          <img src="assets/logo.svg" alt="" aria-hidden="true" style="height: 28px; width: 28px; flex-shrink: 0; margin-right: 8px" />
-          <div class="modal-hdr-title" data-i18n="modal_title"></div>
+          <img
+            src="assets/logo.svg"
+            alt=""
+            aria-hidden="true"
+            style="
+              height: 28px;
+              width: 28px;
+              flex-shrink: 0;
+              margin-right: 8px;
+            " />
+          <div class="site-title-wrap">
+            <div class="modal-hdr-title" data-i18n="modal_title"></div>
+            <div class="site-subtitle" data-i18n="product_name"></div>
+          </div>
           <div class="lang-btns" style="margin-left: auto; margin-right: 12px">
             <button
               class="lang-btn active"
@@ -919,13 +1136,22 @@
               aria-label="Nederlands">
               🇳🇱
             </button>
-            <button class="lang-btn" onclick="setLang('en')" aria-label="English">
+            <button
+              class="lang-btn"
+              onclick="setLang('en')"
+              aria-label="English">
               🇬🇧
             </button>
-            <button class="lang-btn" onclick="setLang('fr')" aria-label="Français">
+            <button
+              class="lang-btn"
+              onclick="setLang('fr')"
+              aria-label="Français">
               🇫🇷
             </button>
-            <button class="lang-btn" onclick="setLang('de')" aria-label="Deutsch">
+            <button
+              class="lang-btn"
+              onclick="setLang('de')"
+              aria-label="Deutsch">
               🇩🇪
             </button>
           </div>
@@ -944,7 +1170,9 @@
           <div class="modal-section">
             <div class="modal-section-title" data-i18n="info_print_title"></div>
             <div class="modal-section-body" data-i18n="info_print_body"></div>
-            <div class="modal-section-body modal-disclaimer" data-i18n="info_print_mobile"></div>
+            <div
+              class="modal-section-body modal-disclaimer"
+              data-i18n="info_print_mobile"></div>
           </div>
           <div class="modal-section">
             <div class="modal-section-title" data-i18n="info_save_title"></div>
