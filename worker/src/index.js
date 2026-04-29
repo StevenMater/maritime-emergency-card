@@ -38,6 +38,14 @@ export default {
       return handleGeneratePdf(request, env)
     }
 
+    if (request.method === "POST" && url.pathname === "/email-backup") {
+      return handleEmailBackup(request, env)
+    }
+
+    if (request.method === "POST" && url.pathname === "/admin/emails") {
+      return handleListEmails(request, env)
+    }
+
     return corsResponse({ error: "Not found" }, 404, env)
   },
 }
@@ -145,9 +153,15 @@ async function handleGeneratePdf(request, env) {
     return corsResponse({ error: "PDF generation failed" }, 503, env)
   }
 
-  // ── Write Stripe session to KV (after successful render) ───────
+  // ── Write Stripe session to KV + save email to D1 ─────────────
   if (type === "stripe") {
     await env.PAYMENT_SESSIONS.put(session, "1", { expirationTtl: 86400 })
+    if (stripeEmail) {
+      const vesselNameForEmail = formData?.name || ""
+      await env.DB.prepare(
+        "INSERT OR REPLACE INTO emails (email, vessel_name, created_at) VALUES (?, ?, ?)"
+      ).bind(stripeEmail, vesselNameForEmail, new Date().toISOString()).run().catch(() => {})
+    }
   }
 
   // ── ZIP ────────────────────────────────────────────────────────
@@ -220,6 +234,64 @@ async function sendRetryEmail(to, sessionId, env) {
   }).catch(() => {})
 }
 
+// ── /email-backup ──────────────────────────────────────────────────
+async function handleEmailBackup(request, env) {
+  const body = await request.json().catch(() => null)
+  if (!body) return corsResponse({ error: "Invalid body" }, 400, env)
+
+  const { email, formData } = body
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return corsResponse({ error: "Invalid email" }, 400, env)
+  }
+
+  const vesselName = formData?.name || ""
+  const createdAt  = new Date().toISOString()
+  const filename   = `MareSafe - ${vesselName || "backup"}.json`
+  const jsonBytes  = new TextEncoder().encode(JSON.stringify(formData, null, 2))
+  const base64     = btoa(String.fromCharCode(...jsonBytes))
+
+  // Store email in D1
+  await env.DB.prepare(
+    "INSERT OR REPLACE INTO emails (email, vessel_name, created_at) VALUES (?, ?, ?)"
+  ).bind(email, vesselName, createdAt).run()
+
+  // Send backup via Resend
+  const resendRes = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from: "MareSafe <noreply@maresafe.eu>",
+      to: email,
+      subject: `MareSafe — backup of ${vesselName || "your vessel"}`,
+      html: `<p>Hi,</p>
+             <p>Attached is a JSON backup of your MareSafe emergency card for <strong>${vesselName || "your vessel"}</strong>.</p>
+             <p>To restore it, open <a href="https://www.maresafe.eu">maresafe.eu</a> and use the import option.</p>
+             <p>— MareSafe</p>`,
+      attachments: [{ filename, content: base64 }],
+    }),
+  })
+
+  if (!resendRes.ok) return corsResponse({ error: "Failed to send email" }, 503, env)
+  return corsResponse({ ok: true }, 200, env)
+}
+
+// ── /admin/emails ──────────────────────────────────────────────────
+async function handleListEmails(request, env) {
+  const { masterCode } = await request.json().catch(() => ({}))
+  if (masterCode !== env.MASTER_CODE) {
+    return corsResponse({ error: "Forbidden" }, 403, env)
+  }
+
+  const { results } = await env.DB.prepare(
+    "SELECT email, vessel_name, created_at FROM emails ORDER BY created_at DESC LIMIT 500"
+  ).all()
+
+  return corsResponse({ emails: results }, 200, env)
+}
+
 // ── Admin page ─────────────────────────────────────────────────────
 function adminPage() {
   const html = `<!doctype html>
@@ -229,26 +301,61 @@ function adminPage() {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MareSafe Admin</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 400px; margin: 60px auto; padding: 0 20px; color: #111; }
+    body { font-family: system-ui, sans-serif; max-width: 540px; margin: 60px auto; padding: 0 20px; color: #111; }
     h2 { color: #1b3a5c; }
     label { display: block; font-size: 13px; margin-bottom: 4px; color: #444; }
     input { display: block; width: 100%; box-sizing: border-box; margin-bottom: 12px; padding: 8px 10px; font-size: 14px; border: 1.5px solid #a8c4e0; border-radius: 4px; }
-    button { background: #1b3a5c; color: white; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; width: 100%; }
-    button:hover { background: #2c5282; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+    .tab { padding: 8px 18px; border: 1.5px solid #a8c4e0; border-radius: 4px; cursor: pointer; font-size: 14px; background: white; }
+    .tab.active { background: #1b3a5c; color: white; border-color: #1b3a5c; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    button.action { background: #1b3a5c; color: white; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; width: 100%; }
+    button.action:hover { background: #2c5282; }
     #result { margin-top: 20px; font-size: 22px; font-weight: 700; color: #1e6b3c; letter-spacing: 2px; }
     #error  { margin-top: 20px; font-size: 13px; color: #a93226; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 16px; }
+    th { text-align: left; padding: 6px 8px; background: #f0f4f8; border-bottom: 2px solid #a8c4e0; }
+    td { padding: 6px 8px; border-bottom: 1px solid #e8eef4; }
+    #email-count { font-size: 13px; color: #555; margin-top: 8px; }
   </style>
 </head>
 <body>
-  <h2>MareSafe — Code Generator</h2>
-  <label>Master code</label>
-  <input id="mc" type="password" autocomplete="current-password" />
-  <label>Number of uses</label>
-  <input id="uses" type="number" value="1" min="1" max="1000" />
-  <button onclick="generate()">Generate code</button>
-  <div id="result"></div>
-  <div id="error"></div>
+  <h2>MareSafe Admin</h2>
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('codes')">Codes</button>
+    <button class="tab" onclick="showTab('emails')">Emails</button>
+  </div>
+
+  <div id="panel-codes" class="panel active">
+    <label>Master code</label>
+    <input id="mc" type="password" autocomplete="current-password" />
+    <label>Number of uses</label>
+    <input id="uses" type="number" value="1" min="1" max="1000" />
+    <button class="action" onclick="generate()">Generate code</button>
+    <div id="result"></div>
+    <div id="error"></div>
+  </div>
+
+  <div id="panel-emails" class="panel">
+    <label>Master code</label>
+    <input id="mc2" type="password" autocomplete="current-password" />
+    <button class="action" onclick="loadEmails()">Load emails</button>
+    <div id="email-count"></div>
+    <table id="email-table" style="display:none">
+      <thead><tr><th>Email</th><th>Vessel</th><th>Date</th></tr></thead>
+      <tbody id="email-rows"></tbody>
+    </table>
+    <div id="email-error"></div>
+  </div>
+
   <script>
+    function showTab(name) {
+      document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", ["codes","emails"][i] === name))
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"))
+      document.getElementById("panel-" + name).classList.add("active")
+    }
+
     async function generate() {
       document.getElementById("result").textContent = ""
       document.getElementById("error").textContent  = ""
@@ -263,6 +370,24 @@ function adminPage() {
       const data = await res.json()
       if (res.ok) document.getElementById("result").textContent = data.code
       else document.getElementById("error").textContent = data.error || "Something went wrong."
+    }
+
+    async function loadEmails() {
+      document.getElementById("email-error").textContent = ""
+      document.getElementById("email-table").style.display = "none"
+      const res = await fetch("/admin/emails", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ masterCode: document.getElementById("mc2").value }),
+      })
+      const data = await res.json()
+      if (!res.ok) { document.getElementById("email-error").textContent = data.error || "Failed."; return }
+      const tbody = document.getElementById("email-rows")
+      tbody.innerHTML = data.emails.map(e =>
+        \`<tr><td>\${e.email}</td><td>\${e.vessel_name || "—"}</td><td>\${e.created_at?.slice(0,10) || "—"}</td></tr>\`
+      ).join("")
+      document.getElementById("email-count").textContent = data.emails.length + " contacts"
+      document.getElementById("email-table").style.display = data.emails.length ? "" : "none"
     }
   </script>
 </body>
