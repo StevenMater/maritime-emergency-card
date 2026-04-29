@@ -742,16 +742,23 @@ window.addEventListener("resize", updatePreviewScale)
 // ══ RENDER MODE (Browserless PDF generation) ════════════════════════
 function initRenderMode() {
   if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
-  document.querySelectorAll(".sticky-header, .fields-wrap, .preview-label, .site-footer").forEach((el) => {
-    el.style.display = "none"
+
+  // Remove everything from body except the card wrapper
+  Array.from(document.body.children).forEach((el) => {
+    if (el.id !== "a4-wrap") el.remove()
   })
+
   document.documentElement.style.cssText = "height:1123px;overflow:hidden;"
   document.body.style.cssText = "margin:0;padding:0;background:white;height:1123px;overflow:hidden;"
+
   const wrap = document.getElementById("a4-wrap")
-  if (wrap) wrap.style.cssText = "margin:0;padding:0;box-shadow:none;border:none;background:white;height:1123px;overflow:hidden;"
+  if (wrap) wrap.style.cssText = "margin:0;padding:0;box-shadow:none;border:none;background:white;"
+
   const card = document.getElementById("emergency-card")
-  if (card) card.style.cssText = "width:794px;height:1123px;box-shadow:none;border:none;overflow:hidden;"
+  if (card) card.style.cssText = "width:794px;height:1123px;box-shadow:none;border:none;"
+
   applyFormData(window.__CARD_DATA__)
+
   const ready = document.createElement("div")
   ready.id = "render-ready"
   ready.style.display = "none"
