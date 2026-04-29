@@ -1,0 +1,21 @@
+name = "maresafe-worker"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+[[kv_namespaces]]
+binding = "PAYMENT_SESSIONS"
+id = "<PAYMENT_SESSIONS_NAMESPACE_ID>"   # replace after: wrangler kv:namespace create PAYMENT_SESSIONS
+
+[[kv_namespaces]]
+binding = "BYPASS_CODES"
+id = "<BYPASS_CODES_NAMESPACE_ID>"       # replace after: wrangler kv:namespace create BYPASS_CODES
+
+[vars]
+ALLOWED_ORIGIN = "https://www.maresafe.eu"
+CARD_URL       = "https://www.maresafe.eu/"
+
+# Secrets — set via `wrangler secret put`:
+#   STRIPE_SECRET_KEY
+#   BROWSERLESS_TOKEN
+#   MASTER_CODE
+#   RESEND_API_KEY
