@@ -1,7 +1,9 @@
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/XXXXXXXX" // fill after Stripe setup
-const PDF_WORKER_URL      = "https://api.maresafe.eu/generate-pdf"
-const CHECK_CODE_URL      = "https://api.maresafe.eu/check-code"
+const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/cNi4gzachcuR5vN0Ao97G00"
+const WORKER_BASE         = "https://maresafe-worker.maresafe.workers.dev"
+const PDF_WORKER_URL      = `${WORKER_BASE}/generate-pdf`
+const CHECK_CODE_URL      = `${WORKER_BASE}/check-code`
+const EMAIL_BACKUP_URL    = `${WORKER_BASE}/email-backup`
 
 // ══ CONTACTS ════════════════════════════════════════════════════════
 const MAX_CONTACTS = 7
@@ -357,7 +359,7 @@ function update() {
     document.getElementById("f-insurer-name").value,
     ...contacts.map((c) => c.label + (c.number || "")),
   ].some((v) => v && v.trim() !== "")
-  const saveBtn = document.getElementById("btn-save")
+  const saveBtn = document.getElementById("btn-email-backup")
   saveBtn.disabled = !hasData
   saveBtn.style.opacity = hasData ? "1" : "0.4"
   saveBtn.style.cursor = hasData ? "pointer" : "not-allowed"
@@ -603,6 +605,59 @@ function exportJSON() {
   document.getElementById("version-warning").style.display = "none"
 }
 
+function openEmailBackupModal() {
+  document.getElementById("email-backup-modal").classList.add("open")
+  document.getElementById("email-backup-input").focus()
+  document.getElementById("email-backup-status").textContent = ""
+  document.getElementById("email-backup-btn").disabled = false
+  document.getElementById("email-backup-btn-label").textContent = "📧 Send backup"
+}
+
+function closeEmailBackupModal() {
+  document.getElementById("email-backup-modal").classList.remove("open")
+}
+
+async function submitEmailBackup() {
+  const email  = document.getElementById("email-backup-input").value.trim()
+  const status = document.getElementById("email-backup-status")
+  const btn    = document.getElementById("email-backup-btn")
+  const label  = document.getElementById("email-backup-btn-label")
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    status.style.color = "#f1948a"
+    status.textContent = "Please enter a valid email address."
+    return
+  }
+
+  btn.disabled = true
+  label.textContent = "Sending…"
+  status.textContent = ""
+
+  const formData = getFormData()
+
+  try {
+    const res = await fetch(EMAIL_BACKUP_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, formData }),
+    })
+
+    if (res.ok) {
+      label.textContent = "✓ Sent"
+      status.style.color = "#6fcf97"
+      status.textContent = "Check your inbox — your backup is on its way."
+      setTimeout(closeEmailBackupModal, 2500)
+    } else {
+      throw new Error()
+    }
+  } catch {
+    label.textContent = "📧 Send backup"
+    btn.disabled = false
+    status.style.color = "#f1948a"
+    status.textContent = "Something went wrong. Please try again."
+  }
+}
+
 function clearAll() {
   if (!confirm(T[currentLang].clear_confirm)) return
   ;[
@@ -775,7 +830,7 @@ function handleDownloadClick() {
     requestPDF({ type: "code", code: _validCode }, langs)
   } else {
     localStorage.setItem("maresafe_langs", JSON.stringify(langs))
-    window.location.href = STRIPE_PAYMENT_LINK
+    window.open(STRIPE_PAYMENT_LINK, "_blank")
   }
 }
 

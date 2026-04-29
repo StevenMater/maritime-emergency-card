@@ -1,0 +1,27 @@
+{
+  "version": 20,
+  "name": "Boaty McBoatface",
+  "type": "Motor Cruiser",
+  "eni": "02331847",
+  "length": "12.4",
+  "width": "3.8",
+  "draft": "1.1",
+  "airDraft": "4.2",
+  "altLength": "10.9",
+  "altAirDraft": "3.1",
+  "callSign": "PBMB1",
+  "atis": "123456789",
+  "mmsi": "244123456",
+  "insurerName": "Blue Ocean Marine Insurance",
+  "policyNumber": "BOI-2024-774821",
+  "insurerEmergencyDialCode": "+31",
+  "insurerEmergencyNumber": "0800123456",
+  "insurerOfficeDialCode": "+31",
+  "insurerOfficeNumber": "0102345678",
+  "contacts": [
+    { "label": "Skipper", "dialCode": "+31", "number": "0612345678" },
+    { "label": "Co-Owner", "dialCode": "+31", "number": "0687654321" },
+    { "label": "Harbour Master", "dialCode": "+31", "number": "0104567890" },
+    { "label": "Emergency Contact", "dialCode": "+44", "number": "07911123456" }
+  ]
+}

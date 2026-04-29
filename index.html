@@ -202,11 +202,11 @@
       <div class="save-load-bar">
         <div class="btn-stack">
           <button
-            id="btn-save"
+            id="btn-email-backup"
             class="print-btn sec"
-            onclick="exportJSON()"
+            onclick="openEmailBackupModal()"
             data-tip-i18n="tip_save">
-            <span>💾</span><span data-i18n="btn_save"></span>
+            <span>📧</span><span data-i18n="btn_save"></span>
           </button>
           <label
             class="print-btn sec"
@@ -1107,6 +1107,42 @@
         >stevenmater@gmail.com</a
       >
     </footer>
+
+    <!-- EMAIL BACKUP MODAL -->
+    <div
+      class="modal-overlay"
+      id="email-backup-modal"
+      onclick="if (event.target === this) closeEmailBackupModal()">
+      <div class="modal-panel" style="max-width: 420px" role="dialog" aria-modal="true">
+        <div class="modal-hdr">
+          <div class="modal-hdr-title">Save your data</div>
+          <button class="modal-close-btn" onclick="closeEmailBackupModal()" aria-label="Close">×</button>
+        </div>
+        <div style="padding: 24px; background: var(--navy); border-radius: 0 0 10px 10px; display: flex; flex-direction: column; gap: 16px;">
+          <p style="font-family: var(--font-sans); font-size: 13px; color: white; line-height: 1.6; margin: 0;">
+            We'll email you a backup of your card data. You can import it at any time to restore your vessel information.
+          </p>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #a8c4e0;">Email address</label>
+            <input
+              id="email-backup-input"
+              class="inp"
+              type="email"
+              placeholder="your@email.com"
+              onkeydown="if (event.key === 'Enter') submitEmailBackup()"
+              style="width: 100%; box-sizing: border-box;" />
+          </div>
+          <button
+            id="email-backup-btn"
+            class="print-btn"
+            style="background: #2a9d5c; width: 100%;"
+            onclick="submitEmailBackup()">
+            <span id="email-backup-btn-label">📧 Send backup</span>
+          </button>
+          <div id="email-backup-status" style="font-family: var(--font-sans); font-size: 12px; min-height: 16px; text-align: center;"></div>
+        </div>
+      </div>
+    </div>
 
     <!-- INFO MODAL -->
     <div
