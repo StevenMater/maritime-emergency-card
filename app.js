@@ -1,5 +1,8 @@
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const STRIPE_PAYMENT_LINK = "https://buy.stripe.com/cNi4gzachcuR5vN0Ao97G00"
+const STRIPE_TEST_MODE    = true
+const STRIPE_LIVE_LINK    = "https://buy.stripe.com/cNi4gzachcuR5vN0Ao97G00"
+const STRIPE_TEST_LINK    = "https://buy.stripe.com/test_cNi4gzachcuR5vN0Ao97G00"
+const STRIPE_PAYMENT_LINK = STRIPE_TEST_MODE ? STRIPE_TEST_LINK : STRIPE_LIVE_LINK
 const WORKER_BASE         = "https://maresafe-worker.maresafe.workers.dev"
 const PDF_WORKER_URL      = `${WORKER_BASE}/generate-pdf`
 const CHECK_CODE_URL      = `${WORKER_BASE}/check-code`
