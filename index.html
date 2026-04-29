@@ -746,12 +746,13 @@
           style="
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
             flex: 1;
             min-height: 0;
+            gap: 7px;
           ">
           <div class="cols">
-            <div>
+            <div class="left-col">
+              <div>
               <div class="sec-hdr" data-i18n="card_ship"></div>
               <table class="dtable">
                 <tr>
@@ -774,11 +775,12 @@
                   <td class="lbl">ATIS</td>
                   <td class="val" id="r-atis">—</td>
                 </tr>
-                <tr class="card-sep-row">
+                <tr>
                   <td class="lbl">MMSI</td>
                   <td class="val" id="r-mmsi">—</td>
                 </tr>
-                <tr>
+                <tr class="gap-row"><td colspan="2"></td></tr>
+                <tr class="card-sep-row">
                   <td class="lbl">
                     <span data-i18n="f_length"></span
                     ><span
@@ -826,24 +828,101 @@
                 </tr>
               </table>
             </div>
+              <div>
+              <div class="sec-hdr" data-i18n="card_channels"></div>
+              <table class="dtable">
+                <tr>
+                  <td class="c25"><span class="pill" style="background:var(--red)" data-i18n="pill_emergency"></span></td>
+                  <td class="c45" data-i18n="k_inland"></td>
+                  <td class="c30 right" style="color:var(--red)">Blokkanaal / 10</td>
+                </tr>
+                <tr>
+                  <td class="c25"><span class="pill" style="background:var(--red)" data-i18n="pill_emergency"></span></td>
+                  <td class="c45" data-i18n="k_open"></td>
+                  <td class="c30 right" style="color:var(--red)">16</td>
+                </tr>
+                <tr>
+                  <td class="c25"><span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span></td>
+                  <td class="c45" data-i18n="k_ijssel"></td>
+                  <td class="c30 right">1</td>
+                </tr>
+                <tr>
+                  <td class="c25"><span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span></td>
+                  <td class="c45" data-i18n="k_rws"></td>
+                  <td class="c30 right" style="color:var(--orange)">23 / 83</td>
+                </tr>
+                <tr>
+                  <td class="c25"><span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span></td>
+                  <td class="c45" data-i18n="k_cg"></td>
+                  <td class="c30 right" style="color:var(--orange)">67</td>
+                </tr>
+              </table>
+              </div>
+            </div>
             <div class="right-col">
               <div>
                 <div class="sec-hdr" data-i18n="card_contacts"></div>
-                <table class="dtable" id="r-contacts">
-                  <tr class="sub-hdr">
-                    <td class="c50" data-i18n="th_name"></td>
-                    <td class="c50 right" data-i18n="th_contact"></td>
+                <table class="dtable" id="r-contacts"></table>
+              </div>
+              <div class="insurer-block">
+                <div class="sec-hdr green"><span data-i18n="card_insurer"></span><span>-</span><span id="r-insurer-name">—</span></div>
+                <table class="dtable">
+                  <tr>
+                    <td class="c25">
+                      <span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span>
+                    </td>
+                    <td class="c45" data-i18n="f_policy"></td>
+                    <td class="c30 right" id="r-policy">—</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span>
+                    </td>
+                    <td class="c45" data-i18n="h_insurer_emergency"></td>
+                    <td class="c30 right" style="color:var(--orange)" id="r-insurer-emergency">—</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span>
+                    </td>
+                    <td class="c45" data-i18n="h_insurer_office"></td>
+                    <td class="c30 right" id="r-insurer-office">—</td>
                   </tr>
                 </table>
               </div>
-              <div class="verz-block">
-                <div class="sec-hdr green" data-i18n="card_insurer"></div>
+              <div>
+                <div class="sec-hdr" data-i18n="card_numbers"></div>
                 <table class="dtable">
                   <tr>
-                    <td class="lbl" id="r-insurer-name">—</td>
-                    <td class="val">
-                      <span data-i18n="card_policy"></span>
-                      <span id="r-policy">—</span>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--red)"
+                        data-i18n="pill_emergency"></span>
+                    </td>
+                    <td class="c45" data-i18n="h_cg"></td>
+                    <td class="c30 right" style="color:var(--red)">0900-0111</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background:var(--red)"
+                        data-i18n="pill_emergency"></span>
+                    </td>
+                    <td class="c45" data-i18n="h_112"></td>
+                    <td class="c30 right" style="color:var(--red)">112</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background:var(--green)"
+                        data-i18n="pill_medical"></span>
+                    </td>
+                    <td class="c45" data-i18n="h_rmd"></td>
+                    <td class="c30 right" style="color:var(--green)">
+                      +31 88 958 4020
                     </td>
                   </tr>
                 </table>
@@ -851,134 +930,20 @@
             </div>
           </div>
 
-          <div class="cols">
-            <div>
-              <div class="sec-hdr" data-i18n="card_channels"></div>
-              <table class="dtable">
-                <tr class="sub-hdr">
-                  <td class="c25" data-i18n="th_type"></td>
-                  <td class="c45" data-i18n="th_waterway"></td>
-                  <td class="c30 right" data-i18n="th_channel"></td>
-                </tr>
-                <tr>
-                  <td class="c25" data-i18n="k_emergency"></td>
-                  <td class="c45" data-i18n="k_inland"></td>
-                  <td class="c30 right">Blokkanaal / 10</td>
-                </tr>
-                <tr>
-                  <td class="c25" data-i18n="k_emergency"></td>
-                  <td class="c45" data-i18n="k_open"></td>
-                  <td class="c30 right">16</td>
-                </tr>
-                <tr>
-                  <td class="c25" data-i18n="k_info"></td>
-                  <td class="c45" data-i18n="k_ijssel"></td>
-                  <td class="c30 right">1</td>
-                </tr>
-                <tr>
-                  <td class="c25" data-i18n="k_safety"></td>
-                  <td class="c45" data-i18n="k_rws"></td>
-                  <td class="c30 right">23 / 83</td>
-                </tr>
-                <tr>
-                  <td class="c25" data-i18n="k_cg"></td>
-                  <td class="c45" data-i18n="k_work"></td>
-                  <td class="c30 right">67</td>
-                </tr>
-              </table>
-            </div>
-            <div>
-              <div class="sec-hdr" data-i18n="card_numbers"></div>
-              <table class="dtable">
-                <tr class="sub-hdr">
-                  <td class="c25" data-i18n="th_type"></td>
-                  <td class="c45" data-i18n="th_service"></td>
-                  <td class="c30 right" data-i18n="th_number"></td>
-                </tr>
-                <tr>
-                  <td class="c25">
-                    <span
-                      class="pill"
-                      style="background: var(--red)"
-                      data-i18n="pill_emergency"></span>
-                  </td>
-                  <td class="c45" data-i18n="h_cg"></td>
-                  <td class="c30 right" style="color: var(--red)">0900-0111</td>
-                </tr>
-                <tr>
-                  <td class="c25">
-                    <span
-                      class="pill"
-                      style="background: var(--red)"
-                      data-i18n="pill_emergency"></span>
-                  </td>
-                  <td class="c45" data-i18n="h_112"></td>
-                  <td class="c30 right" style="color: var(--red)">112</td>
-                </tr>
-                <tr>
-                  <td class="c25">
-                    <span
-                      class="pill"
-                      style="background: var(--green)"
-                      data-i18n="pill_medical"></span>
-                  </td>
-                  <td class="c45" data-i18n="h_rmd"></td>
-                  <td class="c30 right" style="color: var(--green)">
-                    +31 88 958 4020
-                  </td>
-                </tr>
-                <tr>
-                  <td class="c25">
-                    <span
-                      class="pill"
-                      style="background: var(--insurer)"
-                      id="r-insurer-badge1"
-                      >—</span
-                    >
-                  </td>
-                  <td class="c45" data-i18n="h_insurer_emergency"></td>
-                  <td
-                    class="c30 right"
-                    style="color: var(--insurer)"
-                    id="r-insurer-emergency">
-                    —
-                  </td>
-                </tr>
-                <tr>
-                  <td class="c25">
-                    <span
-                      class="pill"
-                      style="background: var(--insurer)"
-                      id="r-insurer-badge2"
-                      >—</span
-                    >
-                  </td>
-                  <td class="c45" data-i18n="h_insurer_office"></td>
-                  <td
-                    class="c30 right"
-                    style="color: var(--insurer)"
-                    id="r-insurer-office">
-                    —
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-          <div class="oproepen-wrap">
+          <div class="calls-wrap">
             <div class="sec-hdr red">
               <span data-i18n="card_calls"></span>
               <span class="calls-lang-note"
                 >⚠️ <span data-i18n="calls_english_note"></span
               ></span>
             </div>
-            <div class="oproepen-grid">
-              <div class="oproep">
-                <div class="oproep-hdr mayday">
-                  <span class="sein-lbl">MAYDAY</span>
+            <div class="calls-grid">
+              <div class="call">
+                <div class="call-hdr mayday">
+                  <span class="signal-lbl">MAYDAY</span>
                   <span class="when-lbl" data-i18n="mayday_when"></span>
                 </div>
-                <div class="oproep-body mayday-bg">
+                <div class="call-body mayday-bg">
                   <div class="call-line bold-red">
                     MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY
                   </div>
@@ -1007,12 +972,12 @@
                   </div>
                 </div>
               </div>
-              <div class="oproep">
-                <div class="oproep-hdr panpan">
-                  <span class="sein-lbl">PAN PAN</span>
+              <div class="call">
+                <div class="call-hdr panpan">
+                  <span class="signal-lbl">PAN PAN</span>
                   <span class="when-lbl" data-i18n="panpan_when"></span>
                 </div>
-                <div class="oproep-body panpan-bg">
+                <div class="call-body panpan-bg">
                   <div class="call-line bold-orange">
                     PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN
                   </div>
@@ -1042,7 +1007,7 @@
                 </div>
               </div>
             </div>
-            <div class="oproep-note" data-i18n="call_note"></div>
+            <div class="call-note" data-i18n="call_note"></div>
           </div>
 
           <div class="cols">
@@ -1057,7 +1022,7 @@
           </div>
 
           <div>
-            <div class="gelu-hdr">
+            <div class="sound-hdr">
               <span data-i18n="card_signals"></span>
               <span class="sep">|</span>
               <span class="leg-item"
@@ -1078,7 +1043,7 @@
                 = 4 <span data-i18n="sig_secs"></span
               ></span>
             </div>
-            <div class="gelu-grid" id="signal-grid"></div>
+            <div class="sound-grid" id="signal-grid"></div>
           </div>
         </div>
         <!-- end space-between wrapper -->

@@ -9,8 +9,8 @@ const CHECK_CODE_URL      = `${WORKER_BASE}/check-code`
 const EMAIL_BACKUP_URL    = `${WORKER_BASE}/email-backup`
 
 // ══ CONTACTS ════════════════════════════════════════════════════════
-const MAX_CONTACTS = 7
-const CONTACT_ROWS = 7
+const MAX_CONTACTS = 9
+const CONTACT_ROWS = 9
 const DIAL_CODES = [
   { code: "+31", flag: "🇳🇱", label: "NL" },
   { code: "+32", flag: "🇧🇪", label: "BE" },
@@ -174,16 +174,16 @@ function buildSignals() {
   T[currentLang].signals.forEach((desc, i) => {
     const rowI = Math.floor(i / 2)
     const div = document.createElement("div")
-    div.className = `gelu-row ${rowI % 2 === 0 ? "alt" : "wht"}`
+    div.className = `sound-row ${rowI % 2 === 0 ? "alt" : "wht"}`
     const pat = document.createElement("div")
-    pat.className = "gelu-pat"
+    pat.className = "sound-pattern"
     SIGNAL_PATTERNS[i].forEach((p) => {
       const el = document.createElement("span")
       el.className = p === "L" ? "g-L" : p === "S" ? "g-S" : "g-XS"
       pat.appendChild(el)
     })
     const d = document.createElement("span")
-    d.className = "gelu-desc"
+    d.className = "sound-desc"
     d.textContent = desc
     div.appendChild(pat)
     div.appendChild(d)
@@ -213,6 +213,17 @@ const NL_2DIGIT_NDC = new Set([
   10, 13, 15, 20, 23, 24, 26, 30, 33, 35, 36, 38, 40, 43, 45, 46, 50, 53, 55,
   58, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79,
 ])
+const BADGE = {
+  emergency: { color: "var(--red)",    key: "pill_emergency" },
+  urgent:    { color: "var(--orange)", key: "pill_urgent"    },
+  medical:   { color: "var(--green)",  key: "pill_medical"   },
+  info:      { color: "var(--mid)",    key: "pill_info"      },
+}
+function badge(type) {
+  const { color, key } = BADGE[type]
+  return `<span class="pill" style="background:${color}" data-i18n="${key}">${T[currentLang][key]}</span>`
+}
+
 function formatPhone(dialCode, number) {
   const n = (number || "").trim()
   if (!n) return "—"
@@ -296,7 +307,7 @@ function update() {
 
   // Contacts — always CONTACT_ROWS rows
   const tbl = document.getElementById("r-contacts")
-  while (tbl.rows.length > 1) tbl.deleteRow(1)
+  while (tbl.rows.length > 0) tbl.deleteRow(0)
   for (let i = 0; i < CONTACT_ROWS; i++) {
     const c = contacts[i]
     const tr = tbl.insertRow()
@@ -324,8 +335,6 @@ function update() {
     insOffCode,
     insOffNum,
   )
-  document.getElementById("r-insurer-badge1").textContent = insName || "—"
-  document.getElementById("r-insurer-badge2").textContent = insName || "—"
 
   // Emergency calls
   ;[
