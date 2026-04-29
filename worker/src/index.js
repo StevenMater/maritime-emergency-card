@@ -206,11 +206,12 @@ async function renderPdf(pageHtml, cardData, env) {
       body: JSON.stringify({
         html: injected,
         addStyleTag: [
-          { content: "@page { size: 794px 1123px; margin: 0; }" },
+          { content: "@page { size: 210mm 297mm; margin: 0; }" },
         ],
         options: {
           printBackground: true,
           preferCSSPageSize: true,
+          pageRanges: "1",
           margin: { top: "0", right: "0", bottom: "0", left: "0" },
         },
         waitForSelector: { selector: "#render-ready", timeout: 30000 },
