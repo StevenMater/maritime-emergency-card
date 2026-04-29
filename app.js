@@ -742,10 +742,14 @@ window.addEventListener("resize", updatePreviewScale)
 // ══ RENDER MODE (Browserless PDF generation) ════════════════════════
 function initRenderMode() {
   if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
-  document.querySelectorAll(".sticky-header, .fields-wrap").forEach((el) => {
+  document.querySelectorAll(".sticky-header, .fields-wrap, .preview-label, .site-footer").forEach((el) => {
     el.style.display = "none"
   })
   document.body.style.cssText = "margin:0;padding:0;background:white;"
+  const wrap = document.getElementById("a4-wrap")
+  if (wrap) wrap.style.cssText = "margin:0;padding:0;box-shadow:none;border:none;background:white;"
+  const card = document.getElementById("emergency-card")
+  if (card) card.style.cssText = "width:794px;min-height:1123px;box-shadow:none;border:none;"
   applyFormData(window.__CARD_DATA__)
   const ready = document.createElement("div")
   ready.id = "render-ready"
