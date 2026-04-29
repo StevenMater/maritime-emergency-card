@@ -232,7 +232,7 @@ async function sendRetryEmail(to, sessionId, env) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "MareSafe <noreply@maresafe.eu>",
+      from: "MareSafe <noreply@contact.maresafe.eu>",
       to,
       subject: "MareSafe — your download link",
       html: `<p>Something went wrong generating your PDF. Your payment is safe.</p>
@@ -271,7 +271,7 @@ async function handleEmailBackup(request, env) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      from: "MareSafe <noreply@maresafe.eu>",
+      from: "MareSafe <noreply@contact.maresafe.eu>",
       to: email,
       subject: `MareSafe — backup of ${vesselName || "your vessel"}`,
       html: `<p>Hi,</p>
