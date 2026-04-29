@@ -10,13 +10,13 @@ id = "ad31e1f30c0d4de48b7db2c8ff5dbf0c"
 binding = "BYPASS_CODES"
 id = "8297312154374ee59c22171ce184fe55"
 
-[[d1_databases]]
-binding      = "DB"
-database_name = "maresafe-db"
-database_id  = "2ec22b61-8912-4850-aed1-e89808ff839b"
-
 workers_dev  = true
 preview_urls = false
+
+[[d1_databases]]
+binding       = "DB"
+database_name = "maresafe-db"
+database_id   = "2ec22b61-8912-4850-aed1-e89808ff839b"
 
 [vars]
 ALLOWED_ORIGIN = "*"
