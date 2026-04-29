@@ -150,7 +150,7 @@ async function handleGeneratePdf(request, env) {
     if (type === "stripe" && stripeEmail) {
       await sendRetryEmail(stripeEmail, session, env)
     }
-    return corsResponse({ error: "PDF generation failed" }, 503, env)
+    return corsResponse({ error: "PDF generation failed", detail: err.message }, 503, env)
   }
 
   // ── Write Stripe session to KV + save email to D1 ─────────────
@@ -205,12 +205,15 @@ async function renderPdf(pageHtml, cardData, env) {
           format: "A4",
           margin: { top: "0", right: "0", bottom: "0", left: "0" },
         },
-        waitFor: { selector: "#render-ready" },
+        waitForSelector: "#render-ready",
       }),
     },
   )
 
-  if (!res.ok) throw new Error(`Browserless error ${res.status}`)
+  if (!res.ok) {
+    const text = await res.text().catch(() => "")
+    throw new Error(`Browserless ${res.status}: ${text}`)
+  }
   return res.arrayBuffer()
 }
 
