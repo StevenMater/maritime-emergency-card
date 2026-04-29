@@ -742,11 +742,10 @@ window.addEventListener("resize", updatePreviewScale)
 // ══ RENDER MODE (Browserless PDF generation) ════════════════════════
 function initRenderMode() {
   if (!window.__RENDER_MODE__ || !window.__CARD_DATA__) return false
-  ;["site-header", "fields-wrap", "preview-label", "site-footer"].forEach((id) => {
-    const el = document.getElementById(id)
-    if (el) el.style.display = "none"
+  document.querySelectorAll(".sticky-header, .fields-wrap").forEach((el) => {
+    el.style.display = "none"
   })
-  document.querySelector(".editor")?.style.setProperty("display", "none")
+  document.body.style.cssText = "margin:0;padding:0;background:white;"
   applyFormData(window.__CARD_DATA__)
   const ready = document.createElement("div")
   ready.id = "render-ready"

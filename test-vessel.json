@@ -19,9 +19,9 @@
   "insurerOfficeDialCode": "+31",
   "insurerOfficeNumber": "0102345678",
   "contacts": [
-    { "label": "Skipper", "dialCode": "+31", "number": "0612345678" },
-    { "label": "Co-Owner", "dialCode": "+31", "number": "0687654321" },
-    { "label": "Harbour Master", "dialCode": "+31", "number": "0104567890" },
-    { "label": "Emergency Contact", "dialCode": "+44", "number": "07911123456" }
+    { "label": "Alex Martin", "dialCode": "+31", "number": "0612345678" },
+    { "label": "Sam Rivera", "dialCode": "+31", "number": "0687654321" },
+    { "label": "Jordan Lee", "dialCode": "+31", "number": "0104567890" },
+    { "label": "Chris Morgan", "dialCode": "+44", "number": "07911123456" }
   ]
 }
