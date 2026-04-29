@@ -188,10 +188,15 @@ async function handleGeneratePdf(request, env) {
 
 // ── Browserless PDF render ─────────────────────────────────────────
 async function renderPdf(pageHtml, cardData, env) {
-  const injected = pageHtml.replace(
-    "</head>",
-    `<script>window.__CARD_DATA__=${JSON.stringify(cardData)};window.__RENDER_MODE__=true;</script></head>`,
-  )
+  const injected = pageHtml
+    .replace(
+      "<head>",
+      `<head><base href="${env.CARD_URL}">`,
+    )
+    .replace(
+      "</head>",
+      `<script>window.__CARD_DATA__=${JSON.stringify(cardData)};window.__RENDER_MODE__=true;</script></head>`,
+    )
 
   const res = await fetch(
     `https://chrome.browserless.io/pdf?token=${env.BROWSERLESS_TOKEN}`,
