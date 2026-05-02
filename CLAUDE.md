@@ -23,6 +23,12 @@ When a modal body and its header share the same background colour (`var(--navy)`
 
 ---
 
+## Commits
+
+Never commit unless the user explicitly says so. When asked, use the `/commit` skill — it groups changes into logical, individually-revertable commits using conventional commit format. Never push.
+
+---
+
 ## Icons
 
 Use inline Lucide SVGs (24×24 viewBox, `stroke="currentColor"`) — no emoji, no CDN. Size to context (14px for buttons, 32px for decorative).
