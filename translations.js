@@ -3,7 +3,7 @@
         nl: {
           btn_save: "Gegevens opslaan",
           btn_load: "Gegevens laden",
-          btn_clear: "Alles wissen",
+          btn_clear: "Formulier wissen",
           modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informatie & uitleg",
           tip_save: "Download je gegevens als JSON-bestand. Zo herstel je de kaart op elk apparaat.",
@@ -12,6 +12,7 @@
           tip_saveload: "Sla je gegevens op als JSON-bestand of laad een eerder opgeslagen bestand.",
           tip_download_pdf: "Kies talen en betaal €2, of gebruik een code voor gratis download.",
           tip_printclear: "Download de kaart als PDF of wis alle velden.",
+          btn_download_pdf: "Download PDF",
           btn_download_pdf_zero: "Selecteer een taal",
           label_free: "gratis",
           placeholder_code: "Heb je een code?",
@@ -57,7 +58,7 @@
           info_print_body:
             'Klik op <strong class="hl">Afdrukken / PDF</strong> onderaan het formulier. Kies <strong class="hl">Bestemming → Opslaan als PDF</strong> voor een digitale kopie, of druk de kaart direct af. Zorg dat <strong class="hl">Achtergronden afdrukken</strong> is ingeschakeld.',
           info_print_mobile:
-            '⚠️ Afdrukken en PDF maken vanuit mobiel is nog niet volledig ondersteund. Op een <strong class="hl">Mac of pc</strong> werkt dit perfect.',
+            'Afdrukken en PDF maken vanuit mobiel is nog niet volledig ondersteund. Op een <strong class="hl">Mac of pc</strong> werkt dit perfect.',
           warn_title: "Let op — automatisch opslaan is niet 100% veilig",
           warn_body:
             'De browser kan opgeslagen gegevens kwijtraken bij een update of bij het wissen van browserdata. We raden altijd aan om je gegevens <strong class="hl">handmatig op te slaan</strong> via <strong class="hl">Gegevens opslaan</strong> onderaan het formulier.',
@@ -183,11 +184,32 @@
           info_what_body_location:
             "Deze kaart is ingericht voor het vaargebied Nederland.",
           footer_feedback: "Feedback? Mail me op",
+          btn_buy: "Kopen",
+          co2_contribution: "MareSafe draagt 1,5% van je aankoop bij aan het verwijderen van CO₂ uit de atmosfeer.",
+          modal_save_title: "Gegevens opslaan",
+          modal_save_body: "We sturen je een back-up van je kaartgegevens per e-mail. Je kunt deze altijd importeren om je scheepsinformatie te herstellen.",
+          modal_save_email_label: "E-mailadres",
+          modal_save_btn: "Back-up versturen",
+          modal_save_sending: "Versturen…",
+          modal_save_sent: "✓ Verstuurd",
+          modal_save_success: "Check je inbox — je back-up is onderweg.",
+          modal_save_error: "Er is iets misgegaan. Probeer het opnieuw.",
+          modal_load_title: "Gegevens laden",
+          modal_load_body: "Laad het .json-back-upbestand dat je per e-mail of op een andere manier hebt ontvangen. Je huidige gegevens worden vervangen door de inhoud van het bestand.",
+          modal_load_tip: "Zoek in je inbox naar <strong>MareSafe</strong> of <strong>maresafe</strong> om je back-upmail te vinden.",
+          modal_load_drop: "Sleep je bestand hierheen of <u>klik om te bladeren</u>",
+          modal_load_error: "Ongeldig bestand — gegevens konden niet worden geladen.",
+          modal_clear_title: "Formulier wissen",
+          modal_clear_body: "Weet je zeker dat je alle formuliergegevens wilt wissen? <strong>Dit kan niet ongedaan worden gemaakt</strong> — alle schips- en contactgegevens worden permanent verwijderd.",
+          modal_clear_cancel: "Annuleren",
+          modal_clear_confirm: "Ja, formulier wissen",
+          load_invalid_title: "Ongeldig bestand",
+          load_invalid_body: "Het bestand kon niet worden ingeladen. Controleer of je het juiste back-upbestand hebt geselecteerd en probeer het opnieuw.",
         },
         en: {
           btn_save: "Save data",
           btn_load: "Load data",
-          btn_clear: "Clear all",
+          btn_clear: "Clear form",
           modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Information & help",
           tip_save: "Downloads your data as a JSON file. Use it to restore your card on any device.",
@@ -196,6 +218,7 @@
           tip_saveload: "Save your data as a JSON file or load a previously saved file.",
           tip_download_pdf: "Choose languages and pay €2, or use a code for a free download.",
           tip_printclear: "Download the card as PDF or clear all fields.",
+          btn_download_pdf: "Download PDF",
           btn_download_pdf_zero: "Select a language",
           label_free: "free",
           placeholder_code: "Have a code?",
@@ -240,7 +263,7 @@
           info_print_body:
             'Click <strong class="hl">Print / PDF</strong> at the bottom of the form. Choose <strong class="hl">Destination → Save as PDF</strong> for a digital copy, or print directly. Make sure <strong class="hl">Print backgrounds</strong> is enabled for colours.',
           info_print_mobile:
-            '⚠️ Printing and creating a PDF from mobile is not fully supported yet. On a <strong class="hl">Mac or PC</strong> it works perfectly.',
+            'Printing and creating a PDF from mobile is not fully supported yet. On a <strong class="hl">Mac or PC</strong> it works perfectly.',
           warn_title: "Warning — auto-save is not 100% reliable",
           warn_body:
             'The browser may lose saved data after an update or when clearing browser data. We always recommend <strong class="hl">saving your data manually</strong> via <strong class="hl">Save data</strong> at the bottom of the form.',
@@ -366,11 +389,32 @@
           info_what_body_location:
             "This card is configured for the Netherlands.",
           footer_feedback: "Feedback? Mail me at",
+          btn_buy: "Buy",
+          co2_contribution: "MareSafe will contribute 1.5% of your purchase to removing CO₂ from the atmosphere.",
+          modal_save_title: "Save your data",
+          modal_save_body: "We'll email you a backup of your card data. You can import it at any time to restore your vessel information.",
+          modal_save_email_label: "Email address",
+          modal_save_btn: "Send backup",
+          modal_save_sending: "Sending…",
+          modal_save_sent: "✓ Sent",
+          modal_save_success: "Check your inbox — your backup is on its way.",
+          modal_save_error: "Something went wrong. Please try again.",
+          modal_load_title: "Load data",
+          modal_load_body: "Load the .json backup file that was sent to you via email or similar. Your current data will be replaced with the contents of the file.",
+          modal_load_tip: "Search your inbox for <strong>MareSafe</strong> or <strong>maresafe</strong> to find your backup email.",
+          modal_load_drop: "Drop your file here or <u>click to browse</u>",
+          modal_load_error: "Invalid file — could not load data.",
+          modal_clear_title: "Clear form",
+          modal_clear_body: "Are you sure you want to clear all form data? <strong>This cannot be undone</strong> — all vessel and contact information will be permanently removed.",
+          modal_clear_cancel: "Cancel",
+          modal_clear_confirm: "Yes, clear form",
+          load_invalid_title: "Invalid file",
+          load_invalid_body: "The file could not be loaded. Make sure you selected the right backup file and try again.",
         },
         fr: {
           btn_save: "Enregistrer",
           btn_load: "Charger",
-          btn_clear: "Tout effacer",
+          btn_clear: "Effacer le formulaire",
           modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informations & aide",
           tip_save: "Télécharge vos données en fichier JSON. Permet de restaurer la carte sur n'importe quel appareil.",
@@ -379,6 +423,7 @@
           tip_saveload: "Enregistrez vos données en JSON ou chargez un fichier précédemment enregistré.",
           tip_download_pdf: "Choisissez les langues et payez €2, ou utilisez un code pour un téléchargement gratuit.",
           tip_printclear: "Téléchargez la carte en PDF ou effacez tous les champs.",
+          btn_download_pdf: "Télécharger PDF",
           btn_download_pdf_zero: "Sélectionnez une langue",
           label_free: "gratuit",
           placeholder_code: "Vous avez un code ?",
@@ -424,7 +469,7 @@
           info_print_body:
             'Cliquez sur <strong class="hl">Imprimer / PDF</strong> en bas du formulaire. Choisissez <strong class="hl">Destination → Enregistrer en PDF</strong> pour une copie numérique, ou imprimez directement. Assurez-vous que <strong class="hl">Imprimer les arrière-plans</strong> est activé.',
           info_print_mobile:
-            '⚠️ L\'impression et la création de PDF depuis un mobile ne sont pas encore entièrement supportées. Sur un <strong class="hl">Mac ou PC</strong> cela fonctionne parfaitement.',
+            'L\'impression et la création de PDF depuis un mobile ne sont pas encore entièrement supportées. Sur un <strong class="hl">Mac ou PC</strong> cela fonctionne parfaitement.',
           warn_title:
             "Attention — la sauvegarde automatique n'est pas fiable à 100%",
           warn_body:
@@ -551,11 +596,32 @@
           info_what_body_location:
             "Cette carte est configurée pour les Pays-Bas.",
           footer_feedback: "Feedback? Écrivez-moi à",
+          btn_buy: "Acheter",
+          co2_contribution: "MareSafe contribuera 1,5% de votre achat à la suppression du CO₂ de l'atmosphère.",
+          modal_save_title: "Enregistrer vos données",
+          modal_save_body: "Nous vous enverrons par e-mail une sauvegarde de vos données de carte. Vous pouvez l'importer à tout moment pour restaurer les informations de votre navire.",
+          modal_save_email_label: "Adresse e-mail",
+          modal_save_btn: "Envoyer la sauvegarde",
+          modal_save_sending: "Envoi en cours…",
+          modal_save_sent: "✓ Envoyé",
+          modal_save_success: "Vérifiez votre boîte de réception — votre sauvegarde est en route.",
+          modal_save_error: "Une erreur s'est produite. Veuillez réessayer.",
+          modal_load_title: "Charger les données",
+          modal_load_body: "Chargez le fichier de sauvegarde .json qui vous a été envoyé par e-mail ou autrement. Vos données actuelles seront remplacées par le contenu du fichier.",
+          modal_load_tip: "Recherchez <strong>MareSafe</strong> ou <strong>maresafe</strong> dans votre boîte de réception pour retrouver votre e-mail de sauvegarde.",
+          modal_load_drop: "Déposez votre fichier ici ou <u>cliquez pour parcourir</u>",
+          modal_load_error: "Fichier invalide — impossible de charger les données.",
+          modal_clear_title: "Effacer le formulaire",
+          modal_clear_body: "Êtes-vous sûr de vouloir effacer toutes les données du formulaire ? <strong>Cette action est irréversible</strong> — toutes les informations sur le navire et les contacts seront définitivement supprimées.",
+          modal_clear_cancel: "Annuler",
+          modal_clear_confirm: "Oui, effacer",
+          load_invalid_title: "Fichier invalide",
+          load_invalid_body: "Le fichier n'a pas pu être chargé. Vérifiez que vous avez sélectionné le bon fichier de sauvegarde et réessayez.",
         },
         de: {
           btn_save: "Daten speichern",
           btn_load: "Daten laden",
-          btn_clear: "Alles löschen",
+          btn_clear: "Formular löschen",
           modal_title: "<span class=\"brand-title-text\">Mare<span>Safe</span></span><span class=\"brand-title-short\">M<span>S</span></span>",
           tip_info_btn: "Informationen & Hilfe",
           tip_save: "Lädt Ihre Daten als JSON-Datei herunter. So können Sie die Karte auf jedem Gerät wiederherstellen.",
@@ -564,6 +630,7 @@
           tip_saveload: "Daten als JSON-Datei speichern oder eine zuvor gespeicherte Datei laden.",
           tip_download_pdf: "Sprachen wählen und €2 bezahlen, oder einen Code für kostenlosen Download verwenden.",
           tip_printclear: "Karte als PDF herunterladen oder alle Felder löschen.",
+          btn_download_pdf: "PDF herunterladen",
           btn_download_pdf_zero: "Sprache auswählen",
           label_free: "kostenlos",
           placeholder_code: "Haben Sie einen Code?",
@@ -609,7 +676,7 @@
           info_print_body:
             'Klicken Sie unten im Formular auf <strong class="hl">Drucken / PDF</strong>. Wählen Sie <strong class="hl">Ziel → Als PDF speichern</strong> für eine digitale Kopie oder drucken Sie direkt aus. Stellen Sie sicher, dass <strong class="hl">Hintergründe drucken</strong> aktiviert ist.',
           info_print_mobile:
-            '⚠️ Drucken und PDF erstellen vom Mobilgerät wird noch nicht vollständig unterstützt. Auf einem <strong class="hl">Mac oder PC</strong> funktioniert es einwandfrei.',
+            'Drucken und PDF erstellen vom Mobilgerät wird noch nicht vollständig unterstützt. Auf einem <strong class="hl">Mac oder PC</strong> funktioniert es einwandfrei.',
           warn_title: "Achtung — automatisches Speichern ist nicht 100% sicher",
           warn_body:
             'Der Browser kann gespeicherte Daten bei einem Update oder beim Löschen von Browserdaten verlieren. Wir empfehlen immer, Daten <strong class="hl">manuell zu speichern</strong> über <strong class="hl">Daten speichern</strong> unten im Formular.',
@@ -736,6 +803,27 @@
           info_what_body_location:
             "Diese Karte ist für das Fahrtgebiet Niederlande konfiguriert.",
           footer_feedback: "Feedback? Schreib mir an",
+          btn_buy: "Kaufen",
+          co2_contribution: "MareSafe trägt 1,5% Ihres Kaufs zur Entfernung von CO₂ aus der Atmosphäre bei.",
+          modal_save_title: "Daten speichern",
+          modal_save_body: "Wir senden Ihnen eine Sicherungskopie Ihrer Kartendaten per E-Mail. Sie können diese jederzeit importieren, um Ihre Schiffsinformationen wiederherzustellen.",
+          modal_save_email_label: "E-Mail-Adresse",
+          modal_save_btn: "Backup senden",
+          modal_save_sending: "Wird gesendet…",
+          modal_save_sent: "✓ Gesendet",
+          modal_save_success: "Überprüfen Sie Ihren Posteingang — Ihre Sicherung ist unterwegs.",
+          modal_save_error: "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+          modal_load_title: "Daten laden",
+          modal_load_body: "Laden Sie die .json-Sicherungsdatei, die Ihnen per E-Mail oder auf ähnlichem Weg zugeschickt wurde. Ihre aktuellen Daten werden durch den Inhalt der Datei ersetzt.",
+          modal_load_tip: "Durchsuchen Sie Ihren Posteingang nach <strong>MareSafe</strong> oder <strong>maresafe</strong>, um Ihre Backup-E-Mail zu finden.",
+          modal_load_drop: "Datei hier ablegen oder <u>zum Durchsuchen klicken</u>",
+          modal_load_error: "Ungültige Datei — Daten konnten nicht geladen werden.",
+          modal_clear_title: "Formular löschen",
+          modal_clear_body: "Sind Sie sicher, dass Sie alle Formulardaten löschen möchten? <strong>Diese Aktion kann nicht rückgängig gemacht werden</strong> — alle Schiffs- und Kontaktdaten werden dauerhaft entfernt.",
+          modal_clear_cancel: "Abbrechen",
+          modal_clear_confirm: "Ja, löschen",
+          load_invalid_title: "Ungültige Datei",
+          load_invalid_body: "Die Datei konnte nicht geladen werden. Stellen Sie sicher, dass Sie die richtige Sicherungsdatei ausgewählt haben, und versuchen Sie es erneut.",
         },
       }
 
@@ -755,7 +843,13 @@
           )
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.getAttribute("data-i18n")
-          if (T[lang][key] !== undefined) {
+          if (T[lang][key] === undefined) return
+          if (el.classList.contains("modal-hdr-title")) {
+            const text = T[lang][key]
+            const i = text.lastIndexOf(" ")
+            el.innerHTML = i === -1 ? `<span style="color:white">${text}</span>`
+              : `${text.slice(0, i)} <span style="color:white">${text.slice(i + 1)}</span>`
+          } else {
             el.innerHTML = T[lang][key]
           }
         })
