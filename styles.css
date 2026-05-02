@@ -1176,6 +1176,7 @@ body {
 .code-inp-wrap .inp {
   padding-right: 52px;
   min-width: 145px;
+  height: 100%;
 }
 .code-inp-btns {
   position: absolute;
