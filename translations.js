@@ -205,6 +205,12 @@
           modal_clear_confirm: "Ja, formulier wissen",
           load_invalid_title: "Ongeldig bestand",
           load_invalid_body: "Het bestand kon niet worden ingeladen. Controleer of je het juiste back-upbestand hebt geselecteerd en probeer het opnieuw.",
+          buy_secured: 'Beveiligd door <a class="stripe-link" href="https://stripe.com/" target="_blank" rel="noopener">Stripe</a>',
+          download_tagline: "Kies je talen, betaal eenmalig — download direct.",
+          step_languages: "Talen",
+          step_code: "Code",
+          step_optional: "(optioneel)",
+          step_download: "Download",
         },
         en: {
           btn_save: "Save data",
@@ -410,6 +416,12 @@
           modal_clear_confirm: "Yes, clear form",
           load_invalid_title: "Invalid file",
           load_invalid_body: "The file could not be loaded. Make sure you selected the right backup file and try again.",
+          buy_secured: 'Secured by <a class="stripe-link" href="https://stripe.com/" target="_blank" rel="noopener">Stripe</a>',
+          download_tagline: "Choose your languages, pay once — download instantly.",
+          step_languages: "Languages",
+          step_code: "Code",
+          step_optional: "(optional)",
+          step_download: "Download",
         },
         fr: {
           btn_save: "Enregistrer",
@@ -617,6 +629,12 @@
           modal_clear_confirm: "Oui, effacer",
           load_invalid_title: "Fichier invalide",
           load_invalid_body: "Le fichier n'a pas pu être chargé. Vérifiez que vous avez sélectionné le bon fichier de sauvegarde et réessayez.",
+          buy_secured: 'Sécurisé par <a class="stripe-link" href="https://stripe.com/" target="_blank" rel="noopener">Stripe</a>',
+          download_tagline: "Choisissez vos langues, payez une fois — téléchargez instantanément.",
+          step_languages: "Langues",
+          step_code: "Code",
+          step_optional: "(optionnel)",
+          step_download: "Télécharger",
         },
         de: {
           btn_save: "Daten speichern",
@@ -824,6 +842,12 @@
           modal_clear_confirm: "Ja, löschen",
           load_invalid_title: "Ungültige Datei",
           load_invalid_body: "Die Datei konnte nicht geladen werden. Stellen Sie sicher, dass Sie die richtige Sicherungsdatei ausgewählt haben, und versuchen Sie es erneut.",
+          buy_secured: 'Gesichert durch <a class="stripe-link" href="https://stripe.com/" target="_blank" rel="noopener">Stripe</a>',
+          download_tagline: "Sprachen wählen, einmal zahlen — sofort herunterladen.",
+          step_languages: "Sprachen",
+          step_code: "Code",
+          step_optional: "(optional)",
+          step_download: "Herunterladen",
         },
       }
 
@@ -833,14 +857,7 @@
       function setLang(lang) {
         currentLang = lang
         document.documentElement.lang = lang
-        document
-          .querySelectorAll(".lang-btn")
-          .forEach((b) =>
-            b.classList.toggle(
-              "active",
-              b.getAttribute("onclick") === `setLang('${lang}')`,
-            ),
-          )
+        if (typeof lsUpdateUi === "function") lsUpdateUi(lang)
         document.querySelectorAll("[data-i18n]").forEach((el) => {
           const key = el.getAttribute("data-i18n")
           if (T[lang][key] === undefined) return
@@ -866,6 +883,10 @@
         document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
           const key = el.getAttribute("data-i18n-aria")
           if (T[lang][key] !== undefined) el.setAttribute("aria-label", T[lang][key])
+        })
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+          const key = el.getAttribute("data-i18n-placeholder")
+          if (T[lang][key] !== undefined) el.setAttribute("placeholder", T[lang][key])
         })
         document.getElementById("site-title").innerHTML =
           '<span class="brand-title-text">Mare<span>Safe</span></span><span class="brand-title-short">M<span>S</span></span>'

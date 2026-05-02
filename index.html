@@ -24,26 +24,10 @@
             <div class="site-subtitle" data-i18n="product_name"></div>
           </div>
         </div>
-        <div class="lang-btns">
-          <button
-            class="lang-btn active"
-            onclick="setLang('nl')"
-            aria-label="Nederlands">
-            🇳🇱
-          </button>
-          <button class="lang-btn" onclick="setLang('en')" aria-label="English">
-            🇬🇧
-          </button>
-          <button
-            class="lang-btn"
-            onclick="setLang('fr')"
-            aria-label="Français">
-            🇫🇷
-          </button>
-          <button class="lang-btn" onclick="setLang('de')" aria-label="Deutsch">
-            🇩🇪
-          </button>
-        </div>
+        <div
+          class="ls-wrap ls-field"
+          id="ui-lang-select"
+          data-mode="single"></div>
         <button
           class="info-btn"
           onclick="openInfoModal()"
@@ -64,8 +48,22 @@
           gap: 12px;
           border-bottom: 3px solid #7b241c;
         ">
-        <div style="flex-shrink: 0; display: flex; align-items: center;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div style="flex-shrink: 0; display: flex; align-items: center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round">
+            <path
+              d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
         </div>
         <div>
           <div
@@ -208,18 +206,57 @@
             class="print-btn sec"
             onclick="openEmailBackupModal()"
             data-tip-i18n="tip_save">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg><span data-i18n="btn_save"></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+              <polyline points="17 21 17 13 7 13 7 21" />
+              <polyline points="7 3 7 8 15 8" /></svg
+            ><span data-i18n="btn_save"></span>
           </button>
-          <button
-            class="print-btn sec"
-            onclick="openLoadModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg><span data-i18n="btn_load"></span>
+          <button class="print-btn sec" onclick="openLoadModal()">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg
+            ><span data-i18n="btn_load"></span>
           </button>
           <button
             class="print-btn"
             style="background: var(--red)"
             onclick="openClearModal()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg><span data-i18n="btn_clear"></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6" />
+              <path
+                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+              <line x1="10" y1="11" x2="10" y2="17" />
+              <line x1="14" y1="11" x2="14" y2="17" /></svg
+            ><span data-i18n="btn_clear"></span>
           </button>
         </div>
       </div>
@@ -616,118 +653,148 @@
 
         <div class="editor-section">
           <div class="action-bar">
-            <div
-              id="download-bar"
-              style="
-                display: flex;
-                gap: 8px;
-                align-items: flex-start;
-                flex-wrap: wrap;
-              ">
-              <div style="display:flex; gap:8px; align-items:flex-start; margin-right:auto;">
-              <!-- Language multiselect dropdown -->
-              <div id="lang-dropdown" class="ms-dropdown">
-                <button
-                  class="ms-trigger inp"
-                  type="button"
-                  id="lang-trigger"
-                  onclick="toggleLangMenu(event)">
-                  <span id="lang-trigger-label">NL, EN</span
-                  ><span class="ms-arrow">▾</span>
-                </button>
-                <div id="lang-menu" class="ms-menu">
-                  <label class="ms-option"
-                    ><input
-                      type="checkbox"
-                      value="nl"
-                      class="lang-check"
-                      checked
-                      onchange="onLangChange()" />
-                    Nederlands</label
-                  >
-                  <label class="ms-option"
-                    ><input
-                      type="checkbox"
-                      value="en"
-                      class="lang-check"
-                      checked
-                      onchange="onLangChange()" />
-                    English</label
-                  >
-                  <label class="ms-option"
-                    ><input
-                      type="checkbox"
-                      value="fr"
-                      class="lang-check"
-                      onchange="onLangChange()" />
-                    Français</label
-                  >
-                  <label class="ms-option"
-                    ><input
-                      type="checkbox"
-                      value="de"
-                      class="lang-check"
-                      onchange="onLangChange()" />
-                    Deutsch</label
-                  >
+            <p class="download-tagline" data-i18n="download_tagline"></p>
+            <div id="download-bar">
+              <!-- Step 1: Languages -->
+              <div class="dl-step">
+                <div class="dl-step-label">
+                  <span class="dl-step-num">① </span
+                  ><span data-i18n="step_languages"></span>
                 </div>
+                <div
+                  class="ls-wrap ls-field"
+                  id="dl-lang-select"
+                  data-mode="multi"></div>
               </div>
 
-              <!-- Code input -->
-              <div class="ms-code-wrap">
-                <input
-                  class="inp"
-                  id="bypass-code-input"
-                  type="text"
-                  maxlength="20"
-                  style="
-                    text-transform: uppercase;
-                    font-family: var(--font-mono);
-                    min-width: 130px;
-                  "
-                  oninput="this.value = this.value.toUpperCase()"
-                  onblur="checkCode()"
-                  onkeydown="if (event.key === 'Enter') checkCode()"
-                  data-i18n-placeholder="placeholder_code" />
-                <span id="code-feedback"></span>
-              </div>
-
-              </div><!-- /.download-left -->
-
-              <!-- Buy button (shown when no valid code) -->
-              <div id="stripe-buy-wrap" style="display:none; flex-direction:column; gap:4px; align-items:center; width:fit-content;">
-                <button id="btn-buy" class="print-btn buy-btn" style="width:100%" onclick="handleBuyClick()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  <span data-i18n="btn_buy"></span> — €2
-                </button>
-                <div style="display:flex; flex-direction:column; gap:4px; align-items:center; margin-top:8px;">
-                  <div class="payment-row">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#1a1f71"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="900" font-style="italic" fill="white">VISA</text></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><circle cx="15" cy="12" r="7.5" fill="#eb001b"/><circle cx="23" cy="12" r="7.5" fill="#f79e1b"/><path d="M19 5.66 A7.5 7.5 0 0 1 19 18.34 A7.5 7.5 0 0 0 19 5.66 Z" fill="#ff5f00"/></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#cc0066">iDEAL</text></svg>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#2e77bc"/><text x="19" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="white" letter-spacing="1.5">AMEX</text></svg>
+              <!-- Step 2: Code (optional) -->
+              <div class="dl-step">
+                <div class="dl-step-label">
+                  <span class="dl-step-num">② </span
+                  ><span data-i18n="step_code"></span>&nbsp;<span
+                    class="dl-optional"
+                    data-i18n="step_optional"></span>
+                </div>
+                <div class="ms-code-wrap">
+                  <div class="code-inp-wrap">
+                    <input
+                      class="inp"
+                      id="bypass-code-input"
+                      type="text"
+                      maxlength="20"
+                      style="
+                        text-transform: uppercase;
+                        font-family: var(--font-mono);
+                      "
+                      oninput="this.value = this.value.toUpperCase()"
+                      onkeydown="if (event.key === 'Enter') checkCode()"
+                      data-i18n-placeholder="placeholder_code" />
+                    <div class="code-inp-btns">
+                      <button
+                        class="code-inp-btn"
+                        type="button"
+                        onclick="clearCodeInput()"
+                        tabindex="-1"
+                        aria-label="Clear">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <line x1="18" y1="6" x2="6" y2="18" />
+                          <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                      </button>
+                      <button
+                        class="code-inp-btn code-inp-btn--check"
+                        type="button"
+                        onclick="checkCode()"
+                        tabindex="-1"
+                        aria-label="Check code">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="12"
+                          height="12"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                          stroke-linecap="round"
+                          stroke-linejoin="round">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <span class="buy-secured">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    Secured by <strong>Stripe</strong>
-                  </span>
+                  <span id="code-feedback"></span>
                 </div>
               </div>
 
-              <!-- Download button (shown when valid code) -->
-              <div id="download-wrap" style="display:flex; flex-direction:column; gap:4px; align-items:flex-start;">
+              <!-- Step 3: Download -->
+              <div class="dl-step">
+                <div class="dl-step-label">
+                  <span class="dl-step-num">③ </span
+                  ><span data-i18n="step_download"></span>
+                </div>
+                <div id="stripe-buy-wrap" style="display:flex; flex-direction:column; gap:8px; align-items:center;">
+                  <button id="btn-buy" class="print-btn buy-btn" onclick="handleBuyClick()">
+                    <span id="btn-buy-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+                    <span data-i18n="btn_buy"></span>
+                    <span id="btn-buy-price">— €2</span>
+                  </button>
+                  <div class="stripe-buy-trust">
+                    <div class="payment-row">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#1a1f71"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="900" font-style="italic" fill="white">VISA</text></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><circle cx="15" cy="12" r="7.5" fill="#eb001b"/><circle cx="23" cy="12" r="7.5" fill="#f79e1b"/><path d="M19 5.66 A7.5 7.5 0 0 1 19 18.34 A7.5 7.5 0 0 0 19 5.66 Z" fill="#ff5f00"/></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#cc0066">iDEAL</text></svg>
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#2e77bc"/><text x="19" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="white" letter-spacing="1.5">AMEX</text></svg>
+                    </div>
+                    <span class="buy-secured">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      <span data-i18n="buy_secured"></span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Download button (shown when valid code, hidden by default) -->
+              <div
+                id="download-wrap"
+                style="
+                  display: none;
+                  flex-direction: column;
+                  gap: 4px;
+                  align-items: flex-start;
+                ">
                 <span id="btn-download-label" class="btn-caption"></span>
                 <button
                   class="print-btn"
                   id="btn-download"
                   style="background: #2a9d5c"
                   onclick="handleDownloadClick()">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                    <polyline points="7 10 12 15 17 10" />
+                    <line x1="12" y1="15" x2="12" y2="3" />
+                  </svg>
                   <span data-i18n="btn_download_pdf"></span>
                 </button>
                 <span id="pdf-status"></span>
               </div>
-
             </div>
           </div>
         </div>
@@ -762,110 +829,141 @@
           <div class="cols">
             <div class="left-col">
               <div>
-              <div class="sec-hdr" data-i18n="card_ship"></div>
-              <table class="dtable">
-                <tr>
-                  <td class="lbl" data-i18n="f_name"></td>
-                  <td class="val" id="r-name">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_type"></td>
-                  <td class="val" id="r-type">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_eni"></td>
-                  <td class="val" id="r-eni">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_callsign"></td>
-                  <td class="val" id="r-callsign">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl">ATIS</td>
-                  <td class="val" id="r-atis">—</td>
-                </tr>
-                <tr>
-                  <td class="lbl">MMSI</td>
-                  <td class="val" id="r-mmsi">—</td>
-                </tr>
-                <tr class="gap-row"><td colspan="2"></td></tr>
-                <tr class="card-sep-row">
-                  <td class="lbl">
-                    <span data-i18n="f_length"></span
-                    ><span
-                      id="r-alt-length-sep"
-                      class="alt-sep"
-                      style="display: none">
-                      | <span data-i18n="f_alt_length"></span
-                    ></span>
-                  </td>
-                  <td class="val">
-                    <span id="r-length">0,00</span> m<span
-                      id="r-alt-length-inline"
-                      class="alt-val"
-                      style="display: none">
-                      | <span id="r-alt-length">—</span> m</span
-                    >
-                  </td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_width"></td>
-                  <td class="val"><span id="r-width">0,00</span> m</td>
-                </tr>
-                <tr>
-                  <td class="lbl" data-i18n="f_draft"></td>
-                  <td class="val"><span id="r-draft">0,00</span> m</td>
-                </tr>
-                <tr>
-                  <td class="lbl">
-                    <span data-i18n="f_airdraft"></span
-                    ><span
-                      id="r-alt-airdraft-sep"
-                      class="alt-sep"
-                      style="display: none">
-                      | <span data-i18n="f_alt_airdraft"></span
-                    ></span>
-                  </td>
-                  <td class="val">
-                    <span id="r-airdraft">0,00</span> m<span
-                      id="r-alt-airdraft-inline"
-                      class="alt-val"
-                      style="display: none">
-                      | <span id="r-alt-airdraft">—</span> m</span
-                    >
-                  </td>
-                </tr>
-              </table>
-            </div>
+                <div class="sec-hdr" data-i18n="card_ship"></div>
+                <table class="dtable">
+                  <tr>
+                    <td class="lbl" data-i18n="f_name"></td>
+                    <td class="val" id="r-name">—</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl" data-i18n="f_type"></td>
+                    <td class="val" id="r-type">—</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl" data-i18n="f_eni"></td>
+                    <td class="val" id="r-eni">—</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl" data-i18n="f_callsign"></td>
+                    <td class="val" id="r-callsign">—</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl">ATIS</td>
+                    <td class="val" id="r-atis">—</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl">MMSI</td>
+                    <td class="val" id="r-mmsi">—</td>
+                  </tr>
+                  <tr class="gap-row">
+                    <td colspan="2"></td>
+                  </tr>
+                  <tr class="card-sep-row">
+                    <td class="lbl">
+                      <span data-i18n="f_length"></span
+                      ><span
+                        id="r-alt-length-sep"
+                        class="alt-sep"
+                        style="display: none">
+                        | <span data-i18n="f_alt_length"></span
+                      ></span>
+                    </td>
+                    <td class="val">
+                      <span id="r-length">0,00</span> m<span
+                        id="r-alt-length-inline"
+                        class="alt-val"
+                        style="display: none">
+                        | <span id="r-alt-length">—</span> m</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="lbl" data-i18n="f_width"></td>
+                    <td class="val"><span id="r-width">0,00</span> m</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl" data-i18n="f_draft"></td>
+                    <td class="val"><span id="r-draft">0,00</span> m</td>
+                  </tr>
+                  <tr>
+                    <td class="lbl">
+                      <span data-i18n="f_airdraft"></span
+                      ><span
+                        id="r-alt-airdraft-sep"
+                        class="alt-sep"
+                        style="display: none">
+                        | <span data-i18n="f_alt_airdraft"></span
+                      ></span>
+                    </td>
+                    <td class="val">
+                      <span id="r-airdraft">0,00</span> m<span
+                        id="r-alt-airdraft-inline"
+                        class="alt-val"
+                        style="display: none">
+                        | <span id="r-alt-airdraft">—</span> m</span
+                      >
+                    </td>
+                  </tr>
+                </table>
+              </div>
               <div>
-              <div class="sec-hdr" data-i18n="card_channels"></div>
-              <table class="dtable">
-                <tr>
-                  <td class="c25"><span class="pill" style="background:var(--red)" data-i18n="pill_emergency"></span></td>
-                  <td class="c45" data-i18n="k_inland"></td>
-                  <td class="c30 right" style="color:var(--red)">Blokkanaal / 10</td>
-                </tr>
-                <tr>
-                  <td class="c25"><span class="pill" style="background:var(--red)" data-i18n="pill_emergency"></span></td>
-                  <td class="c45" data-i18n="k_open"></td>
-                  <td class="c30 right" style="color:var(--red)">16</td>
-                </tr>
-                <tr>
-                  <td class="c25"><span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span></td>
-                  <td class="c45" data-i18n="k_ijssel"></td>
-                  <td class="c30 right">1</td>
-                </tr>
-                <tr>
-                  <td class="c25"><span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span></td>
-                  <td class="c45" data-i18n="k_rws"></td>
-                  <td class="c30 right" style="color:var(--orange)">23 / 83</td>
-                </tr>
-                <tr>
-                  <td class="c25"><span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span></td>
-                  <td class="c45" data-i18n="k_cg"></td>
-                  <td class="c30 right" style="color:var(--orange)">67</td>
-                </tr>
-              </table>
+                <div class="sec-hdr" data-i18n="card_channels"></div>
+                <table class="dtable">
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--red)"
+                        data-i18n="pill_emergency"></span>
+                    </td>
+                    <td class="c45" data-i18n="k_inland"></td>
+                    <td class="c30 right" style="color: var(--red)">
+                      Blokkanaal / 10
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--red)"
+                        data-i18n="pill_emergency"></span>
+                    </td>
+                    <td class="c45" data-i18n="k_open"></td>
+                    <td class="c30 right" style="color: var(--red)">16</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--mid)"
+                        data-i18n="pill_info"></span>
+                    </td>
+                    <td class="c45" data-i18n="k_ijssel"></td>
+                    <td class="c30 right">1</td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--orange)"
+                        data-i18n="pill_urgent"></span>
+                    </td>
+                    <td class="c45" data-i18n="k_rws"></td>
+                    <td class="c30 right" style="color: var(--orange)">
+                      23 / 83
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="c25">
+                      <span
+                        class="pill"
+                        style="background: var(--orange)"
+                        data-i18n="pill_urgent"></span>
+                    </td>
+                    <td class="c45" data-i18n="k_cg"></td>
+                    <td class="c30 right" style="color: var(--orange)">67</td>
+                  </tr>
+                </table>
               </div>
             </div>
             <div class="right-col">
@@ -874,25 +972,42 @@
                 <table class="dtable" id="r-contacts"></table>
               </div>
               <div class="insurer-block">
-                <div class="sec-hdr green"><span data-i18n="card_insurer"></span><span>-</span><span id="r-insurer-name">—</span></div>
+                <div class="sec-hdr green">
+                  <span data-i18n="card_insurer"></span><span>-</span
+                  ><span id="r-insurer-name">—</span>
+                </div>
                 <table class="dtable">
                   <tr>
                     <td class="c25">
-                      <span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span>
+                      <span
+                        class="pill"
+                        style="background: var(--mid)"
+                        data-i18n="pill_info"></span>
                     </td>
                     <td class="c45" data-i18n="f_policy"></td>
                     <td class="c30 right" id="r-policy">—</td>
                   </tr>
                   <tr>
                     <td class="c25">
-                      <span class="pill" style="background:var(--orange)" data-i18n="pill_urgent"></span>
+                      <span
+                        class="pill"
+                        style="background: var(--orange)"
+                        data-i18n="pill_urgent"></span>
                     </td>
                     <td class="c45" data-i18n="h_insurer_emergency"></td>
-                    <td class="c30 right" style="color:var(--orange)" id="r-insurer-emergency">—</td>
+                    <td
+                      class="c30 right"
+                      style="color: var(--orange)"
+                      id="r-insurer-emergency">
+                      —
+                    </td>
                   </tr>
                   <tr>
                     <td class="c25">
-                      <span class="pill" style="background:var(--mid)" data-i18n="pill_info"></span>
+                      <span
+                        class="pill"
+                        style="background: var(--mid)"
+                        data-i18n="pill_info"></span>
                     </td>
                     <td class="c45" data-i18n="h_insurer_office"></td>
                     <td class="c30 right" id="r-insurer-office">—</td>
@@ -910,27 +1025,29 @@
                         data-i18n="pill_emergency"></span>
                     </td>
                     <td class="c45" data-i18n="h_cg"></td>
-                    <td class="c30 right" style="color:var(--red)">0900-0111</td>
+                    <td class="c30 right" style="color: var(--red)">
+                      0900-0111
+                    </td>
                   </tr>
                   <tr>
                     <td class="c25">
                       <span
                         class="pill"
-                        style="background:var(--red)"
+                        style="background: var(--red)"
                         data-i18n="pill_emergency"></span>
                     </td>
                     <td class="c45" data-i18n="h_112"></td>
-                    <td class="c30 right" style="color:var(--red)">112</td>
+                    <td class="c30 right" style="color: var(--red)">112</td>
                   </tr>
                   <tr>
                     <td class="c25">
                       <span
                         class="pill"
-                        style="background:var(--green)"
+                        style="background: var(--green)"
                         data-i18n="pill_medical"></span>
                     </td>
                     <td class="c45" data-i18n="h_rmd"></td>
-                    <td class="c30 right" style="color:var(--green)">
+                    <td class="c30 right" style="color: var(--green)">
                       +31 88 958 4020
                     </td>
                   </tr>
@@ -1090,28 +1207,65 @@
       <div class="modal-panel" role="dialog" aria-modal="true">
         <div class="modal-hdr">
           <div class="modal-hdr-title" data-i18n="modal_save_title"></div>
-          <button class="modal-close-btn" onclick="closeEmailBackupModal()" aria-label="Close">×</button>
+          <button
+            class="modal-close-btn"
+            onclick="closeEmailBackupModal()"
+            aria-label="Close">
+            ×
+          </button>
         </div>
-        <div style="padding: 0 24px 24px; background: var(--navy); border-radius: 0 0 10px 10px; display: flex; flex-direction: column; gap: 16px;">
-          <p style="font-family: var(--font-sans); font-size: 13px; color: white; line-height: 1.6; margin: 0;" data-i18n="modal_save_body"></p>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            <label style="font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #a8c4e0;" data-i18n="modal_save_email_label"></label>
+        <div
+          style="
+            padding: 0 24px 24px;
+            background: var(--navy);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          ">
+          <p
+            style="
+              font-family: var(--font-sans);
+              font-size: 13px;
+              color: white;
+              line-height: 1.6;
+              margin: 0;
+            "
+            data-i18n="modal_save_body"></p>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label
+              style="
+                font-family: var(--font-mono);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: #a8c4e0;
+              "
+              data-i18n="modal_save_email_label"></label>
             <input
               id="email-backup-input"
               class="inp"
               type="email"
               placeholder="your@email.com"
               onkeydown="if (event.key === 'Enter') submitEmailBackup()"
-              style="width: 100%; box-sizing: border-box;" />
+              style="width: 100%; box-sizing: border-box" />
           </div>
           <button
             id="email-backup-btn"
             class="print-btn"
-            style="background: #2a9d5c; width: 100%;"
+            style="background: #2a9d5c; width: 100%"
             onclick="submitEmailBackup()">
             <span id="email-backup-btn-label" data-i18n="modal_save_btn"></span>
           </button>
-          <div id="email-backup-status" style="display: none; font-family: var(--font-sans); font-size: 12px; text-align: center;"></div>
+          <div
+            id="email-backup-status"
+            style="
+              display: none;
+              font-family: var(--font-sans);
+              font-size: 12px;
+              text-align: center;
+            "></div>
         </div>
       </div>
     </div>
@@ -1124,12 +1278,57 @@
       <div class="modal-panel" role="dialog" aria-modal="true">
         <div class="modal-hdr">
           <div class="modal-hdr-title" data-i18n="modal_load_title"></div>
-          <button class="modal-close-btn" onclick="closeLoadModal()" aria-label="Close">×</button>
+          <button
+            class="modal-close-btn"
+            onclick="closeLoadModal()"
+            aria-label="Close">
+            ×
+          </button>
         </div>
-        <div style="padding: 0 24px 24px; background: var(--navy); border-radius: 0 0 10px 10px; display: flex; flex-direction: column; gap: 16px;">
-          <p style="font-family: var(--font-sans); font-size: 13px; color: white; line-height: 1.6; margin: 0;" data-i18n="modal_load_body"></p>
-          <div style="display: flex; align-items: flex-start; gap: 8px; font-family: var(--font-sans); font-size: 12px; color: #a8c4e0; line-height: 1.6;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>
+        <div
+          style="
+            padding: 0 24px 24px;
+            background: var(--navy);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          ">
+          <p
+            style="
+              font-family: var(--font-sans);
+              font-size: 13px;
+              color: white;
+              line-height: 1.6;
+              margin: 0;
+            "
+            data-i18n="modal_load_body"></p>
+          <div
+            style="
+              display: flex;
+              align-items: flex-start;
+              gap: 8px;
+              font-family: var(--font-sans);
+              font-size: 12px;
+              color: #a8c4e0;
+              line-height: 1.6;
+            ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              style="flex-shrink: 0; margin-top: 2px">
+              <path d="M9 18h6" />
+              <path d="M10 22h4" />
+              <path
+                d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14" />
+            </svg>
             <span data-i18n="modal_load_tip"></span>
           </div>
           <div
@@ -1144,10 +1343,30 @@
               align-items: center;
               gap: 10px;
               cursor: pointer;
-              transition: border-color 0.15s, background 0.15s;
+              transition:
+                border-color 0.15s,
+                background 0.15s;
             ">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5a8ac0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-            <span style="font-family: var(--font-sans); font-size: 13px; color: #a8c4e0;" data-i18n="modal_load_drop"></span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#5a8ac0"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round">
+              <path
+                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            </svg>
+            <span
+              style="
+                font-family: var(--font-sans);
+                font-size: 13px;
+                color: #a8c4e0;
+              "
+              data-i18n="modal_load_drop"></span>
             <input
               id="load-file-input"
               type="file"
@@ -1167,22 +1386,57 @@
       <div class="modal-panel" role="dialog" aria-modal="true">
         <div class="modal-hdr">
           <div class="modal-hdr-title" data-i18n="modal_clear_title"></div>
-          <button class="modal-close-btn" onclick="closeClearModal()" aria-label="Close">×</button>
+          <button
+            class="modal-close-btn"
+            onclick="closeClearModal()"
+            aria-label="Close">
+            ×
+          </button>
         </div>
-        <div style="padding: 0 24px 24px; background: var(--navy); border-radius: 0 0 10px 10px; display: flex; flex-direction: column; gap: 16px;">
-          <p style="font-family: var(--font-sans); font-size: 13px; color: white; line-height: 1.6; margin: 0;" data-i18n="modal_clear_body"></p>
-          <div style="display: flex; gap: 8px;">
+        <div
+          style="
+            padding: 0 24px 24px;
+            background: var(--navy);
+            border-radius: 0 0 10px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+          ">
+          <p
+            style="
+              font-family: var(--font-sans);
+              font-size: 13px;
+              color: white;
+              line-height: 1.6;
+              margin: 0;
+            "
+            data-i18n="modal_clear_body"></p>
+          <div style="display: flex; gap: 8px">
             <button
               class="print-btn sec"
-              style="flex: 1;"
+              style="flex: 1"
               onclick="closeClearModal()"
-              data-i18n="modal_clear_cancel">
-            </button>
+              data-i18n="modal_clear_cancel"></button>
             <button
               class="print-btn"
-              style="flex: 1; background: var(--red);"
+              style="flex: 1; background: var(--red)"
               onclick="confirmClear()">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
+              </svg>
               <span data-i18n="modal_clear_confirm"></span>
             </button>
           </div>
@@ -1208,35 +1462,16 @@
               margin-right: 8px;
             " />
           <div class="site-title-wrap">
-            <div class="modal-hdr-title" data-i18n="modal_title"></div>
+            <h1 class="modal-hdr-brand">
+              <span class="brand-title-text">Mare<span>Safe</span></span>
+            </h1>
             <div class="site-subtitle" data-i18n="product_name"></div>
           </div>
-          <div class="lang-btns" style="margin-left: auto; margin-right: 12px">
-            <button
-              class="lang-btn active"
-              onclick="setLang('nl')"
-              aria-label="Nederlands">
-              🇳🇱
-            </button>
-            <button
-              class="lang-btn"
-              onclick="setLang('en')"
-              aria-label="English">
-              🇬🇧
-            </button>
-            <button
-              class="lang-btn"
-              onclick="setLang('fr')"
-              aria-label="Français">
-              🇫🇷
-            </button>
-            <button
-              class="lang-btn"
-              onclick="setLang('de')"
-              aria-label="Deutsch">
-              🇩🇪
-            </button>
-          </div>
+          <div
+            class="ls-wrap ls-field"
+            id="ui-lang-select-modal"
+            data-mode="single"
+            style="margin-left: auto; margin-right: 12px"></div>
           <button
             class="modal-close-btn"
             onclick="closeInfoModal()"
@@ -1252,8 +1487,25 @@
           <div class="modal-section">
             <div class="modal-section-title" data-i18n="info_print_title"></div>
             <div class="modal-section-body" data-i18n="info_print_body"></div>
-            <div class="modal-section-body modal-disclaimer" style="display: flex; align-items: flex-start; gap: 8px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            <div
+              class="modal-section-body modal-disclaimer"
+              style="display: flex; align-items: flex-start; gap: 8px">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                style="flex-shrink: 0; margin-top: 2px">
+                <path
+                  d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
               <span data-i18n="info_print_mobile"></span>
             </div>
           </div>

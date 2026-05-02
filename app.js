@@ -577,14 +577,6 @@ function applyFormData(d) {
     loaded.length > 0
       ? loaded
       : [{ label: "", dialCode: DEFAULT_DIAL_CODE, number: "" }]
-  document
-    .querySelectorAll(".lang-btn")
-    .forEach((b) =>
-      b.classList.toggle(
-        "active",
-        b.getAttribute("onclick") === `setLang('${currentLang}')`,
-      ),
-    )
   setLang(currentLang)
   if (outdated) showVersionWarning()
 }
@@ -831,49 +823,57 @@ function initRenderMode() {
 let _validCode = null
 
 function getSelectedLanguages() {
-  return [...document.querySelectorAll(".lang-check:checked")].map((el) => el.value)
+  return _ls["dl-lang-select"]?.selected || []
 }
 
 document.addEventListener("click", (e) => {
-  if (!document.getElementById("lang-dropdown").contains(e.target))
-    document.getElementById("lang-menu").style.display = "none"
+  Object.keys(_ls).forEach((id) => {
+    const wrap = document.getElementById(id)
+    if (wrap && wrap.contains(e.target)) return
+    const dp = document.getElementById(`${id}-dp`)
+    if (dp) dp.style.display = "none"
+  })
 })
-
-function toggleLangMenu(e) {
-  e.stopPropagation()
-  const menu = document.getElementById("lang-menu")
-  menu.style.display = menu.style.display === "none" ? "block" : "none"
-}
+window.addEventListener("scroll", lsCloseAll, true)
+window.addEventListener("resize", lsCloseAll)
 
 function onLangChange() {
-  const langs = getSelectedLanguages()
-  document.getElementById("lang-trigger-label").textContent =
-    langs.length ? langs.map((l) => l.toUpperCase()).join(", ") : "—"
-  localStorage.setItem("maresafe_langs", JSON.stringify(langs))
+  localStorage.setItem("maresafe_langs", JSON.stringify(getSelectedLanguages()))
   updateDownloadLabel()
 }
 
 function updateDownloadLabel() {
-  const langs = getSelectedLanguages()
-  const count = langs.length
-  const hasFreeCode = _validCode !== null
-  const showBuyBtn = !hasFreeCode
+  const count = getSelectedLanguages().length
+  const free = _validCode !== null
+  const btn = document.getElementById("btn-buy")
+  const priceEl = document.getElementById("btn-buy-price")
 
-  document.getElementById("stripe-buy-wrap").style.display = showBuyBtn ? "flex" : "none"
-  document.getElementById("download-wrap").style.display = showBuyBtn ? "none" : "flex"
-
-  if (showBuyBtn) {
-    document.getElementById("btn-buy").disabled = count === 0
-  } else {
-    document.getElementById("btn-download").disabled = count === 0
-    document.getElementById("btn-download-label").textContent = count === 0
-      ? T[currentLang].btn_download_pdf_zero
-      : `${count} PDF${count > 1 ? "'s" : ""} — ${T[currentLang].label_free}`
-  }
+  const lockSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
+  const dlSvg   = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
+  btn.disabled = count === 0
+  btn.classList.toggle("buy-btn--free", free)
+  document.getElementById("btn-buy-icon").innerHTML = free ? dlSvg : lockSvg
+  btn.querySelector("[data-i18n='btn_buy']").textContent = free ? "Download" : T[currentLang].btn_buy
+  priceEl.textContent = free ? `— ${T[currentLang].label_free}` : "— €2"
 }
 
 function handleBuyClick() {
-  window.location.href = STRIPE_PAYMENT_LINK
+  if (_validCode) {
+    const langs = getSelectedLanguages()
+    if (!langs.length) { alert(T[currentLang].pdf_no_lang); return }
+    requestPDF({ type: "code", code: _validCode }, langs)
+  } else {
+    window.location.href = STRIPE_PAYMENT_LINK
+  }
+}
+
+function clearCodeInput() {
+  const inp = document.getElementById("bypass-code-input")
+  inp.value = ""
+  _validCode = null
+  document.getElementById("code-feedback").textContent = ""
+  updateDownloadLabel()
+  inp.focus()
 }
 
 async function checkCode() {
@@ -1076,6 +1076,208 @@ window.addEventListener("resize", hideTip)
   })
 })()
 
+// ══ LANG SELECT COMPONENT ═══════════════════════════════════════════
+
+const LS_LANGS = [
+  { code: "nl", flag: "🇳🇱", name: "Nederlands" },
+  { code: "en", flag: "🇬🇧", name: "English" },
+  { code: "fr", flag: "🇫🇷", name: "Français" },
+  { code: "de", flag: "🇩🇪", name: "Deutsch" },
+]
+
+const _ls = {}
+
+function lsInit(id, mode, initialSelected, onChange) {
+  _ls[id] = { mode, selected: [...initialSelected], query: "", onChange }
+  lsRender(id)
+}
+
+function lsRender(id) {
+  const wrap = document.getElementById(id)
+  if (!wrap) return
+  const state = _ls[id]
+  const chevron = `<svg class="ls-chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`
+  wrap.innerHTML = `
+    <button class="ls-trigger" type="button" onclick="lsToggle('${id}',event)">
+      <span id="${id}-flags" class="ls-flags">${lsFlagsHTML(state)}</span>
+      ${chevron}
+    </button>
+    <div class="ls-dropdown" id="${id}-dp" style="display:none">
+      <input class="ls-search" type="text" placeholder="" oninput="lsFilter('${id}',this.value)" onkeydown="lsKeyDown('${id}',event)" autocomplete="off" />
+      <div class="ls-options" id="${id}-opts">${lsOptionsHTML(id)}</div>
+    </div>`
+}
+
+function lsFlagsHTML(state) {
+  const { mode, selected } = state
+  if (mode === "single") {
+    const l = LS_LANGS.find((l) => l.code === selected[0])
+    return l ? `<span class="ls-flag">${l.flag}</span><span class="ls-label">${l.name}</span>` : ""
+  }
+  const vis = selected.slice(0, 3)
+  const extra = selected.length > 3 ? `<span class="ls-extra">+${selected.length - 3}</span>` : ""
+  return vis.map((c) => {
+    const l = LS_LANGS.find((l) => l.code === c)
+    return l ? `<span class="ls-flag">${l.flag}</span>` : ""
+  }).join("") + extra
+}
+
+const _lsCheck = `<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+
+function lsOptionsHTML(id) {
+  const state = _ls[id]
+  const q = state.query.toLowerCase()
+  return LS_LANGS
+    .filter((l) => !q || l.name.toLowerCase().includes(q) || l.code.includes(q))
+    .map((l) => {
+      const sel = state.selected.includes(l.code)
+      return `<div class="ls-option${sel ? " ls-sel" : ""}" onclick="lsSelect('${id}','${l.code}',event)">
+        <span class="ls-opt-flag">${l.flag}</span>
+        <span class="ls-opt-name">${l.name}</span>
+        ${sel ? _lsCheck : ""}
+      </div>`
+    }).join("")
+}
+
+function lsPositionDropdown(id) {
+  const trigger = document.querySelector(`#${id} .ls-trigger`)
+  const dp = document.getElementById(`${id}-dp`)
+  if (!trigger || !dp) return
+  const rect = trigger.getBoundingClientRect()
+  const dpMinW = 165
+  const dpMinH = dp.offsetHeight || 200
+  const margin = 8
+  const spaceBelow = window.innerHeight - rect.bottom - margin
+  const spaceAbove = rect.top - margin
+  if (spaceBelow >= dpMinH || spaceBelow >= spaceAbove) {
+    dp.style.top = `${rect.bottom + 4}px`
+    dp.style.bottom = "auto"
+  } else {
+    dp.style.bottom = `${window.innerHeight - rect.top + 4}px`
+    dp.style.top = "auto"
+  }
+  if (rect.left + dpMinW <= window.innerWidth - margin) {
+    dp.style.left = `${rect.left}px`
+    dp.style.right = "auto"
+  } else {
+    dp.style.right = `${window.innerWidth - rect.right}px`
+    dp.style.left = "auto"
+  }
+}
+
+function lsCloseAll() {
+  Object.keys(_ls).forEach((k) => {
+    const d = document.getElementById(`${k}-dp`)
+    if (d) d.style.display = "none"
+  })
+}
+
+function lsToggle(id, e) {
+  e.stopPropagation()
+  const dp = document.getElementById(`${id}-dp`)
+  const open = dp.style.display !== "none"
+  lsCloseAll()
+  if (!open) {
+    dp.style.display = "block"
+    lsPositionDropdown(id)
+    _ls[id].query = ""
+    _ls[id]._cursor = -1
+    document.getElementById(`${id}-opts`).innerHTML = lsOptionsHTML(id)
+    const inp = dp.querySelector(".ls-search")
+    if (inp) { inp.value = ""; inp.focus() }
+  }
+}
+
+function lsFilter(id, value) {
+  _ls[id].query = value
+  _ls[id]._cursor = -1
+  document.getElementById(`${id}-opts`).innerHTML = lsOptionsHTML(id)
+}
+
+function lsKeyDown(id, e) {
+  const dp = document.getElementById(`${id}-dp`)
+  if (dp.style.display === "none") return
+
+  if (e.key === "Escape") {
+    dp.style.display = "none"
+    document.querySelector(`#${id} .ls-trigger`).focus()
+    return
+  }
+
+  const opts = [...dp.querySelectorAll(".ls-option")]
+  if (!opts.length) return
+  const state = _ls[id]
+
+  if (e.key === "ArrowDown") {
+    e.preventDefault()
+    state._cursor = state._cursor === undefined || state._cursor < 0
+      ? 0
+      : Math.min(state._cursor + 1, opts.length - 1)
+    opts.forEach((el, i) => el.classList.toggle("ls-cursor", i === state._cursor))
+    opts[state._cursor].scrollIntoView({ block: "nearest" })
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault()
+    if (!state._cursor || state._cursor <= 0) {
+      state._cursor = -1
+      opts.forEach((el) => el.classList.remove("ls-cursor"))
+    } else {
+      state._cursor--
+      opts.forEach((el, i) => el.classList.toggle("ls-cursor", i === state._cursor))
+      opts[state._cursor].scrollIntoView({ block: "nearest" })
+    }
+  } else if (e.key === "Enter") {
+    e.preventDefault()
+    if (state._cursor >= 0 && opts[state._cursor]) {
+      opts[state._cursor].click()
+    }
+  }
+}
+
+function lsSelect(id, code, e) {
+  const state = _ls[id]
+  state._cursor = -1
+  if (state.mode === "single") {
+    state.selected = [code]
+    document.getElementById(`${id}-dp`).style.display = "none"
+  } else {
+    if (e) e.stopPropagation()
+    const idx = state.selected.indexOf(code)
+    if (idx === -1) {
+      state.selected.push(code)
+    } else if (state.selected.length > 1) {
+      state.selected.splice(idx, 1)
+    }
+    document.getElementById(`${id}-opts`).innerHTML = lsOptionsHTML(id)
+  }
+  document.getElementById(`${id}-flags`).innerHTML = lsFlagsHTML(state)
+  state.onChange(state.selected)
+}
+
+function lsUpdateUi(langCode) {
+  ;["ui-lang-select", "ui-lang-select-modal"].forEach((id) => {
+    const state = _ls[id]
+    if (!state) return
+    state.selected = [langCode]
+    const fl = document.getElementById(`${id}-flags`)
+    if (fl) fl.innerHTML = lsFlagsHTML(state)
+    const opts = document.getElementById(`${id}-opts`)
+    if (opts) opts.innerHTML = lsOptionsHTML(id)
+  })
+}
+
+function onUiLangSelect(langCode) {
+  setLang(langCode)
+  const dl = _ls["dl-lang-select"]
+  if (!dl) return
+  dl.selected = langCode === "en" ? ["en"] : [langCode, "en"]
+  const fl = document.getElementById("dl-lang-select-flags")
+  if (fl) fl.innerHTML = lsFlagsHTML(dl)
+  const opts = document.getElementById("dl-lang-select-opts")
+  if (opts) opts.innerHTML = lsOptionsHTML("dl-lang-select")
+  localStorage.setItem("maresafe_langs", JSON.stringify(dl.selected))
+  updateDownloadLabel()
+}
+
 // ══ INIT ════════════════════════════════════════════════════════════
 document.getElementById("site-version").textContent = "2.0"
 
@@ -1084,6 +1286,14 @@ buildProtocols()
 buildSignals()
 
 if (!initRenderMode()) {
+  const _savedLangs = (() => {
+    try { return JSON.parse(localStorage.getItem("maresafe_langs") || "null") || ["nl", "en"] }
+    catch { return ["nl", "en"] }
+  })()
+  lsInit("dl-lang-select", "multi", _savedLangs, () => onLangChange())
+  lsInit("ui-lang-select", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
+  lsInit("ui-lang-select-modal", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
+
   if (!loadFromStorage()) setLang("nl")
   updatePreviewScale()
   updateDownloadLabel()
