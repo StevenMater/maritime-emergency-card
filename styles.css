@@ -150,6 +150,48 @@ body {
 .print-btn.sec:hover {
   background: #1e3a6e;
 }
+.print-btn.buy-btn {
+  background: #635bff;
+  min-width: 140px;
+}
+.print-btn.buy-btn:hover {
+  background: #4f46e5;
+}
+.print-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-caption {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--mid);
+  padding-left: 2px;
+}
+.payment-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.buy-secured {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--mid);
+}
+.buy-secured strong {
+  color: #635bff;
+}
+.co2-text {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  color: var(--mid);
+  margin: 0;
+  max-width: 300px;
+  line-height: 1.4;
+}
 
 .lang-btns {
   display: flex;
@@ -506,7 +548,7 @@ body {
 .left-col {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 .left-col > div:first-child {
   flex: 1;
@@ -1135,6 +1177,7 @@ body {
   line-height: 1;
   display: flex;
   align-items: center;
+  white-space: nowrap;
 }
 .modal-close-btn {
   background: none;
