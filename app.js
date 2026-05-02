@@ -1,5 +1,5 @@
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const STRIPE_TEST_MODE    = true
+const STRIPE_TEST_MODE    = false
 const STRIPE_LIVE_LINK    = "https://buy.stripe.com/cNi4gzachcuR5vN0Ao97G00"
 const STRIPE_TEST_LINK    = "https://buy.stripe.com/test_cNi4gzachcuR5vN0Ao97G00"
 const STRIPE_PAYMENT_LINK = STRIPE_TEST_MODE ? STRIPE_TEST_LINK : STRIPE_LIVE_LINK
@@ -403,6 +403,7 @@ const STORAGE_KEY = "maritieme_noodkaart"
 
 function getFormData() {
   return {
+    _maresafe: true,
     version: CURRENT_VERSION,
     lang: currentLang,
     name: document.getElementById("f-name").value,
@@ -513,15 +514,24 @@ function migrateData(d) {
   return { data: m, outdated: true }
 }
 
-function showVersionWarning() {
+function showBanner(titleKey, bodyKey) {
   const t = T[currentLang]
-  const el = document.getElementById("version-warning")
-  document.getElementById("vw-title").textContent = t.vw_title
-  document.getElementById("vw-body").textContent = t.vw_body
-  el.style.display = "flex"
+  document.getElementById("vw-title").textContent = t[titleKey]
+  document.getElementById("vw-body").textContent = t[bodyKey]
+  document.getElementById("version-warning").style.display = "flex"
 }
 
+function showVersionWarning() {
+  showBanner("vw_title", "vw_body")
+}
+
+const KNOWN_FIELDS = ["name", "naam", "mmsi", "callSign", "roep", "contacts", "insurerName", "verzNaam", "lang", "version"]
+
 function applyFormData(d) {
+  const isMarked = d._maresafe === true
+  const isLegacy = KNOWN_FIELDS.some((k) => k in d)
+  if (!isMarked && !isLegacy) throw new Error("invalid")
+
   const { data, outdated } = migrateData(d)
 
   if (data.lang && T[data.lang]) currentLang = data.lang
@@ -620,9 +630,11 @@ function exportJSON() {
 function openEmailBackupModal() {
   document.getElementById("email-backup-modal").classList.add("open")
   document.getElementById("email-backup-input").focus()
-  document.getElementById("email-backup-status").textContent = ""
+  const st = document.getElementById("email-backup-status")
+  st.style.display = "none"
+  st.textContent = ""
   document.getElementById("email-backup-btn").disabled = false
-  document.getElementById("email-backup-btn-label").textContent = "📧 Send backup"
+  document.getElementById("email-backup-btn-label").textContent = T[currentLang].modal_save_btn
 }
 
 function closeEmailBackupModal() {
@@ -642,7 +654,7 @@ async function submitEmailBackup() {
   }
 
   btn.disabled = true
-  label.textContent = "Sending…"
+  label.textContent = T[currentLang].modal_save_sending
   status.textContent = ""
 
   const formData = getFormData()
@@ -655,23 +667,62 @@ async function submitEmailBackup() {
     })
 
     if (res.ok) {
-      label.textContent = "✓ Sent"
+      label.textContent = T[currentLang].modal_save_sent
       status.style.color = "#6fcf97"
-      status.textContent = "Check your inbox — your backup is on its way."
+      status.style.display = "block"
+      status.textContent = T[currentLang].modal_save_success
       setTimeout(closeEmailBackupModal, 2500)
     } else {
       throw new Error()
     }
   } catch {
-    label.textContent = "📧 Send backup"
+    label.textContent = T[currentLang].modal_save_btn
     btn.disabled = false
     status.style.color = "#f1948a"
-    status.textContent = "Something went wrong. Please try again."
+    status.style.display = "block"
+    status.textContent = T[currentLang].modal_save_error
   }
 }
 
+function openLoadModal() {
+  document.getElementById("load-modal").classList.add("open")
+}
+
+function closeLoadModal() {
+  document.getElementById("load-modal").classList.remove("open")
+}
+
+function importJSONFromModal(e) {
+  const file = e.target.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (ev) => {
+    try {
+      applyFormData(JSON.parse(ev.target.result))
+      closeLoadModal()
+    } catch {
+      closeLoadModal()
+      showBanner("load_invalid_title", "load_invalid_body")
+    }
+  }
+  reader.readAsText(file)
+  e.target.value = ""
+}
+
+function openClearModal() {
+  document.getElementById("clear-modal").classList.add("open")
+}
+
+function closeClearModal() {
+  document.getElementById("clear-modal").classList.remove("open")
+}
+
+function confirmClear() {
+  closeClearModal()
+  clearAll()
+}
+
 function clearAll() {
-  if (!confirm(T[currentLang].clear_confirm)) return
   ;[
     "f-name",
     "f-type",
@@ -798,16 +849,31 @@ function onLangChange() {
   const langs = getSelectedLanguages()
   document.getElementById("lang-trigger-label").textContent =
     langs.length ? langs.map((l) => l.toUpperCase()).join(", ") : "—"
+  localStorage.setItem("maresafe_langs", JSON.stringify(langs))
   updateDownloadLabel()
 }
 
 function updateDownloadLabel() {
-  const count = getSelectedLanguages().length
-  const price = _validCode !== null ? T[currentLang].label_free : "€2"
-  document.getElementById("btn-download-label").textContent =
-    count === 0
+  const langs = getSelectedLanguages()
+  const count = langs.length
+  const hasFreeCode = _validCode !== null
+  const showBuyBtn = !hasFreeCode
+
+  document.getElementById("stripe-buy-wrap").style.display = showBuyBtn ? "flex" : "none"
+  document.getElementById("download-wrap").style.display = showBuyBtn ? "none" : "flex"
+
+  if (showBuyBtn) {
+    document.getElementById("btn-buy").disabled = count === 0
+  } else {
+    document.getElementById("btn-download").disabled = count === 0
+    document.getElementById("btn-download-label").textContent = count === 0
       ? T[currentLang].btn_download_pdf_zero
-      : `Download ${count} PDF${count > 1 ? "'s" : ""} — ${price}`
+      : `${count} PDF${count > 1 ? "'s" : ""} — ${T[currentLang].label_free}`
+  }
+}
+
+function handleBuyClick() {
+  window.location.href = STRIPE_PAYMENT_LINK
 }
 
 async function checkCode() {
@@ -847,12 +913,7 @@ async function checkCode() {
 function handleDownloadClick() {
   const langs = getSelectedLanguages()
   if (!langs.length) { alert(T[currentLang].pdf_no_lang); return }
-  if (_validCode) {
-    requestPDF({ type: "code", code: _validCode }, langs)
-  } else {
-    localStorage.setItem("maresafe_langs", JSON.stringify(langs))
-    window.location.href = STRIPE_PAYMENT_LINK
-  }
+  requestPDF({ type: "code", code: _validCode }, langs)
 }
 
 async function handlePaymentReturn(sessionId) {
@@ -982,8 +1043,43 @@ document.addEventListener("click", (e) => {
 document.addEventListener("scroll", hideTip, true)
 window.addEventListener("resize", hideTip)
 
+// ══ LOAD DROP ZONE ══════════════════════════════════════════════════
+;(function () {
+  const zone = document.getElementById("load-drop-zone")
+  if (!zone) return
+  zone.addEventListener("dragover", (e) => {
+    e.preventDefault()
+    zone.style.borderColor = "#5a8ac0"
+    zone.style.background = "rgba(90,138,192,0.08)"
+  })
+  zone.addEventListener("dragleave", () => {
+    zone.style.borderColor = "#3a5a8a"
+    zone.style.background = ""
+  })
+  zone.addEventListener("drop", (e) => {
+    e.preventDefault()
+    zone.style.borderColor = "#3a5a8a"
+    zone.style.background = ""
+    const file = e.dataTransfer.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      try {
+        applyFormData(JSON.parse(ev.target.result))
+        closeLoadModal()
+      } catch {
+        closeLoadModal()
+        showBanner("load_invalid_title", "load_invalid_body")
+      }
+    }
+    reader.readAsText(file)
+  })
+})()
+
 // ══ INIT ════════════════════════════════════════════════════════════
 document.getElementById("site-version").textContent = "2.0"
+
+
 buildProtocols()
 buildSignals()
 
