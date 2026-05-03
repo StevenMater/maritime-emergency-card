@@ -442,7 +442,7 @@ function migrateData(d) {
 
   const m = {
     version: CURRENT_VERSION,
-    lang: d.lang || "nl",
+    lang: d.lang || "en",
     name: d.name || d.naam || "",
     type: d.type || "",
     eni: d.eni || "",
@@ -696,9 +696,10 @@ function updatePreviewScale() {
   const cs = getComputedStyle(wrap)
   const padH = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)
   const availW = wrap.offsetWidth - padH
+  const portrait = window.innerHeight > window.innerWidth
   const scale = Math.min(
     availW >= CARD_W ? 1 : availW / CARD_W,
-    (window.innerHeight * 0.8) / CARD_H
+    (window.innerHeight * (portrait ? 0.5 : 0.8)) / CARD_H
   )
 
   if (scale < 1) {
@@ -764,6 +765,7 @@ const DEMO_DATA = {
 
 // ══ DOWNLOAD / PAYMENT ══════════════════════════════════════════════
 let _validCode = null
+let _uses = null
 
 function getSelectedLanguages() {
   return _ls["dl-lang-select"]?.selected || []
@@ -812,6 +814,7 @@ async function checkCode() {
     const data = await res.json()
     if (data.valid) {
       _validCode = code
+      _uses = data.tokens
       lsSetDisabled("dl-lang-select", false)
       lsSetMax("dl-lang-select", data.tokens)
       update()
@@ -878,7 +881,25 @@ async function requestPDF(languages) {
 
   status.style.color = "var(--green)"
   status.textContent = T[currentLang].pdf_success
-  btn.disabled = false
+
+  if (_uses !== "unlimited") {
+    _uses = Math.max(0, _uses - languages.length)
+    const feedback = document.getElementById("code-feedback")
+    if (_uses <= 0) {
+      _validCode = null
+      lsSetDisabled("dl-lang-select", true)
+      btn.disabled = true
+      feedback.style.color = "var(--mid)"
+      feedback.textContent = T[currentLang].code_uses_depleted
+    } else {
+      lsSetMax("dl-lang-select", _uses)
+      btn.disabled = false
+      feedback.style.color = "var(--green)"
+      feedback.textContent = "✓ " + T[currentLang].code_uses_remaining.replace("{n}", _uses)
+    }
+  } else {
+    btn.disabled = false
+  }
 }
 
 // ══ INFO MODAL ══════════════════════════════════════════════════════
@@ -992,8 +1013,8 @@ window.addEventListener("resize", hideTip)
 // ══ LANG SELECT COMPONENT ═══════════════════════════════════════════
 
 const LS_LANGS = [
-  { code: "nl", flag: "🇳🇱", name: "Nederlands" },
   { code: "en", flag: "🇬🇧", name: "English" },
+  { code: "nl", flag: "🇳🇱", name: "Nederlands" },
   { code: "fr", flag: "🇫🇷", name: "Français" },
   { code: "de", flag: "🇩🇪", name: "Deutsch" },
 ]
@@ -1225,10 +1246,10 @@ if (!initRenderMode()) {
   })()
   lsInit("dl-lang-select", "multi", _savedLangs, () => onLangChange())
   lsSetDisabled("dl-lang-select", true)
-  lsInit("ui-lang-select", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
-  lsInit("ui-lang-select-modal", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
+  lsInit("ui-lang-select", "single", ["en"], (sel) => onUiLangSelect(sel[0]))
+  lsInit("ui-lang-select-modal", "single", ["en"], (sel) => onUiLangSelect(sel[0]))
 
-  if (!loadFromStorage()) setLang("nl")
+  if (!loadFromStorage()) setLang("en")
   updatePreviewScale()
 
   if (new URLSearchParams(window.location.search).get("payment") === "success") {
