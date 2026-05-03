@@ -14,6 +14,73 @@ const LANG_LABEL = {
   de: "DE",
 }
 
+const EMAIL_T = {
+  nl: {
+    code_subject: "Jouw MareSafe downloadcode",
+    code_body: (code) =>
+      `<p>Bedankt voor je aankoop.</p>
+       <p>Jouw downloadcode is:</p>
+       <p style="font-family:monospace;font-size:32px;font-weight:700;letter-spacing:4px">${code}</p>
+       <p>Deze code geeft je <strong>3 tokens</strong> (1 per taal per download).</p>
+       <p>Open <a href="https://www.maresafe.eu">maresafe.eu</a>, voer je code in en download je noodkaart.</p>
+       <p>— MareSafe</p>`,
+    receipt_subject: (v) => `MareSafe — downloadbevestiging voor ${v}`,
+    receipt_body: (count, langList, vessel, remaining) =>
+      `<p>Je hebt ${count} kaart${count > 1 ? "en" : ""} (${langList}) gedownload voor <strong>${vessel}</strong>.</p>
+       <p>${remaining > 0 ? `<strong>${remaining} token${remaining > 1 ? "s" : ""} resterend</strong> op je code.` : "Je code is volledig gebruikt."}</p>
+       <p>Bijgevoegd vind je een JSON-backup van je kaartgegevens. Open <a href="https://www.maresafe.eu">maresafe.eu</a> om hem te importeren.</p>
+       <p>— MareSafe</p>`,
+  },
+  en: {
+    code_subject: "Your MareSafe download code",
+    code_body: (code) =>
+      `<p>Thank you for your purchase.</p>
+       <p>Your download code is:</p>
+       <p style="font-family:monospace;font-size:32px;font-weight:700;letter-spacing:4px">${code}</p>
+       <p>This code gives you <strong>3 tokens</strong> (1 per language per download).</p>
+       <p>Open <a href="https://www.maresafe.eu">maresafe.eu</a>, enter your code, and download your emergency card.</p>
+       <p>— MareSafe</p>`,
+    receipt_subject: (v) => `MareSafe — download receipt for ${v}`,
+    receipt_body: (count, langList, vessel, remaining) =>
+      `<p>You downloaded ${count} card${count > 1 ? "s" : ""} (${langList}) for <strong>${vessel}</strong>.</p>
+       <p>${remaining > 0 ? `<strong>${remaining} token${remaining > 1 ? "s" : ""} remaining</strong> on your code.` : "Your code has been fully used."}</p>
+       <p>Attached is a JSON backup of your card data. Open <a href="https://www.maresafe.eu">maresafe.eu</a> to import it.</p>
+       <p>— MareSafe</p>`,
+  },
+  fr: {
+    code_subject: "Votre code de téléchargement MareSafe",
+    code_body: (code) =>
+      `<p>Merci pour votre achat.</p>
+       <p>Votre code de téléchargement est :</p>
+       <p style="font-family:monospace;font-size:32px;font-weight:700;letter-spacing:4px">${code}</p>
+       <p>Ce code vous donne <strong>3 tokens</strong> (1 par langue par téléchargement).</p>
+       <p>Ouvrez <a href="https://www.maresafe.eu">maresafe.eu</a>, entrez votre code et téléchargez votre carte d'urgence.</p>
+       <p>— MareSafe</p>`,
+    receipt_subject: (v) => `MareSafe — reçu de téléchargement pour ${v}`,
+    receipt_body: (count, langList, vessel, remaining) =>
+      `<p>Vous avez téléchargé ${count} carte${count > 1 ? "s" : ""} (${langList}) pour <strong>${vessel}</strong>.</p>
+       <p>${remaining > 0 ? `<strong>${remaining} token${remaining > 1 ? "s" : ""} restant${remaining > 1 ? "s" : ""}</strong> sur votre code.` : "Votre code est entièrement utilisé."}</p>
+       <p>Ci-joint une sauvegarde JSON de vos données. Ouvrez <a href="https://www.maresafe.eu">maresafe.eu</a> pour l'importer.</p>
+       <p>— MareSafe</p>`,
+  },
+  de: {
+    code_subject: "Ihr MareSafe Download-Code",
+    code_body: (code) =>
+      `<p>Vielen Dank für Ihren Kauf.</p>
+       <p>Ihr Download-Code lautet:</p>
+       <p style="font-family:monospace;font-size:32px;font-weight:700;letter-spacing:4px">${code}</p>
+       <p>Dieser Code gibt Ihnen <strong>3 Tokens</strong> (1 pro Sprache pro Download).</p>
+       <p>Öffnen Sie <a href="https://www.maresafe.eu">maresafe.eu</a>, geben Sie Ihren Code ein und laden Sie Ihre Notfallkarte herunter.</p>
+       <p>— MareSafe</p>`,
+    receipt_subject: (v) => `MareSafe — Download-Beleg für ${v}`,
+    receipt_body: (count, langList, vessel, remaining) =>
+      `<p>Sie haben ${count} Karte${count > 1 ? "n" : ""} (${langList}) für <strong>${vessel}</strong> heruntergeladen.</p>
+       <p>${remaining > 0 ? `<strong>${remaining} Token${remaining > 1 ? "s" : ""} verbleibend</strong> auf Ihrem Code.` : "Ihr Code wurde vollständig verbraucht."}</p>
+       <p>Anbei eine JSON-Sicherung Ihrer Kartendaten. Öffnen Sie <a href="https://www.maresafe.eu">maresafe.eu</a>, um sie zu importieren.</p>
+       <p>— MareSafe</p>`,
+  },
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
@@ -38,12 +105,12 @@ export default {
       return handleGeneratePdf(request, env)
     }
 
-    if (request.method === "POST" && url.pathname === "/email-backup") {
-      return handleEmailBackup(request, env)
+    if (request.method === "POST" && url.pathname === "/admin/codes") {
+      return handleListCodes(request, env)
     }
 
-    if (request.method === "POST" && url.pathname === "/admin/emails") {
-      return handleListEmails(request, env)
+    if (request.method === "POST" && url.pathname === "/stripe-webhook") {
+      return handleStripeWebhook(request, env)
     }
 
     return corsResponse({ error: "Not found" }, 404, env)
@@ -56,26 +123,38 @@ async function handleCheckCode(request, env) {
   if (!code) return corsResponse({ valid: false }, 200, env)
 
   if (code === env.MASTER_CODE) {
-    return corsResponse({ valid: true, uses: "unlimited" }, 200, env)
+    return corsResponse({ valid: true, tokens: "unlimited" }, 200, env)
   }
 
   const raw = await env.BYPASS_CODES.get(code)
   if (!raw) return corsResponse({ valid: false }, 200, env)
 
-  const { uses_remaining } = JSON.parse(raw)
-  return corsResponse({ valid: true, uses: uses_remaining }, 200, env)
+  const { tokens_remaining } = JSON.parse(raw)
+  return corsResponse({ valid: true, tokens: tokens_remaining }, 200, env)
 }
 
 // ── /create-code ───────────────────────────────────────────────────
 async function handleCreateCode(request, env) {
-  const { masterCode, uses } = await request.json().catch(() => ({}))
+  const { masterCode, uses, email } = await request.json().catch(() => ({}))
 
   if (masterCode !== env.MASTER_CODE) {
     return corsResponse({ error: "Forbidden" }, 403, env)
   }
 
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return corsResponse({ error: "Email required" }, 400, env)
+  }
+
+  const total = uses || 3
   const code = generateCode()
-  await env.BYPASS_CODES.put(code, JSON.stringify({ uses_remaining: uses || 1 }))
+  await env.BYPASS_CODES.put(code, JSON.stringify({
+    tokens_total: total,
+    tokens_remaining: total,
+    email,
+    source: "manual",
+    created_at: new Date().toISOString(),
+    uses_log: [],
+  }))
   return corsResponse({ code }, 200, env)
 }
 
@@ -84,7 +163,7 @@ async function handleGeneratePdf(request, env) {
   const body = await request.json().catch(() => null)
   if (!body) return corsResponse({ error: "Invalid body" }, 400, env)
 
-  const { type, session, code, formData, languages, area } = body
+  const { code, formData, languages, area, lang } = body
 
   if (!Array.isArray(languages) || languages.length === 0 ||
       !languages.every((l) => VALID_LANGS.includes(l))) {
@@ -96,46 +175,19 @@ async function handleGeneratePdf(request, env) {
   }
 
   // ── Auth ───────────────────────────────────────────────────────
-  let stripeEmail = null
+  let codeData = null
 
-  if (type === "stripe") {
-    const existing = await env.PAYMENT_SESSIONS.get(session)
-    if (existing) return corsResponse({ error: "Session already used" }, 403, env)
+  if (code !== env.MASTER_CODE) {
+    const raw = await env.BYPASS_CODES.get(code)
+    if (!raw) return corsResponse({ error: "Invalid code" }, 403, env)
 
-    const stripeRes = await fetch(
-      `https://api.stripe.com/v1/checkout/sessions/${session}`,
-      { headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}` } },
-    )
-    if (!stripeRes.ok) return corsResponse({ error: "Payment not verified" }, 402, env)
-
-    const stripeSession = await stripeRes.json()
-    if (stripeSession.payment_status !== "paid") {
-      return corsResponse({ error: "Payment not verified" }, 402, env)
+    codeData = JSON.parse(raw)
+    if (codeData.tokens_remaining < languages.length) {
+      return corsResponse({ error: "Not enough tokens remaining" }, 403, env)
     }
-    stripeEmail = stripeSession.customer_details?.email || null
-
-  } else if (type === "code") {
-    if (code !== env.MASTER_CODE) {
-      const raw = await env.BYPASS_CODES.get(code)
-      if (!raw) return corsResponse({ error: "Invalid code" }, 403, env)
-
-      const parsed = JSON.parse(raw)
-      if (parsed.uses_remaining <= 0) {
-        return corsResponse({ error: "Code exhausted" }, 403, env)
-      }
-
-      const newUses = parsed.uses_remaining - 1
-      if (newUses === 0) {
-        await env.BYPASS_CODES.delete(code)
-      } else {
-        await env.BYPASS_CODES.put(code, JSON.stringify({ uses_remaining: newUses }))
-      }
-    }
-  } else {
-    return corsResponse({ error: "Invalid type" }, 400, env)
   }
 
-  // ── Fetch page HTML once ───────────────────────────────────────
+  // ── Fetch page HTML ────────────────────────────────────────────
   const pageRes = await fetch(env.CARD_URL)
   if (!pageRes.ok) return corsResponse({ error: "Could not fetch card page" }, 503, env)
   const pageHtml = await pageRes.text()
@@ -143,24 +195,33 @@ async function handleGeneratePdf(request, env) {
   // ── Render PDFs in parallel ────────────────────────────────────
   let pdfs
   try {
-    pdfs = await Promise.all(
-      languages.map((lang) => renderPdf(pageHtml, { ...formData, lang }, env)),
-    )
-  } catch (err) {
-    if (type === "stripe" && stripeEmail) {
-      await sendRetryEmail(stripeEmail, session, env)
+    pdfs = []
+    for (const l of languages) {
+      pdfs.push(await renderPdf(pageHtml, { ...formData, lang: l }, env))
     }
-    return corsResponse({ error: "PDF generation failed" }, 503, env)
+  } catch (err) {
+return corsResponse({ error: "PDF generation failed" }, 503, env)
   }
 
-  // ── Write Stripe session to KV + save email to D1 ─────────────
-  if (type === "stripe") {
-    await env.PAYMENT_SESSIONS.put(session, "1", { expirationTtl: 86400 })
-    if (stripeEmail) {
-      const vesselNameForEmail = formData?.name || ""
-      await env.DB.prepare(
-        "INSERT OR REPLACE INTO emails (email, vessel_name, created_at) VALUES (?, ?, ?)"
-      ).bind(stripeEmail, vesselNameForEmail, new Date().toISOString()).run().catch(() => {})
+  // ── Decrement tokens + append uses_log ────────────────────────
+  if (codeData) {
+    const newRemaining = codeData.tokens_remaining - languages.length
+    const now = new Date().toISOString()
+    const newEntries = languages.map((l) => ({ at: now, lang: l }))
+
+    if (newRemaining <= 0) {
+      await env.BYPASS_CODES.delete(code)
+    } else {
+      await env.BYPASS_CODES.put(code, JSON.stringify({
+        ...codeData,
+        tokens_remaining: newRemaining,
+        uses_log: [...(codeData.uses_log || []), ...newEntries],
+      }))
+    }
+
+    if (codeData.email) {
+      const emailLang = VALID_LANGS.includes(lang) ? lang : "en"
+      await sendReceiptEmail(codeData.email, formData, languages, newRemaining, emailLang, env)
     }
   }
 
@@ -170,9 +231,8 @@ async function handleGeneratePdf(request, env) {
 
   const files = {}
   for (let i = 0; i < languages.length; i++) {
-    const lang = languages[i]
-    const filename = `MareSafe - ${vesselName} - ${areaLabel} - ${LANG_LABEL[lang]}.pdf`
-    files[filename] = new Uint8Array(pdfs[i])
+    const l = languages[i]
+    files[`MareSafe - ${vesselName} - ${areaLabel} - ${LANG_LABEL[l]}.pdf`] = new Uint8Array(pdfs[i])
   }
   const zipped = zipSync(files)
 
@@ -186,6 +246,58 @@ async function handleGeneratePdf(request, env) {
   })
 }
 
+// ── /stripe-webhook ────────────────────────────────────────────────
+async function handleStripeWebhook(request, env) {
+  const rawBody = await request.text()
+  const sig = request.headers.get("Stripe-Signature")
+
+  if (!sig || !env.STRIPE_WEBHOOK_SECRET) {
+    return new Response("Forbidden", { status: 403 })
+  }
+
+  // Verify HMAC-SHA256 signature
+  const sigParts = Object.fromEntries(sig.split(",").map((p) => p.split("=")))
+  const payload = `${sigParts.t}.${rawBody}`
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(env.STRIPE_WEBHOOK_SECRET),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  )
+  const mac = await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(payload))
+  const expected = Array.from(new Uint8Array(mac))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+
+  if (expected !== sigParts.v1) {
+    return new Response("Forbidden", { status: 403 })
+  }
+
+  const event = JSON.parse(rawBody)
+  if (event.type !== "checkout.session.completed") {
+    return new Response("OK", { status: 200 })
+  }
+
+  const session = event.data?.object
+  const email = session?.customer_details?.email || null
+  const lang = localeToLang(session?.locale)
+
+  const code = generateCode()
+  await env.BYPASS_CODES.put(code, JSON.stringify({
+    tokens_total: 3,
+    tokens_remaining: 3,
+    email,
+    source: "payment",
+    created_at: new Date().toISOString(),
+    uses_log: [],
+  }))
+
+  if (email) await sendCodeEmail(email, code, lang, env)
+
+  return new Response("OK", { status: 200 })
+}
+
 // ── Browserless PDF render ─────────────────────────────────────────
 async function renderPdf(pageHtml, cardData, env) {
   const injected = pageHtml
@@ -195,7 +307,8 @@ async function renderPdf(pageHtml, cardData, env) {
     )
     .replace(
       "</head>",
-      `<script>window.__CARD_DATA__=${JSON.stringify(cardData)};window.__RENDER_MODE__=true;</script></head>`,
+      `<script>window.__CARD_DATA__=${JSON.stringify(cardData)};window.__RENDER_MODE__=true;</script>` +
+      `<style>.watermark-overlay{display:none!important}</style></head>`,
     )
 
   const res = await fetch(
@@ -226,9 +339,30 @@ async function renderPdf(pageHtml, cardData, env) {
   return res.arrayBuffer()
 }
 
-// ── Resend email fallback ──────────────────────────────────────────
-async function sendRetryEmail(to, sessionId, env) {
-  const retryUrl = `https://www.maresafe.eu/?session=${sessionId}`
+// ── /admin/codes ───────────────────────────────────────────────────
+async function handleListCodes(request, env) {
+  const { masterCode } = await request.json().catch(() => ({}))
+  if (masterCode !== env.MASTER_CODE) {
+    return corsResponse({ error: "Forbidden" }, 403, env)
+  }
+
+  const list = await env.BYPASS_CODES.list()
+  const codes = await Promise.all(
+    list.keys.map(async ({ name }) => {
+      const raw = await env.BYPASS_CODES.get(name)
+      const data = raw
+        ? JSON.parse(raw)
+        : { tokens_total: 0, tokens_remaining: 0, source: "unknown", uses_log: [] }
+      return { code: name, ...data }
+    }),
+  )
+  codes.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0))
+  return corsResponse({ codes }, 200, env)
+}
+
+// ── Email: code delivery ───────────────────────────────────────────
+async function sendCodeEmail(email, code, lang, env) {
+  const t = EMAIL_T[lang] || EMAIL_T.en
   await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
@@ -237,38 +371,23 @@ async function sendRetryEmail(to, sessionId, env) {
     },
     body: JSON.stringify({
       from: "MareSafe <noreply@contact.maresafe.eu>",
-      to,
-      subject: "MareSafe — your download link",
-      html: `<p>Something went wrong generating your PDF. Your payment is safe.</p>
-             <p><a href="${retryUrl}">Click here to retry your download</a></p>
-             <p>This link is valid for 24 hours.</p>`,
+      to: email,
+      subject: t.code_subject,
+      html: t.code_body(code),
     }),
   }).catch(() => {})
 }
 
-// ── /email-backup ──────────────────────────────────────────────────
-async function handleEmailBackup(request, env) {
-  const body = await request.json().catch(() => null)
-  if (!body) return corsResponse({ error: "Invalid body" }, 400, env)
+// ── Email: download receipt + JSON backup ─────────────────────────
+async function sendReceiptEmail(email, formData, languages, tokensRemaining, lang, env) {
+  const t = EMAIL_T[lang] || EMAIL_T.en
+  const vesselName = formData?.name || "your vessel"
+  const langList = languages.map((l) => LANG_LABEL[l]).join(", ")
+  const filename = `MareSafe - ${vesselName}.json`
+  const jsonBytes = new TextEncoder().encode(JSON.stringify(formData, null, 2))
+  const base64 = btoa(String.fromCharCode(...jsonBytes))
 
-  const { email, formData } = body
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return corsResponse({ error: "Invalid email" }, 400, env)
-  }
-
-  const vesselName = formData?.name || ""
-  const createdAt  = new Date().toISOString()
-  const filename   = `MareSafe - ${vesselName || "backup"}.json`
-  const jsonBytes  = new TextEncoder().encode(JSON.stringify(formData, null, 2))
-  const base64     = btoa(String.fromCharCode(...jsonBytes))
-
-  // Store email in D1
-  await env.DB.prepare(
-    "INSERT OR REPLACE INTO emails (email, vessel_name, created_at) VALUES (?, ?, ?)"
-  ).bind(email, vesselName, createdAt).run()
-
-  // Send backup via Resend
-  const resendRes = await fetch("https://api.resend.com/emails", {
+  await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       Authorization: `Bearer ${env.RESEND_API_KEY}`,
@@ -277,31 +396,11 @@ async function handleEmailBackup(request, env) {
     body: JSON.stringify({
       from: "MareSafe <noreply@contact.maresafe.eu>",
       to: email,
-      subject: `MareSafe — backup of ${vesselName || "your vessel"}`,
-      html: `<p>Hi,</p>
-             <p>Attached is a JSON backup of your MareSafe emergency card for <strong>${vesselName || "your vessel"}</strong>.</p>
-             <p>To restore it, open <a href="https://www.maresafe.eu">maresafe.eu</a> and use the import option.</p>
-             <p>— MareSafe</p>`,
+      subject: t.receipt_subject(vesselName),
+      html: t.receipt_body(languages.length, langList, vesselName, tokensRemaining),
       attachments: [{ filename, content: base64 }],
     }),
-  })
-
-  if (!resendRes.ok) return corsResponse({ error: "Failed to send email" }, 503, env)
-  return corsResponse({ ok: true }, 200, env)
-}
-
-// ── /admin/emails ──────────────────────────────────────────────────
-async function handleListEmails(request, env) {
-  const { masterCode } = await request.json().catch(() => ({}))
-  if (masterCode !== env.MASTER_CODE) {
-    return corsResponse({ error: "Forbidden" }, 403, env)
-  }
-
-  const { results } = await env.DB.prepare(
-    "SELECT email, vessel_name, created_at FROM emails ORDER BY created_at DESC LIMIT 500"
-  ).all()
-
-  return corsResponse({ emails: results }, 200, env)
+  }).catch(() => {})
 }
 
 // ── Admin page ─────────────────────────────────────────────────────
@@ -313,7 +412,7 @@ function adminPage() {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MareSafe Admin</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 540px; margin: 60px auto; padding: 0 20px; color: #111; }
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 60px auto; padding: 0 20px; color: #111; }
     h2 { color: #1b3a5c; }
     label { display: block; font-size: 13px; margin-bottom: 4px; color: #444; }
     input { display: block; width: 100%; box-sizing: border-box; margin-bottom: 12px; padding: 8px 10px; font-size: 14px; border: 1.5px solid #a8c4e0; border-radius: 4px; }
@@ -325,81 +424,118 @@ function adminPage() {
     button.action { background: #1b3a5c; color: white; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; width: 100%; }
     button.action:hover { background: #2c5282; }
     #result { margin-top: 20px; font-size: 22px; font-weight: 700; color: #1e6b3c; letter-spacing: 2px; }
-    #error  { margin-top: 20px; font-size: 13px; color: #a93226; }
-    table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 16px; }
-    th { text-align: left; padding: 6px 8px; background: #f0f4f8; border-bottom: 2px solid #a8c4e0; }
-    td { padding: 6px 8px; border-bottom: 1px solid #e8eef4; }
-    #email-count { font-size: 13px; color: #555; margin-top: 8px; }
+    #gen-error { margin-top: 12px; font-size: 13px; color: #a93226; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
+    .badge-green  { background: #e8f4ee; color: #1e6b3c; }
+    .badge-orange { background: #fef3cd; color: #856404; }
+    .badge-red    { background: #fdecea; color: #a93226; }
+    .badge-grey   { background: #f0f4f8; color: #555; }
+    hr.sep { border: none; border-top: 1px solid #e0e8f0; margin: 24px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+    th { text-align: left; padding: 6px 8px; background: #f0f4f8; border-bottom: 2px solid #a8c4e0; white-space: nowrap; }
+    td { padding: 6px 8px; border-bottom: 1px solid #e8eef4; vertical-align: top; }
+    .log-entry { display: block; color: #555; }
+    #codes-count { font-size: 13px; color: #555; margin-top: 8px; }
+    #codes-error { font-size: 13px; color: #a93226; margin-top: 8px; }
   </style>
 </head>
 <body>
   <h2>MareSafe Admin</h2>
   <div class="tabs">
-    <button class="tab active" onclick="showTab('codes')">Codes</button>
-    <button class="tab" onclick="showTab('emails')">Emails</button>
+    <button class="tab active" onclick="showTab('generate')">Generate code</button>
+    <button class="tab" onclick="showTab('issued')">Issued codes</button>
   </div>
 
-  <div id="panel-codes" class="panel active">
+  <div id="panel-generate" class="panel active">
     <label>Master code</label>
     <input id="mc" type="password" autocomplete="current-password" />
-    <label>Number of uses</label>
-    <input id="uses" type="number" value="1" min="1" max="1000" />
+    <label>Email</label>
+    <input id="email" type="email" placeholder="customer@example.com" />
+    <label>Number of tokens</label>
+    <input id="uses" type="number" value="3" min="1" max="1000" />
     <button class="action" onclick="generate()">Generate code</button>
     <div id="result"></div>
-    <div id="error"></div>
+    <div id="gen-error"></div>
   </div>
 
-  <div id="panel-emails" class="panel">
+  <div id="panel-issued" class="panel">
     <label>Master code</label>
     <input id="mc2" type="password" autocomplete="current-password" />
-    <button class="action" onclick="loadEmails()">Load emails</button>
-    <div id="email-count"></div>
-    <table id="email-table" style="display:none">
-      <thead><tr><th>Email</th><th>Vessel</th><th>Date</th></tr></thead>
-      <tbody id="email-rows"></tbody>
+    <button class="action" onclick="loadCodes()">Load issued codes</button>
+    <div id="codes-count"></div>
+    <table id="codes-table" style="display:none">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Email</th>
+          <th>Source</th>
+          <th>Created</th>
+          <th>Tokens</th>
+          <th>Use log</th>
+        </tr>
+      </thead>
+      <tbody id="codes-rows"></tbody>
     </table>
-    <div id="email-error"></div>
+    <div id="codes-error"></div>
   </div>
 
   <script>
     function showTab(name) {
-      document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", ["codes","emails"][i] === name))
+      document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", ["generate","issued"][i] === name))
       document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"))
       document.getElementById("panel-" + name).classList.add("active")
     }
 
     async function generate() {
       document.getElementById("result").textContent = ""
-      document.getElementById("error").textContent  = ""
+      document.getElementById("gen-error").textContent = ""
       const res = await fetch("/create-code", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           masterCode: document.getElementById("mc").value,
-          uses: parseInt(document.getElementById("uses").value) || 1,
+          email: document.getElementById("email").value,
+          uses: parseInt(document.getElementById("uses").value) || 3,
         }),
       })
       const data = await res.json()
       if (res.ok) document.getElementById("result").textContent = data.code
-      else document.getElementById("error").textContent = data.error || "Something went wrong."
+      else document.getElementById("gen-error").textContent = data.error || "Something went wrong."
     }
 
-    async function loadEmails() {
-      document.getElementById("email-error").textContent = ""
-      document.getElementById("email-table").style.display = "none"
-      const res = await fetch("/admin/emails", {
+    async function loadCodes() {
+      document.getElementById("codes-error").textContent = ""
+      document.getElementById("codes-table").style.display = "none"
+      document.getElementById("codes-count").textContent = ""
+      const res = await fetch("/admin/codes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ masterCode: document.getElementById("mc2").value }),
       })
       const data = await res.json()
-      if (!res.ok) { document.getElementById("email-error").textContent = data.error || "Failed."; return }
-      const tbody = document.getElementById("email-rows")
-      tbody.innerHTML = data.emails.map(e =>
-        \`<tr><td>\${e.email}</td><td>\${e.vessel_name || "—"}</td><td>\${e.created_at?.slice(0,10) || "—"}</td></tr>\`
-      ).join("")
-      document.getElementById("email-count").textContent = data.emails.length + " contacts"
-      document.getElementById("email-table").style.display = data.emails.length ? "" : "none"
+      if (!res.ok) { document.getElementById("codes-error").textContent = data.error || "Failed."; return }
+
+      const tbody = document.getElementById("codes-rows")
+      tbody.innerHTML = data.codes.map(c => {
+        const tr = c.tokens_remaining
+        const tt = c.tokens_total || "?"
+        const tokenClass = tr === 0 ? "badge-red" : tr === 1 ? "badge-orange" : "badge-green"
+        const srcClass = c.source === "payment" ? "badge-green" : "badge-grey"
+        const log = (c.uses_log || []).map(e =>
+          \`<span class="log-entry">\${e.at?.slice(0,10) || "?"}: \${(e.lang || "?").toUpperCase()}</span>\`
+        ).join("") || "—"
+        return \`<tr>
+          <td style="font-family:monospace;font-weight:700">\${c.code}</td>
+          <td>\${c.email || "—"}</td>
+          <td><span class="badge \${srcClass}">\${c.source || "?"}</span></td>
+          <td>\${c.created_at?.slice(0,10) || "—"}</td>
+          <td><span class="badge \${tokenClass}">\${tr} / \${tt}</span></td>
+          <td>\${log}</td>
+        </tr>\`
+      }).join("")
+
+      document.getElementById("codes-count").textContent = data.codes.length + " code" + (data.codes.length !== 1 ? "s" : "")
+      document.getElementById("codes-table").style.display = data.codes.length ? "" : "none"
     }
   </script>
 </body>
@@ -418,6 +554,14 @@ function generateCode() {
       .map((b) => chars[b % chars.length])
       .join("")
   return `${rand(4)}-${rand(4)}`
+}
+
+function localeToLang(locale) {
+  if (!locale || locale === "auto") return "en"
+  if (locale.startsWith("nl")) return "nl"
+  if (locale.startsWith("fr")) return "fr"
+  if (locale.startsWith("de")) return "de"
+  return "en"
 }
 
 function corsHeaders(env) {
