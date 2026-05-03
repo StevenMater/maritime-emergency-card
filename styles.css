@@ -586,6 +586,7 @@ body {
 .a4-wrap {
   display: flex;
   justify-content: center;
+  overflow: hidden;
 }
 .emergency-card {
   width: 794px;
@@ -1473,37 +1474,18 @@ body {
   order: 0;
   display: flex;
   justify-content: center;
-  align-items: stretch;
+  align-items: flex-start;
+  gap: 1.5rem;
   padding: 20px 16px 0;
   background: var(--ui-bg);
-}
-#preview-buy-row > #a4-wrap {
-  flex: 1 1 0;
-  max-width: calc(794px * 1.5 / 2);
-  min-width: 0;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
 }
 .fields-wrap {
   order: 1;
 }
-#buy-column {
-  flex: 1 1 0;
-  max-width: calc(794px * 1.5 / 2);
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-@media (max-width: 700px) {
+@media (max-width: 900px), (orientation: portrait) {
   #preview-buy-row {
     flex-direction: column;
-  }
-  #preview-buy-row > #a4-wrap,
-  #buy-column {
-    max-width: 100%;
+    align-items: center;
   }
 }
 
