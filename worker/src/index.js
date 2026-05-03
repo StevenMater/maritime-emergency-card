@@ -113,6 +113,10 @@ export default {
       return handleStripeWebhook(request, env)
     }
 
+    if (request.method === "POST" && url.pathname === "/revoke-code") {
+      return handleRevokeCode(request, env)
+    }
+
     return corsResponse({ error: "Not found" }, 404, env)
   },
 }
@@ -129,7 +133,8 @@ async function handleCheckCode(request, env) {
   const raw = await env.BYPASS_CODES.get(code)
   if (!raw) return corsResponse({ valid: false }, 200, env)
 
-  const { tokens_remaining } = JSON.parse(raw)
+  const { tokens_remaining, status } = JSON.parse(raw)
+  if (status && status !== "active") return corsResponse({ valid: false }, 200, env)
   return corsResponse({ valid: true, tokens: tokens_remaining }, 200, env)
 }
 
@@ -152,9 +157,11 @@ async function handleCreateCode(request, env) {
     tokens_remaining: total,
     email,
     source: "manual",
+    status: "active",
     created_at: new Date().toISOString(),
     uses_log: [],
   }))
+  await sendCodeEmail(email, code, "en", env)
   return corsResponse({ code }, 200, env)
 }
 
@@ -210,7 +217,12 @@ return corsResponse({ error: "PDF generation failed" }, 503, env)
     const newEntries = languages.map((l) => ({ at: now, lang: l }))
 
     if (newRemaining <= 0) {
-      await env.BYPASS_CODES.delete(code)
+      await env.BYPASS_CODES.put(code, JSON.stringify({
+        ...codeData,
+        tokens_remaining: 0,
+        status: "depleted",
+        uses_log: [...(codeData.uses_log || []), ...newEntries],
+      }))
     } else {
       await env.BYPASS_CODES.put(code, JSON.stringify({
         ...codeData,
@@ -289,6 +301,7 @@ async function handleStripeWebhook(request, env) {
     tokens_remaining: 3,
     email,
     source: "payment",
+    status: "active",
     created_at: new Date().toISOString(),
     uses_log: [],
   }))
@@ -360,6 +373,17 @@ async function handleListCodes(request, env) {
   return corsResponse({ codes }, 200, env)
 }
 
+// ── /revoke-code ───────────────────────────────────────────────────
+async function handleRevokeCode(request, env) {
+  const { masterCode, code } = await request.json().catch(() => ({}))
+  if (masterCode !== env.MASTER_CODE) return corsResponse({ error: "Forbidden" }, 403, env)
+  const raw = await env.BYPASS_CODES.get(code)
+  if (!raw) return corsResponse({ error: "Code not found" }, 404, env)
+  const data = JSON.parse(raw)
+  await env.BYPASS_CODES.put(code, JSON.stringify({ ...data, status: "revoked" }))
+  return corsResponse({ ok: true }, 200, env)
+}
+
 // ── Email: code delivery ───────────────────────────────────────────
 async function sendCodeEmail(email, code, lang, env) {
   const t = EMAIL_T[lang] || EMAIL_T.en
@@ -412,7 +436,7 @@ function adminPage() {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MareSafe Admin</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 60px auto; padding: 0 20px; color: #111; }
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 60px auto; padding: 0 20px; color: #111; }
     h2 { color: #1b3a5c; }
     label { display: block; font-size: 13px; margin-bottom: 4px; color: #444; }
     input { display: block; width: 100%; box-sizing: border-box; margin-bottom: 12px; padding: 8px 10px; font-size: 14px; border: 1.5px solid #a8c4e0; border-radius: 4px; }
@@ -421,8 +445,14 @@ function adminPage() {
     .tab.active { background: #1b3a5c; color: white; border-color: #1b3a5c; }
     .panel { display: none; }
     .panel.active { display: block; }
-    button.action { background: #1b3a5c; color: white; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; width: 100%; }
+    .row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 12px; }
+    .row input { margin-bottom: 0; flex: 1; }
+    button.action { background: #1b3a5c; color: white; border: none; border-radius: 4px; padding: 10px 20px; font-size: 14px; cursor: pointer; }
     button.action:hover { background: #2c5282; }
+    button.action.full { width: 100%; }
+    button.action.sm { padding: 8px 14px; white-space: nowrap; }
+    button.revoke { background: #a93226; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-size: 11px; cursor: pointer; }
+    button.revoke:hover { background: #7b241c; }
     #result { margin-top: 20px; font-size: 22px; font-weight: 700; color: #1e6b3c; letter-spacing: 2px; }
     #gen-error { margin-top: 12px; font-size: 13px; color: #a93226; }
     .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 700; }
@@ -430,13 +460,15 @@ function adminPage() {
     .badge-orange { background: #fef3cd; color: #856404; }
     .badge-red    { background: #fdecea; color: #a93226; }
     .badge-grey   { background: #f0f4f8; color: #555; }
-    hr.sep { border: none; border-top: 1px solid #e0e8f0; margin: 24px 0; }
-    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 16px; }
+    .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
+    .toolbar input { margin-bottom: 0; max-width: 240px; flex: 1; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; }
     th { text-align: left; padding: 6px 8px; background: #f0f4f8; border-bottom: 2px solid #a8c4e0; white-space: nowrap; }
     td { padding: 6px 8px; border-bottom: 1px solid #e8eef4; vertical-align: top; }
     .log-entry { display: block; color: #555; }
-    #codes-count { font-size: 13px; color: #555; margin-top: 8px; }
+    #codes-meta { font-size: 13px; color: #555; margin-top: 4px; }
     #codes-error { font-size: 13px; color: #a93226; margin-top: 8px; }
+    #issued-auth { margin-bottom: 16px; }
   </style>
 </head>
 <body>
@@ -453,33 +485,54 @@ function adminPage() {
     <input id="email" type="email" placeholder="customer@example.com" />
     <label>Number of tokens</label>
     <input id="uses" type="number" value="3" min="1" max="1000" />
-    <button class="action" onclick="generate()">Generate code</button>
+    <button class="action full" onclick="generate()">Generate code</button>
     <div id="result"></div>
     <div id="gen-error"></div>
   </div>
 
   <div id="panel-issued" class="panel">
-    <label>Master code</label>
-    <input id="mc2" type="password" autocomplete="current-password" />
-    <button class="action" onclick="loadCodes()">Load issued codes</button>
-    <div id="codes-count"></div>
-    <table id="codes-table" style="display:none">
-      <thead>
-        <tr>
-          <th>Code</th>
-          <th>Email</th>
-          <th>Source</th>
-          <th>Created</th>
-          <th>Tokens</th>
-          <th>Use log</th>
-        </tr>
-      </thead>
-      <tbody id="codes-rows"></tbody>
-    </table>
-    <div id="codes-error"></div>
+    <div id="issued-auth">
+      <label>Master code</label>
+      <div class="row">
+        <input id="mc2" type="password" autocomplete="current-password" />
+        <button class="action sm" onclick="loadCodes()">Load</button>
+      </div>
+    </div>
+    <div id="issued-loaded" style="display:none">
+      <div class="toolbar">
+        <input id="email-search" type="search" placeholder="Filter by email…" oninput="renderTable()" />
+        <select id="status-filter" onchange="renderTable()" style="padding:8px 10px;font-size:14px;border:1.5px solid #a8c4e0;border-radius:4px;background:white">
+          <option value="all">All statuses</option>
+          <option value="active">Active</option>
+          <option value="depleted">Depleted</option>
+          <option value="revoked">Revoked</option>
+        </select>
+        <button class="action sm" onclick="loadCodes()">↻ Refresh</button>
+      </div>
+      <div id="codes-meta"></div>
+      <table id="codes-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Email</th>
+            <th>Source</th>
+            <th>Created</th>
+            <th>Status</th>
+            <th>Tokens</th>
+            <th>Use log</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="codes-rows"></tbody>
+      </table>
+      <div id="codes-error"></div>
+    </div>
   </div>
 
   <script>
+    let _allCodes = []
+    let _mc2 = ""
+
     function showTab(name) {
       document.querySelectorAll(".tab").forEach((t, i) => t.classList.toggle("active", ["generate","issued"][i] === name))
       document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"))
@@ -504,38 +557,74 @@ function adminPage() {
     }
 
     async function loadCodes() {
+      const mcInput = document.getElementById("mc2")
+      if (mcInput.value) _mc2 = mcInput.value
       document.getElementById("codes-error").textContent = ""
-      document.getElementById("codes-table").style.display = "none"
-      document.getElementById("codes-count").textContent = ""
       const res = await fetch("/admin/codes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ masterCode: document.getElementById("mc2").value }),
+        body: JSON.stringify({ masterCode: _mc2 }),
       })
       const data = await res.json()
       if (!res.ok) { document.getElementById("codes-error").textContent = data.error || "Failed."; return }
+      _allCodes = data.codes
+      document.getElementById("issued-loaded").style.display = ""
+      renderTable()
+    }
+
+    function renderTable() {
+      const q = document.getElementById("email-search").value.toLowerCase()
+      const sf = document.getElementById("status-filter").value
+      const filtered = _allCodes.filter(c => {
+        if (q && !(c.email || "").toLowerCase().includes(q)) return false
+        if (sf !== "all" && (c.status || "active") !== sf) return false
+        return true
+      })
+
+      const statusBadge = (s) => {
+        const map = { active: "badge-green", depleted: "badge-orange", revoked: "badge-red" }
+        return \`<span class="badge \${map[s] || "badge-grey"}">\${s || "active"}</span>\`
+      }
 
       const tbody = document.getElementById("codes-rows")
-      tbody.innerHTML = data.codes.map(c => {
+      tbody.innerHTML = filtered.map(c => {
         const tr = c.tokens_remaining
         const tt = c.tokens_total || "?"
         const tokenClass = tr === 0 ? "badge-red" : tr === 1 ? "badge-orange" : "badge-green"
         const srcClass = c.source === "payment" ? "badge-green" : "badge-grey"
+        const st = c.status || "active"
         const log = (c.uses_log || []).map(e =>
           \`<span class="log-entry">\${e.at?.slice(0,10) || "?"}: \${(e.lang || "?").toUpperCase()}</span>\`
         ).join("") || "—"
+        const revokeBtn = st === "active"
+          ? \`<button class="revoke" onclick="revokeCode('\${c.code}')">Revoke</button>\`
+          : ""
         return \`<tr>
           <td style="font-family:monospace;font-weight:700">\${c.code}</td>
           <td>\${c.email || "—"}</td>
           <td><span class="badge \${srcClass}">\${c.source || "?"}</span></td>
           <td>\${c.created_at?.slice(0,10) || "—"}</td>
+          <td>\${statusBadge(st)}</td>
           <td><span class="badge \${tokenClass}">\${tr} / \${tt}</span></td>
           <td>\${log}</td>
+          <td>\${revokeBtn}</td>
         </tr>\`
       }).join("")
 
-      document.getElementById("codes-count").textContent = data.codes.length + " code" + (data.codes.length !== 1 ? "s" : "")
-      document.getElementById("codes-table").style.display = data.codes.length ? "" : "none"
+      document.getElementById("codes-meta").textContent =
+        filtered.length + " of " + _allCodes.length + " code" + (_allCodes.length !== 1 ? "s" : "")
+    }
+
+    async function revokeCode(code) {
+      if (!confirm(\`Revoke code \${code}? This cannot be undone.\`)) return
+      const res = await fetch("/revoke-code", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ masterCode: _mc2, code }),
+      })
+      const data = await res.json()
+      if (!res.ok) { alert(data.error || "Failed to revoke."); return }
+      await loadCodes()
     }
   </script>
 </body>
