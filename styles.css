@@ -586,11 +586,6 @@ body {
 .a4-wrap {
   display: flex;
   justify-content: center;
-  padding: 0 16px 32px;
-}
-.a4-wrap.scaled .emergency-card {
-  width: 794px;
-  max-width: none;
 }
 .emergency-card {
   width: 794px;
@@ -1467,4 +1462,76 @@ body {
 }
 #numeric-warn.visible {
   opacity: 1;
+}
+
+/* ── LAYOUT: preview + buy above form ───────────────────────── */
+#main-content {
+  display: flex;
+  flex-direction: column;
+}
+#preview-buy-row {
+  order: 0;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  padding: 20px 16px 0;
+  background: var(--ui-bg);
+}
+#preview-buy-row > #a4-wrap {
+  flex: 1 1 0;
+  max-width: calc(794px * 1.5 / 2);
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.fields-wrap {
+  order: 1;
+}
+#buy-column {
+  flex: 1 1 0;
+  max-width: calc(794px * 1.5 / 2);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 700px) {
+  #preview-buy-row {
+    flex-direction: column;
+  }
+  #preview-buy-row > #a4-wrap,
+  #buy-column {
+    max-width: 100%;
+  }
+}
+
+/* ── WATERMARK OVERLAY ───────────────────────────────────────── */
+.emergency-card {
+  position: relative;
+  /* overflow: hidden; */
+}
+.watermark-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+  font-family: var(--font-mono);
+  font-size: 200px;
+  font-weight: 900;
+  color: rgba(44, 82, 130, 0.12);
+  transform: rotate(-50deg);
+  letter-spacing: 0.15em;
+  user-select: none;
+}
+
+/* ── DISABLED LANG SELECT TRIGGER ───────────────────────────── */
+.ls-field .ls-trigger:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
 }

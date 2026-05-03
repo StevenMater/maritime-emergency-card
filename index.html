@@ -6,6 +6,7 @@
     <title>MareSafe</title>
     <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css" />
+    <script async src="https://js.stripe.com/v3/buy-button.js"></script>
   </head>
   <body>
     <div class="sticky-header">
@@ -90,6 +91,49 @@
           onclick="
             document.getElementById('version-warning').style.display = 'none'
           "
+          style="
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 22px;
+            cursor: pointer;
+            flex-shrink: 0;
+            line-height: 1;
+          ">
+          ×
+        </button>
+      </div>
+
+      <!-- PAYMENT SUCCESS BANNER -->
+      <div
+        id="payment-success-banner"
+        style="
+          display: none;
+          background: #1e6b3c;
+          padding: 10px 24px;
+          align-items: center;
+          gap: 12px;
+          border-bottom: 3px solid #155a30;
+        ">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="white"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          style="flex-shrink: 0">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+        <span
+          style="font-family: var(--font-sans); font-size: 12px; color: white"
+          data-i18n="payment_success_body"></span>
+        <button
+          onclick="this.parentElement.style.display = 'none'"
           style="
             margin-left: auto;
             background: none;
@@ -198,412 +242,102 @@
     </div>
     <!-- /.sticky-header -->
 
-    <div class="fields-wrap">
-      <div class="save-load-bar">
-        <div class="btn-stack">
-          <button
-            id="btn-email-backup"
-            class="print-btn sec"
-            onclick="openEmailBackupModal()"
-            data-tip-i18n="tip_save">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-              <path
-                d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
-              <polyline points="17 21 17 13 7 13 7 21" />
-              <polyline points="7 3 7 8 15 8" /></svg
-            ><span data-i18n="btn_save"></span>
-          </button>
-          <button class="print-btn sec" onclick="openLoadModal()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-              <path
-                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg
-            ><span data-i18n="btn_load"></span>
-          </button>
-          <button
-            class="print-btn"
-            style="background: var(--red)"
-            onclick="openClearModal()">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6" />
-              <path
-                d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-              <line x1="10" y1="11" x2="10" y2="17" />
-              <line x1="14" y1="11" x2="14" y2="17" /></svg
-            ><span data-i18n="btn_clear"></span>
-          </button>
-        </div>
-      </div>
-      <div class="fields-grid">
-        <div class="editor-section">
-          <div class="editor-section-title" data-i18n="sec_ship"></div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <div class="fields-row r3">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_name"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_name"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-name"
-                  value=""
-                  maxlength="30"
-                  oninput="update()" />
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_type"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_type"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-type"
-                  value=""
-                  maxlength="30"
-                  oninput="update()" />
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_eni"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_eni"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-eni"
-                  value=""
-                  maxlength="8"
-                  inputmode="numeric"
-                  oninput="
-                    numericOnly(this)
-                    update()
-                  " />
-              </div>
-            </div>
-            <div class="fields-row r3">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_callsign"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_callsign"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-callsign"
-                  value=""
-                  maxlength="6"
-                  oninput="update()" />
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label>ATIS</label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_atis"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-atis"
-                  value=""
-                  maxlength="10"
-                  inputmode="numeric"
-                  oninput="
-                    numericOnly(this)
-                    update()
-                  " />
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label>MMSI</label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_mmsi"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-mmsi"
-                  value=""
-                  maxlength="9"
-                  inputmode="numeric"
-                  oninput="
-                    numericOnly(this)
-                    update()
-                  " />
-              </div>
-            </div>
-            <hr class="form-sep" />
-            <div class="meas-grid">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_length"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_length"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-length"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_alt_length"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_alt_length"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-alt-length"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_width"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_width"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-width"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_draft"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_draft"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-draft"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_airdraft"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_airdraft"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-airdraft"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_alt_airdraft"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_alt_airdraft"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--m">
-                  <input
-                    class="inp"
-                    id="f-alt-airdraft"
-                    type="text"
-                    inputmode="decimal"
-                    value=""
-                    oninput="
-                      decimalOnly(this)
-                      update()
-                    " /><span class="inp-badge">m</span>
-                </div>
-              </div>
-            </div>
+    <div id="main-content">
+      <div class="fields-wrap">
+        <div class="save-load-bar">
+          <div class="btn-stack">
+            <button class="print-btn sec" onclick="openLoadModal()">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <path
+                  d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" /></svg
+              ><span data-i18n="btn_load"></span>
+            </button>
+            <button
+              class="print-btn"
+              style="background: var(--red)"
+              onclick="openClearModal()">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round">
+                <polyline points="3 6 5 6 21 6" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" /></svg
+              ><span data-i18n="btn_clear"></span>
+            </button>
           </div>
         </div>
-
-        <div class="editor-section">
-          <div class="editor-section-title" data-i18n="sec_contacts"></div>
-          <div class="contact-rows" id="contact-rows"></div>
-          <button
-            class="add-btn"
-            onclick="addContact()"
-            data-i18n="btn_add_contact"></button>
-        </div>
-
-        <div class="editor-section">
-          <div class="editor-section-title" data-i18n="sec_insurer"></div>
-          <div style="display: flex; flex-direction: column; gap: 8px">
-            <div class="fields-row r2">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_insurer_name"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_insurer_name"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-insurer-name"
-                  value=""
-                  maxlength="15"
-                  oninput="update()" />
-              </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_policy"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_policy"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <input
-                  class="inp"
-                  id="f-policy"
-                  value=""
-                  maxlength="25"
-                  oninput="update()" />
-              </div>
-            </div>
-            <div class="fields-row r2">
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_insurer_emergency"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_insurer_emergency"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--phone">
-                  <select
-                    id="f-insurer-emergency-code"
-                    class="inp dial-sel"
-                    onchange="update()">
-                    <option value="+31">🇳🇱 +31</option>
-                    <option value="+32">🇧🇪 +32</option>
-                    <option value="+49">🇩🇪 +49</option>
-                    <option value="+33">🇫🇷 +33</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+45">🇩🇰 +45</option>
-                    <option value="+47">🇳🇴 +47</option>
-                    <option value="+46">🇸🇪 +46</option></select
-                  ><input
+        <div class="fields-grid">
+          <div class="editor-section">
+            <div class="editor-section-title" data-i18n="sec_ship"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div class="fields-row r3">
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_name"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_name"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
                     class="inp"
-                    id="f-insurer-emergency-number"
+                    id="f-name"
                     value=""
-                    maxlength="15"
+                    maxlength="30"
+                    oninput="update()" />
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_type"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_type"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-type"
+                    value=""
+                    maxlength="30"
+                    oninput="update()" />
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_eni"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_eni"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-eni"
+                    value=""
+                    maxlength="8"
                     inputmode="numeric"
                     oninput="
                       numericOnly(this)
@@ -611,35 +345,60 @@
                     " />
                 </div>
               </div>
-              <div class="field-group">
-                <div class="label-wrap">
-                  <label data-i18n="f_insurer_office"></label
-                  ><button
-                    class="tip-btn"
-                    data-tip-i18n="tip_f_insurer_office"
-                    type="button">
-                    ?
-                  </button>
-                </div>
-                <div class="inp-wrap inp-wrap--phone">
-                  <select
-                    id="f-insurer-office-code"
-                    class="inp dial-sel"
-                    onchange="update()">
-                    <option value="+31">🇳🇱 +31</option>
-                    <option value="+32">🇧🇪 +32</option>
-                    <option value="+49">🇩🇪 +49</option>
-                    <option value="+33">🇫🇷 +33</option>
-                    <option value="+44">🇬🇧 +44</option>
-                    <option value="+1">🇺🇸 +1</option>
-                    <option value="+45">🇩🇰 +45</option>
-                    <option value="+47">🇳🇴 +47</option>
-                    <option value="+46">🇸🇪 +46</option></select
-                  ><input
+              <div class="fields-row r3">
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_callsign"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_callsign"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
                     class="inp"
-                    id="f-insurer-office-number"
+                    id="f-callsign"
                     value=""
-                    maxlength="15"
+                    maxlength="6"
+                    oninput="update()" />
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label>ATIS</label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_atis"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-atis"
+                    value=""
+                    maxlength="10"
+                    inputmode="numeric"
+                    oninput="
+                      numericOnly(this)
+                      update()
+                    " />
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label>MMSI</label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_mmsi"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-mmsi"
+                    value=""
+                    maxlength="9"
                     inputmode="numeric"
                     oninput="
                       numericOnly(this)
@@ -647,532 +406,779 @@
                     " />
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="editor-section">
-          <div class="action-bar">
-            <p class="download-tagline" data-i18n="download_tagline"></p>
-            <div id="download-bar">
-              <!-- Step 1: Languages -->
-              <div class="dl-step">
-                <div class="dl-step-label">
-                  <span class="dl-step-num">① </span
-                  ><span data-i18n="step_languages"></span>
-                </div>
-                <div
-                  class="ls-wrap ls-field"
-                  id="dl-lang-select"
-                  data-mode="multi"></div>
-              </div>
-
-              <!-- Step 2: Code (optional) -->
-              <div class="dl-step">
-                <div class="dl-step-label">
-                  <span class="dl-step-num">② </span><span data-i18n="step_code"></span>
-                </div>
-                <div class="ms-code-wrap">
-                  <div class="code-inp-wrap">
+              <hr class="form-sep" />
+              <div class="meas-grid">
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_length"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_length"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
                     <input
                       class="inp"
-                      id="bypass-code-input"
+                      id="f-length"
                       type="text"
-                      maxlength="20"
-                      style="
-                        text-transform: uppercase;
-                        font-family: var(--font-mono);
-                      "
-                      oninput="this.value = this.value.toUpperCase()"
-                      onkeydown="if (event.key === 'Enter') checkCode()"
-                      data-i18n-placeholder="placeholder_code" />
-                    <div class="code-inp-btns">
-                      <button
-                        class="code-inp-btn"
-                        type="button"
-                        onclick="clearCodeInput()"
-                        tabindex="-1"
-                        aria-label="Clear">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round">
-                          <line x1="18" y1="6" x2="6" y2="18" />
-                          <line x1="6" y1="6" x2="18" y2="18" />
-                        </svg>
-                      </button>
-                      <button
-                        class="code-inp-btn code-inp-btn--check"
-                        type="button"
-                        onclick="checkCode()"
-                        tabindex="-1"
-                        aria-label="Check code">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="12"
-                          height="12"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2.5"
-                          stroke-linecap="round"
-                          stroke-linejoin="round">
-                          <polyline points="20 6 9 17 4 12" />
-                        </svg>
-                      </button>
-                    </div>
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
                   </div>
-                  <span id="code-feedback"></span>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_alt_length"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_alt_length"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
+                    <input
+                      class="inp"
+                      id="f-alt-length"
+                      type="text"
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_width"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_width"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
+                    <input
+                      class="inp"
+                      id="f-width"
+                      type="text"
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_draft"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_draft"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
+                    <input
+                      class="inp"
+                      id="f-draft"
+                      type="text"
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_airdraft"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_airdraft"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
+                    <input
+                      class="inp"
+                      id="f-airdraft"
+                      type="text"
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
+                  </div>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_alt_airdraft"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_alt_airdraft"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--m">
+                    <input
+                      class="inp"
+                      id="f-alt-airdraft"
+                      type="text"
+                      inputmode="decimal"
+                      value=""
+                      oninput="
+                        decimalOnly(this)
+                        update()
+                      " /><span class="inp-badge">m</span>
+                  </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- Step 3: Download -->
-              <div class="dl-step">
-                <div class="dl-step-label">
-                  <span class="dl-step-num">③ </span
-                  ><span data-i18n="step_download"></span>
+          <div class="editor-section">
+            <div class="editor-section-title" data-i18n="sec_contacts"></div>
+            <div class="contact-rows" id="contact-rows"></div>
+            <button
+              class="add-btn"
+              onclick="addContact()"
+              data-i18n="btn_add_contact"></button>
+          </div>
+
+          <div class="editor-section">
+            <div class="editor-section-title" data-i18n="sec_insurer"></div>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <div class="fields-row r2">
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_insurer_name"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_insurer_name"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-insurer-name"
+                    value=""
+                    maxlength="15"
+                    oninput="update()" />
                 </div>
-                <div id="stripe-buy-wrap" style="display:flex; flex-direction:column; gap:8px; align-items:center;">
-                  <button id="btn-buy" class="print-btn buy-btn" onclick="handleBuyClick()">
-                    <span id="btn-buy-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-                    <span data-i18n="btn_buy"></span>
-                    <span id="btn-buy-price">— €2</span>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_policy"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_policy"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <input
+                    class="inp"
+                    id="f-policy"
+                    value=""
+                    maxlength="25"
+                    oninput="update()" />
+                </div>
+              </div>
+              <div class="fields-row r2">
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_insurer_emergency"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_insurer_emergency"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--phone">
+                    <select
+                      id="f-insurer-emergency-code"
+                      class="inp dial-sel"
+                      onchange="update()">
+                      <option value="+31">🇳🇱 +31</option>
+                      <option value="+32">🇧🇪 +32</option>
+                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+33">🇫🇷 +33</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+45">🇩🇰 +45</option>
+                      <option value="+47">🇳🇴 +47</option>
+                      <option value="+46">🇸🇪 +46</option></select
+                    ><input
+                      class="inp"
+                      id="f-insurer-emergency-number"
+                      value=""
+                      maxlength="15"
+                      inputmode="numeric"
+                      oninput="
+                        numericOnly(this)
+                        update()
+                      " />
+                  </div>
+                </div>
+                <div class="field-group">
+                  <div class="label-wrap">
+                    <label data-i18n="f_insurer_office"></label
+                    ><button
+                      class="tip-btn"
+                      data-tip-i18n="tip_f_insurer_office"
+                      type="button">
+                      ?
+                    </button>
+                  </div>
+                  <div class="inp-wrap inp-wrap--phone">
+                    <select
+                      id="f-insurer-office-code"
+                      class="inp dial-sel"
+                      onchange="update()">
+                      <option value="+31">🇳🇱 +31</option>
+                      <option value="+32">🇧🇪 +32</option>
+                      <option value="+49">🇩🇪 +49</option>
+                      <option value="+33">🇫🇷 +33</option>
+                      <option value="+44">🇬🇧 +44</option>
+                      <option value="+1">🇺🇸 +1</option>
+                      <option value="+45">🇩🇰 +45</option>
+                      <option value="+47">🇳🇴 +47</option>
+                      <option value="+46">🇸🇪 +46</option></select
+                    ><input
+                      class="inp"
+                      id="f-insurer-office-number"
+                      value=""
+                      maxlength="15"
+                      inputmode="numeric"
+                      oninput="
+                        numericOnly(this)
+                        update()
+                      " />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="editor-section">
+            <div class="action-bar">
+              <p class="download-tagline" data-i18n="download_tagline"></p>
+              <div id="download-bar">
+                <!-- Step 1: Code -->
+                <div class="dl-step">
+                  <div class="dl-step-label">
+                    <span class="dl-step-num">① </span
+                    ><span data-i18n="step_code"></span>
+                  </div>
+                  <div class="ms-code-wrap">
+                    <div class="code-inp-wrap">
+                      <input
+                        class="inp"
+                        id="bypass-code-input"
+                        type="text"
+                        maxlength="32"
+                        style="
+                          text-transform: uppercase;
+                          font-family: var(--font-mono);
+                        "
+                        oninput="this.value = this.value.toUpperCase()"
+                        onkeydown="if (event.key === 'Enter') checkCode()"
+                        data-i18n-placeholder="placeholder_code" />
+                      <div class="code-inp-btns">
+                        <button
+                          class="code-inp-btn"
+                          type="button"
+                          onclick="clearCodeInput()"
+                          tabindex="-1"
+                          aria-label="Clear">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                          </svg>
+                        </button>
+                        <button
+                          class="code-inp-btn code-inp-btn--check"
+                          type="button"
+                          onclick="checkCode()"
+                          tabindex="-1"
+                          aria-label="Check code">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <polyline points="20 6 9 17 4 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <span id="code-feedback"></span>
+                  </div>
+                </div>
+
+                <!-- Step 2: Languages (disabled until valid code) -->
+                <div class="dl-step">
+                  <div class="dl-step-label">
+                    <span class="dl-step-num">② </span
+                    ><span data-i18n="step_languages"></span>
+                  </div>
+                  <div
+                    class="ls-wrap ls-field"
+                    id="dl-lang-select"
+                    data-mode="multi"></div>
+                </div>
+
+                <!-- Step 3: Download -->
+                <div class="dl-step">
+                  <div class="dl-step-label">
+                    <span class="dl-step-num">③ </span
+                    ><span data-i18n="step_download"></span>
+                  </div>
+                  <button
+                    class="print-btn"
+                    id="btn-download"
+                    style="background: #2a9d5c"
+                    onclick="handleDownloadClick()"
+                    disabled>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                      <polyline points="7 10 12 15 17 10" />
+                      <line x1="12" y1="15" x2="12" y2="3" />
+                    </svg>
+                    <span data-i18n="btn_download"></span>
                   </button>
-                  <div class="stripe-buy-trust">
-                    <div class="payment-row">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#1a1f71"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" font-weight="900" font-style="italic" fill="white">VISA</text></svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><circle cx="15" cy="12" r="7.5" fill="#eb001b"/><circle cx="23" cy="12" r="7.5" fill="#f79e1b"/><path d="M19 5.66 A7.5 7.5 0 0 1 19 18.34 A7.5 7.5 0 0 0 19 5.66 Z" fill="#ff5f00"/></svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="white" stroke="#ddd" stroke-width="0.5"/><text x="19" y="17" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="#cc0066">iDEAL</text></svg>
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 24" width="38" height="24"><rect width="38" height="24" rx="3" fill="#2e77bc"/><text x="19" y="16" text-anchor="middle" font-family="Arial,sans-serif" font-size="8" font-weight="bold" fill="white" letter-spacing="1.5">AMEX</text></svg>
+                  <span id="pdf-status"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="preview-buy-row">
+        <div class="a4-wrap" id="a4-wrap">
+          <div class="emergency-card" id="emergency-card">
+            <div class="watermark-overlay" aria-hidden="true">PREVIEW</div>
+            <div class="title-bar">
+              <div class="title-left">
+                <img src="assets/logo.svg" class="card-logo" alt="MareSafe" />
+                <div class="title-text">
+                  <div id="vessel-name"></div>
+                  <h2 id="card-title"></h2>
+                </div>
+              </div>
+              <div class="title-right">
+                <small data-i18n="card_subtitle"></small>
+                <small id="location-display"></small>
+              </div>
+            </div>
+
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-height: 0;
+                gap: 7px;
+              ">
+              <div class="cols">
+                <div class="left-col">
+                  <div>
+                    <div class="sec-hdr" data-i18n="card_ship"></div>
+                    <table class="dtable">
+                      <tr>
+                        <td class="lbl" data-i18n="f_name"></td>
+                        <td class="val" id="r-name">—</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl" data-i18n="f_type"></td>
+                        <td class="val" id="r-type">—</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl" data-i18n="f_eni"></td>
+                        <td class="val" id="r-eni">—</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl" data-i18n="f_callsign"></td>
+                        <td class="val" id="r-callsign">—</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl">ATIS</td>
+                        <td class="val" id="r-atis">—</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl">MMSI</td>
+                        <td class="val" id="r-mmsi">—</td>
+                      </tr>
+                      <tr class="gap-row">
+                        <td colspan="2"></td>
+                      </tr>
+                      <tr class="card-sep-row">
+                        <td class="lbl">
+                          <span data-i18n="f_length"></span
+                          ><span
+                            id="r-alt-length-sep"
+                            class="alt-sep"
+                            style="display: none">
+                            | <span data-i18n="f_alt_length"></span
+                          ></span>
+                        </td>
+                        <td class="val">
+                          <span id="r-length">0,00</span> m<span
+                            id="r-alt-length-inline"
+                            class="alt-val"
+                            style="display: none">
+                            | <span id="r-alt-length">—</span> m</span
+                          >
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="lbl" data-i18n="f_width"></td>
+                        <td class="val"><span id="r-width">0,00</span> m</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl" data-i18n="f_draft"></td>
+                        <td class="val"><span id="r-draft">0,00</span> m</td>
+                      </tr>
+                      <tr>
+                        <td class="lbl">
+                          <span data-i18n="f_airdraft"></span
+                          ><span
+                            id="r-alt-airdraft-sep"
+                            class="alt-sep"
+                            style="display: none">
+                            | <span data-i18n="f_alt_airdraft"></span
+                          ></span>
+                        </td>
+                        <td class="val">
+                          <span id="r-airdraft">0,00</span> m<span
+                            id="r-alt-airdraft-inline"
+                            class="alt-val"
+                            style="display: none">
+                            | <span id="r-alt-airdraft">—</span> m</span
+                          >
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div>
+                    <div class="sec-hdr" data-i18n="card_channels"></div>
+                    <table class="dtable">
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--red)"
+                            data-i18n="pill_emergency"></span>
+                        </td>
+                        <td class="c45" data-i18n="k_inland"></td>
+                        <td class="c30 right" style="color: var(--red)">
+                          Blokkanaal / 10
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--red)"
+                            data-i18n="pill_emergency"></span>
+                        </td>
+                        <td class="c45" data-i18n="k_open"></td>
+                        <td class="c30 right" style="color: var(--red)">16</td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--mid)"
+                            data-i18n="pill_info"></span>
+                        </td>
+                        <td class="c45" data-i18n="k_ijssel"></td>
+                        <td class="c30 right">1</td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--orange)"
+                            data-i18n="pill_urgent"></span>
+                        </td>
+                        <td class="c45" data-i18n="k_rws"></td>
+                        <td class="c30 right" style="color: var(--orange)">
+                          23 / 83
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--orange)"
+                            data-i18n="pill_urgent"></span>
+                        </td>
+                        <td class="c45" data-i18n="k_cg"></td>
+                        <td class="c30 right" style="color: var(--orange)">
+                          67
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <div class="right-col">
+                  <div>
+                    <div class="sec-hdr" data-i18n="card_contacts"></div>
+                    <table class="dtable" id="r-contacts"></table>
+                  </div>
+                  <div class="insurer-block">
+                    <div class="sec-hdr green">
+                      <span data-i18n="card_insurer"></span><span>-</span
+                      ><span id="r-insurer-name">—</span>
                     </div>
-                    <span class="buy-secured">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      <span data-i18n="buy_secured"></span>
-                    </span>
+                    <table class="dtable">
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--mid)"
+                            data-i18n="pill_info"></span>
+                        </td>
+                        <td class="c45" data-i18n="f_policy"></td>
+                        <td class="c30 right" id="r-policy">—</td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--orange)"
+                            data-i18n="pill_urgent"></span>
+                        </td>
+                        <td class="c45" data-i18n="h_insurer_emergency"></td>
+                        <td
+                          class="c30 right"
+                          style="color: var(--orange)"
+                          id="r-insurer-emergency">
+                          —
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--mid)"
+                            data-i18n="pill_info"></span>
+                        </td>
+                        <td class="c45" data-i18n="h_insurer_office"></td>
+                        <td class="c30 right" id="r-insurer-office">—</td>
+                      </tr>
+                    </table>
+                  </div>
+                  <div>
+                    <div class="sec-hdr" data-i18n="card_numbers"></div>
+                    <table class="dtable">
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--red)"
+                            data-i18n="pill_emergency"></span>
+                        </td>
+                        <td class="c45" data-i18n="h_cg"></td>
+                        <td class="c30 right" style="color: var(--red)">
+                          0900-0111
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--red)"
+                            data-i18n="pill_emergency"></span>
+                        </td>
+                        <td class="c45" data-i18n="h_112"></td>
+                        <td class="c30 right" style="color: var(--red)">112</td>
+                      </tr>
+                      <tr>
+                        <td class="c25">
+                          <span
+                            class="pill"
+                            style="background: var(--green)"
+                            data-i18n="pill_medical"></span>
+                        </td>
+                        <td class="c45" data-i18n="h_rmd"></td>
+                        <td class="c30 right" style="color: var(--green)">
+                          +31 88 958 4020
+                        </td>
+                      </tr>
+                    </table>
                   </div>
                 </div>
               </div>
 
-              <!-- Download button (shown when valid code, hidden by default) -->
-              <div
-                id="download-wrap"
-                style="
-                  display: none;
-                  flex-direction: column;
-                  gap: 4px;
-                  align-items: flex-start;
-                ">
-                <span id="btn-download-label" class="btn-caption"></span>
-                <button
-                  class="print-btn"
-                  id="btn-download"
-                  style="background: #2a9d5c"
-                  onclick="handleDownloadClick()">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  <span data-i18n="btn_download_pdf"></span>
-                </button>
-                <span id="pdf-status"></span>
+              <div class="calls-wrap">
+                <div class="sec-hdr red">
+                  <span data-i18n="card_calls"></span>
+                  <span class="calls-lang-note"
+                    >⚠️ <span data-i18n="calls_english_note"></span
+                  ></span>
+                </div>
+                <div class="calls-grid">
+                  <div class="call">
+                    <div class="call-hdr mayday">
+                      <span class="signal-lbl">MAYDAY</span>
+                      <span class="when-lbl" data-i18n="mayday_when"></span>
+                    </div>
+                    <div class="call-body mayday-bg">
+                      <div class="call-line bold-red">
+                        MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY
+                      </div>
+                      <div class="call-line">
+                        This is &nbsp;<span id="m-name">—</span> &nbsp;<span
+                          id="m-name2"
+                          >—</span
+                        >
+                        &nbsp;<span id="m-name3">—</span>
+                      </div>
+                      <div class="call-line" id="m-callsign1">—</div>
+                      <div class="call-line bold-red">
+                        MAYDAY &nbsp;—&nbsp; <span id="m-name4">—</span>
+                      </div>
+                      <div class="call-line" id="m-callsign2">—</div>
+                      <div class="call-line">
+                        Position
+                        <span class="call-hint" data-i18n="call_pos"></span>
+                      </div>
+                      <div
+                        class="call-line call-hint"
+                        data-i18n="call_mayday_sit"></div>
+                      <div class="call-line">
+                        <span class="call-hint" data-i18n="call_pob"></span>
+                        &nbsp;—&nbsp; OVER
+                      </div>
+                    </div>
+                  </div>
+                  <div class="call">
+                    <div class="call-hdr panpan">
+                      <span class="signal-lbl">PAN PAN</span>
+                      <span class="when-lbl" data-i18n="panpan_when"></span>
+                    </div>
+                    <div class="call-body panpan-bg">
+                      <div class="call-line bold-orange">
+                        PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN
+                      </div>
+                      <div class="call-line">
+                        This is &nbsp;<span id="p-name">—</span> &nbsp;<span
+                          id="p-name2"
+                          >—</span
+                        >
+                        &nbsp;<span id="p-name3">—</span>
+                      </div>
+                      <div class="call-line" id="p-callsign1">—</div>
+                      <div class="call-line bold-orange">
+                        PAN PAN &nbsp;—&nbsp; <span id="p-name4">—</span>
+                      </div>
+                      <div class="call-line" id="p-callsign2">—</div>
+                      <div class="call-line">
+                        Position
+                        <span class="call-hint" data-i18n="call_pos"></span>
+                      </div>
+                      <div
+                        class="call-line call-hint"
+                        data-i18n="call_panpan_sit"></div>
+                      <div class="call-line">
+                        <span class="call-hint" data-i18n="call_pob"></span>
+                        &nbsp;—&nbsp; OVER
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="call-note" data-i18n="call_note"></div>
+              </div>
+
+              <div class="cols">
+                <div>
+                  <div class="sec-hdr brand" data-i18n="card_fire"></div>
+                  <table class="proto-rows" id="fire-rows"></table>
+                </div>
+                <div>
+                  <div class="sec-hdr mob" data-i18n="card_mob"></div>
+                  <table class="proto-rows mob" id="mob-rows"></table>
+                </div>
+              </div>
+
+              <div>
+                <div class="sound-hdr">
+                  <span data-i18n="card_signals"></span>
+                  <span class="sep">|</span>
+                  <span class="leg-item"
+                    ><span class="sym-diamond"></span>&nbsp;<span
+                      data-i18n="sig_xs"></span>
+                    = ¼ <span data-i18n="sig_sec"></span
+                  ></span>
+                  <span class="sep">|</span>
+                  <span class="leg-item"
+                    ><span class="sym-circle"></span>&nbsp;<span
+                      data-i18n="sig_s"></span>
+                    = 1 <span data-i18n="sig_sec"></span
+                  ></span>
+                  <span class="sep">|</span>
+                  <span class="leg-item"
+                    ><span class="sym-bar"></span>&nbsp;<span
+                      data-i18n="sig_l"></span>
+                    = 4 <span data-i18n="sig_secs"></span
+                  ></span>
+                </div>
+                <div class="sound-grid" id="signal-grid"></div>
               </div>
             </div>
+            <!-- end space-between wrapper -->
+            <div class="card-footer" id="card-footer"></div>
           </div>
         </div>
+        <!-- <div id="buy-column"> -->
+        <stripe-buy-button
+          buy-button-id="buy_btn_1TRMZQGaP0Kpq8ZzXpRNbeXm"
+          publishable-key="pk_live_51TRLDhGaP0Kpq8ZzwkmrIsJN5NZTWRTnAMToOTLPFL60GEi2CKq2afCE5IYZyHh7M0LnhmLpQJKlj3BMYFXb9FN700f3SpgRGw"></stripe-buy-button>
+        <!-- </div> -->
       </div>
     </div>
-
-    <p class="preview-label" data-i18n="preview_label"></p>
-    <div class="a4-wrap" id="a4-wrap">
-      <div class="emergency-card" id="emergency-card">
-        <div class="title-bar">
-          <div class="title-left">
-            <img src="assets/logo.svg" class="card-logo" alt="MareSafe" />
-            <div class="title-text">
-              <div id="vessel-name"></div>
-              <h2 id="card-title"></h2>
-            </div>
-          </div>
-          <div class="title-right">
-            <small data-i18n="card_subtitle"></small>
-            <small id="location-display"></small>
-          </div>
-        </div>
-
-        <div
-          style="
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-height: 0;
-            gap: 7px;
-          ">
-          <div class="cols">
-            <div class="left-col">
-              <div>
-                <div class="sec-hdr" data-i18n="card_ship"></div>
-                <table class="dtable">
-                  <tr>
-                    <td class="lbl" data-i18n="f_name"></td>
-                    <td class="val" id="r-name">—</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl" data-i18n="f_type"></td>
-                    <td class="val" id="r-type">—</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl" data-i18n="f_eni"></td>
-                    <td class="val" id="r-eni">—</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl" data-i18n="f_callsign"></td>
-                    <td class="val" id="r-callsign">—</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl">ATIS</td>
-                    <td class="val" id="r-atis">—</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl">MMSI</td>
-                    <td class="val" id="r-mmsi">—</td>
-                  </tr>
-                  <tr class="gap-row">
-                    <td colspan="2"></td>
-                  </tr>
-                  <tr class="card-sep-row">
-                    <td class="lbl">
-                      <span data-i18n="f_length"></span
-                      ><span
-                        id="r-alt-length-sep"
-                        class="alt-sep"
-                        style="display: none">
-                        | <span data-i18n="f_alt_length"></span
-                      ></span>
-                    </td>
-                    <td class="val">
-                      <span id="r-length">0,00</span> m<span
-                        id="r-alt-length-inline"
-                        class="alt-val"
-                        style="display: none">
-                        | <span id="r-alt-length">—</span> m</span
-                      >
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="lbl" data-i18n="f_width"></td>
-                    <td class="val"><span id="r-width">0,00</span> m</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl" data-i18n="f_draft"></td>
-                    <td class="val"><span id="r-draft">0,00</span> m</td>
-                  </tr>
-                  <tr>
-                    <td class="lbl">
-                      <span data-i18n="f_airdraft"></span
-                      ><span
-                        id="r-alt-airdraft-sep"
-                        class="alt-sep"
-                        style="display: none">
-                        | <span data-i18n="f_alt_airdraft"></span
-                      ></span>
-                    </td>
-                    <td class="val">
-                      <span id="r-airdraft">0,00</span> m<span
-                        id="r-alt-airdraft-inline"
-                        class="alt-val"
-                        style="display: none">
-                        | <span id="r-alt-airdraft">—</span> m</span
-                      >
-                    </td>
-                  </tr>
-                </table>
-              </div>
-              <div>
-                <div class="sec-hdr" data-i18n="card_channels"></div>
-                <table class="dtable">
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--red)"
-                        data-i18n="pill_emergency"></span>
-                    </td>
-                    <td class="c45" data-i18n="k_inland"></td>
-                    <td class="c30 right" style="color: var(--red)">
-                      Blokkanaal / 10
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--red)"
-                        data-i18n="pill_emergency"></span>
-                    </td>
-                    <td class="c45" data-i18n="k_open"></td>
-                    <td class="c30 right" style="color: var(--red)">16</td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--mid)"
-                        data-i18n="pill_info"></span>
-                    </td>
-                    <td class="c45" data-i18n="k_ijssel"></td>
-                    <td class="c30 right">1</td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--orange)"
-                        data-i18n="pill_urgent"></span>
-                    </td>
-                    <td class="c45" data-i18n="k_rws"></td>
-                    <td class="c30 right" style="color: var(--orange)">
-                      23 / 83
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--orange)"
-                        data-i18n="pill_urgent"></span>
-                    </td>
-                    <td class="c45" data-i18n="k_cg"></td>
-                    <td class="c30 right" style="color: var(--orange)">67</td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-            <div class="right-col">
-              <div>
-                <div class="sec-hdr" data-i18n="card_contacts"></div>
-                <table class="dtable" id="r-contacts"></table>
-              </div>
-              <div class="insurer-block">
-                <div class="sec-hdr green">
-                  <span data-i18n="card_insurer"></span><span>-</span
-                  ><span id="r-insurer-name">—</span>
-                </div>
-                <table class="dtable">
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--mid)"
-                        data-i18n="pill_info"></span>
-                    </td>
-                    <td class="c45" data-i18n="f_policy"></td>
-                    <td class="c30 right" id="r-policy">—</td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--orange)"
-                        data-i18n="pill_urgent"></span>
-                    </td>
-                    <td class="c45" data-i18n="h_insurer_emergency"></td>
-                    <td
-                      class="c30 right"
-                      style="color: var(--orange)"
-                      id="r-insurer-emergency">
-                      —
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--mid)"
-                        data-i18n="pill_info"></span>
-                    </td>
-                    <td class="c45" data-i18n="h_insurer_office"></td>
-                    <td class="c30 right" id="r-insurer-office">—</td>
-                  </tr>
-                </table>
-              </div>
-              <div>
-                <div class="sec-hdr" data-i18n="card_numbers"></div>
-                <table class="dtable">
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--red)"
-                        data-i18n="pill_emergency"></span>
-                    </td>
-                    <td class="c45" data-i18n="h_cg"></td>
-                    <td class="c30 right" style="color: var(--red)">
-                      0900-0111
-                    </td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--red)"
-                        data-i18n="pill_emergency"></span>
-                    </td>
-                    <td class="c45" data-i18n="h_112"></td>
-                    <td class="c30 right" style="color: var(--red)">112</td>
-                  </tr>
-                  <tr>
-                    <td class="c25">
-                      <span
-                        class="pill"
-                        style="background: var(--green)"
-                        data-i18n="pill_medical"></span>
-                    </td>
-                    <td class="c45" data-i18n="h_rmd"></td>
-                    <td class="c30 right" style="color: var(--green)">
-                      +31 88 958 4020
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <div class="calls-wrap">
-            <div class="sec-hdr red">
-              <span data-i18n="card_calls"></span>
-              <span class="calls-lang-note"
-                >⚠️ <span data-i18n="calls_english_note"></span
-              ></span>
-            </div>
-            <div class="calls-grid">
-              <div class="call">
-                <div class="call-hdr mayday">
-                  <span class="signal-lbl">MAYDAY</span>
-                  <span class="when-lbl" data-i18n="mayday_when"></span>
-                </div>
-                <div class="call-body mayday-bg">
-                  <div class="call-line bold-red">
-                    MAYDAY &nbsp; MAYDAY &nbsp; MAYDAY
-                  </div>
-                  <div class="call-line">
-                    This is &nbsp;<span id="m-name">—</span> &nbsp;<span
-                      id="m-name2"
-                      >—</span
-                    >
-                    &nbsp;<span id="m-name3">—</span>
-                  </div>
-                  <div class="call-line" id="m-callsign1">—</div>
-                  <div class="call-line bold-red">
-                    MAYDAY &nbsp;—&nbsp; <span id="m-name4">—</span>
-                  </div>
-                  <div class="call-line" id="m-callsign2">—</div>
-                  <div class="call-line">
-                    Position
-                    <span class="call-hint" data-i18n="call_pos"></span>
-                  </div>
-                  <div
-                    class="call-line call-hint"
-                    data-i18n="call_mayday_sit"></div>
-                  <div class="call-line">
-                    <span class="call-hint" data-i18n="call_pob"></span>
-                    &nbsp;—&nbsp; OVER
-                  </div>
-                </div>
-              </div>
-              <div class="call">
-                <div class="call-hdr panpan">
-                  <span class="signal-lbl">PAN PAN</span>
-                  <span class="when-lbl" data-i18n="panpan_when"></span>
-                </div>
-                <div class="call-body panpan-bg">
-                  <div class="call-line bold-orange">
-                    PAN PAN &nbsp; PAN PAN &nbsp; PAN PAN
-                  </div>
-                  <div class="call-line">
-                    This is &nbsp;<span id="p-name">—</span> &nbsp;<span
-                      id="p-name2"
-                      >—</span
-                    >
-                    &nbsp;<span id="p-name3">—</span>
-                  </div>
-                  <div class="call-line" id="p-callsign1">—</div>
-                  <div class="call-line bold-orange">
-                    PAN PAN &nbsp;—&nbsp; <span id="p-name4">—</span>
-                  </div>
-                  <div class="call-line" id="p-callsign2">—</div>
-                  <div class="call-line">
-                    Position
-                    <span class="call-hint" data-i18n="call_pos"></span>
-                  </div>
-                  <div
-                    class="call-line call-hint"
-                    data-i18n="call_panpan_sit"></div>
-                  <div class="call-line">
-                    <span class="call-hint" data-i18n="call_pob"></span>
-                    &nbsp;—&nbsp; OVER
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="call-note" data-i18n="call_note"></div>
-          </div>
-
-          <div class="cols">
-            <div>
-              <div class="sec-hdr brand" data-i18n="card_fire"></div>
-              <table class="proto-rows" id="fire-rows"></table>
-            </div>
-            <div>
-              <div class="sec-hdr mob" data-i18n="card_mob"></div>
-              <table class="proto-rows mob" id="mob-rows"></table>
-            </div>
-          </div>
-
-          <div>
-            <div class="sound-hdr">
-              <span data-i18n="card_signals"></span>
-              <span class="sep">|</span>
-              <span class="leg-item"
-                ><span class="sym-diamond"></span>&nbsp;<span
-                  data-i18n="sig_xs"></span>
-                = ¼ <span data-i18n="sig_sec"></span
-              ></span>
-              <span class="sep">|</span>
-              <span class="leg-item"
-                ><span class="sym-circle"></span>&nbsp;<span
-                  data-i18n="sig_s"></span>
-                = 1 <span data-i18n="sig_sec"></span
-              ></span>
-              <span class="sep">|</span>
-              <span class="leg-item"
-                ><span class="sym-bar"></span>&nbsp;<span
-                  data-i18n="sig_l"></span>
-                = 4 <span data-i18n="sig_secs"></span
-              ></span>
-            </div>
-            <div class="sound-grid" id="signal-grid"></div>
-          </div>
-        </div>
-        <!-- end space-between wrapper -->
-        <div class="card-footer" id="card-footer"></div>
-      </div>
-    </div>
+    <!-- /#main-content -->
 
     <footer
       class="site-footer"
@@ -1195,77 +1201,6 @@
         >stevenmater@gmail.com</a
       >
     </footer>
-
-    <!-- EMAIL BACKUP MODAL -->
-    <div
-      class="modal-overlay"
-      id="email-backup-modal"
-      onclick="if (event.target === this) closeEmailBackupModal()">
-      <div class="modal-panel" role="dialog" aria-modal="true">
-        <div class="modal-hdr">
-          <div class="modal-hdr-title" data-i18n="modal_save_title"></div>
-          <button
-            class="modal-close-btn"
-            onclick="closeEmailBackupModal()"
-            aria-label="Close">
-            ×
-          </button>
-        </div>
-        <div
-          style="
-            padding: 0 24px 24px;
-            background: var(--navy);
-            border-radius: 0 0 10px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-          ">
-          <p
-            style="
-              font-family: var(--font-sans);
-              font-size: 13px;
-              color: white;
-              line-height: 1.6;
-              margin: 0;
-            "
-            data-i18n="modal_save_body"></p>
-          <div style="display: flex; flex-direction: column; gap: 6px">
-            <label
-              style="
-                font-family: var(--font-mono);
-                font-size: 11px;
-                font-weight: 700;
-                letter-spacing: 0.1em;
-                text-transform: uppercase;
-                color: #a8c4e0;
-              "
-              data-i18n="modal_save_email_label"></label>
-            <input
-              id="email-backup-input"
-              class="inp"
-              type="email"
-              placeholder="your@email.com"
-              onkeydown="if (event.key === 'Enter') submitEmailBackup()"
-              style="width: 100%; box-sizing: border-box" />
-          </div>
-          <button
-            id="email-backup-btn"
-            class="print-btn"
-            style="background: #2a9d5c; width: 100%"
-            onclick="submitEmailBackup()">
-            <span id="email-backup-btn-label" data-i18n="modal_save_btn"></span>
-          </button>
-          <div
-            id="email-backup-status"
-            style="
-              display: none;
-              font-family: var(--font-sans);
-              font-size: 12px;
-              text-align: center;
-            "></div>
-        </div>
-      </div>
-    </div>
 
     <!-- LOAD MODAL -->
     <div
