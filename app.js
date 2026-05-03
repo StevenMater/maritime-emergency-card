@@ -1,12 +1,7 @@
 // ══ CONFIG ══════════════════════════════════════════════════════════
-const STRIPE_TEST_MODE    = false
-const STRIPE_LIVE_LINK    = "https://buy.stripe.com/cNi4gzachcuR5vN0Ao97G00"
-const STRIPE_TEST_LINK    = "https://buy.stripe.com/test_cNi4gzachcuR5vN0Ao97G00"
-const STRIPE_PAYMENT_LINK = STRIPE_TEST_MODE ? STRIPE_TEST_LINK : STRIPE_LIVE_LINK
 const WORKER_BASE         = "https://maresafe-worker.maresafe.workers.dev"
 const PDF_WORKER_URL      = `${WORKER_BASE}/generate-pdf`
 const CHECK_CODE_URL      = `${WORKER_BASE}/check-code`
-const EMAIL_BACKUP_URL    = `${WORKER_BASE}/email-backup`
 
 // ══ CONTACTS ════════════════════════════════════════════════════════
 const MAX_CONTACTS = 9
@@ -254,26 +249,26 @@ function formatPhone(dialCode, number) {
 // ══ UPDATE ═══════════════════════════════════════════════════════════
 function update() {
   const t = T[currentLang]
-  const name = document.getElementById("f-name").value
-  const type = document.getElementById("f-type").value
-  const eni = document.getElementById("f-eni").value
-  const length = document.getElementById("f-length").value
-  const width = document.getElementById("f-width").value
-  const draft = document.getElementById("f-draft").value
-  const airdraft = document.getElementById("f-airdraft").value
-  const altLength = document.getElementById("f-alt-length").value
-  const altAirdraft = document.getElementById("f-alt-airdraft").value
-  const callsign = document.getElementById("f-callsign").value
-  const atis = document.getElementById("f-atis").value
-  const mmsi = document.getElementById("f-mmsi").value
-  const insName = document.getElementById("f-insurer-name").value
-  const policy = document.getElementById("f-policy").value
-  const insEmergCode = document.getElementById("f-insurer-emergency-code").value
-  const insEmergNum = document.getElementById(
-    "f-insurer-emergency-number",
-  ).value
-  const insOffCode = document.getElementById("f-insurer-office-code").value
-  const insOffNum = document.getElementById("f-insurer-office-number").value
+  const d = _validCode !== null ? getFormData() : DEMO_DATA
+  const name      = d.name
+  const type      = d.type
+  const eni       = d.eni
+  const length    = d.length
+  const width     = d.width
+  const draft     = d.draft
+  const airdraft  = d.airDraft
+  const altLength = d.altLength
+  const altAirdraft = d.altAirDraft
+  const callsign  = d.callSign
+  const atis      = d.atis
+  const mmsi      = d.mmsi
+  const insName   = d.insurerName
+  const policy    = d.policyNumber
+  const insEmergCode = d.insurerEmergencyDialCode
+  const insEmergNum  = d.insurerEmergencyNumber
+  const insOffCode   = d.insurerOfficeDialCode
+  const insOffNum    = d.insurerOfficeNumber
+  const previewContacts = d.contacts
 
   const fmt = (v) => {
     const n = parseFloat(String(v).replace(",", "."))
@@ -309,7 +304,7 @@ function update() {
   const tbl = document.getElementById("r-contacts")
   while (tbl.rows.length > 0) tbl.deleteRow(0)
   for (let i = 0; i < CONTACT_ROWS; i++) {
-    const c = contacts[i]
+    const c = previewContacts[i]
     const tr = tbl.insertRow()
     tr.style.background = i % 2 === 0 ? "var(--alt)" : "white"
     if (c?.label || c?.number) {
@@ -360,21 +355,7 @@ function update() {
   document.getElementById("location-display").textContent =
     t.location_label + ": " + t.location_name + " " + t.location_flag
 
-  // Enable/disable save button based on whether any data has been entered
-  const hasData = [
-    name,
-    type,
-    eni,
-    callsign,
-    atis,
-    mmsi,
-    document.getElementById("f-insurer-name").value,
-    ...contacts.map((c) => c.label + (c.number || "")),
-  ].some((v) => v && v.trim() !== "")
-  const saveBtn = document.getElementById("btn-email-backup")
-  saveBtn.disabled = !hasData
-  saveBtn.style.opacity = hasData ? "1" : "0.4"
-  saveBtn.style.cursor = hasData ? "pointer" : "not-allowed"
+  document.getElementById("btn-download").disabled = _validCode === null
   const now = new Date()
   const date = now.toLocaleDateString(
     currentLang === "nl" ? "nl-NL" : currentLang,
@@ -387,7 +368,7 @@ function update() {
   const dateISO = now.toISOString().slice(0, 10)
   document.title = [
     "MareSafe",
-    name || null,
+    document.getElementById("f-name").value || null,
     dateISO,
     currentLang.toUpperCase(),
   ]
@@ -619,62 +600,6 @@ function exportJSON() {
   document.getElementById("version-warning").style.display = "none"
 }
 
-function openEmailBackupModal() {
-  document.getElementById("email-backup-modal").classList.add("open")
-  document.getElementById("email-backup-input").focus()
-  const st = document.getElementById("email-backup-status")
-  st.style.display = "none"
-  st.textContent = ""
-  document.getElementById("email-backup-btn").disabled = false
-  document.getElementById("email-backup-btn-label").textContent = T[currentLang].modal_save_btn
-}
-
-function closeEmailBackupModal() {
-  document.getElementById("email-backup-modal").classList.remove("open")
-}
-
-async function submitEmailBackup() {
-  const email  = document.getElementById("email-backup-input").value.trim()
-  const status = document.getElementById("email-backup-status")
-  const btn    = document.getElementById("email-backup-btn")
-  const label  = document.getElementById("email-backup-btn-label")
-
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    status.style.color = "#f1948a"
-    status.textContent = "Please enter a valid email address."
-    return
-  }
-
-  btn.disabled = true
-  label.textContent = T[currentLang].modal_save_sending
-  status.textContent = ""
-
-  const formData = getFormData()
-
-  try {
-    const res = await fetch(EMAIL_BACKUP_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, formData }),
-    })
-
-    if (res.ok) {
-      label.textContent = T[currentLang].modal_save_sent
-      status.style.color = "#6fcf97"
-      status.style.display = "block"
-      status.textContent = T[currentLang].modal_save_success
-      setTimeout(closeEmailBackupModal, 2500)
-    } else {
-      throw new Error()
-    }
-  } catch {
-    label.textContent = T[currentLang].modal_save_btn
-    btn.disabled = false
-    status.style.color = "#f1948a"
-    status.style.display = "block"
-    status.textContent = T[currentLang].modal_save_error
-  }
-}
 
 function openLoadModal() {
   document.getElementById("load-modal").classList.add("open")
@@ -764,31 +689,21 @@ const CARD_MARGIN = 32
 function updatePreviewScale() {
   const wrap = document.getElementById("a4-wrap")
   const card = document.getElementById("emergency-card")
-  const available = document.documentElement.clientWidth
 
-  if (available >= CARD_W + CARD_MARGIN) {
-    wrap.classList.remove("scaled")
-    card.style.transform = ""
-    card.style.transformOrigin = ""
-    wrap.style.display = ""
-    wrap.style.width = ""
-    wrap.style.height = ""
-    wrap.style.overflow = ""
-    wrap.style.margin = ""
-    wrap.style.padding = ""
-  } else {
-    const scale = (available - CARD_MARGIN) / CARD_W
-    const scaledW = Math.round(CARD_W * scale)
-    const scaledH = Math.round(CARD_H * scale)
-    wrap.classList.add("scaled")
-    card.style.transform = `scale(${scale})`
-    card.style.transformOrigin = "top left"
-    wrap.style.display = "block"
-    wrap.style.width = `${scaledW}px`
-    wrap.style.height = `${scaledH + 32}px`
-    wrap.style.overflow = "hidden"
-    wrap.style.margin = "0 auto"
-    wrap.style.padding = "0"
+  card.style.zoom = ""
+  card.style.width = ""
+
+  const cs = getComputedStyle(wrap)
+  const padH = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight)
+  const availW = wrap.offsetWidth - padH
+  const scale = Math.min(
+    availW >= CARD_W ? 1 : availW / CARD_W,
+    (window.innerHeight * 0.8) / CARD_H
+  )
+
+  if (scale < 1) {
+    card.style.width = CARD_W + "px"
+    card.style.zoom = scale
   }
 }
 
@@ -819,6 +734,34 @@ function initRenderMode() {
   return true
 }
 
+// ══ DEMO PREVIEW DATA ═══════════════════════════════════════════════
+const DEMO_DATA = {
+  name: "Boaty McBoatface",
+  type: "Motor Cruiser",
+  eni: "02331847",
+  length: "12.4",
+  width: "3.8",
+  draft: "1.1",
+  airDraft: "4.2",
+  altLength: "10.9",
+  altAirDraft: "3.1",
+  callSign: "PBMB1",
+  atis: "123456789",
+  mmsi: "244123456",
+  insurerName: "Blue Ocean Marine Insurance",
+  policyNumber: "BOI-2024-774821",
+  insurerEmergencyDialCode: "+31",
+  insurerEmergencyNumber: "0800123456",
+  insurerOfficeDialCode: "+31",
+  insurerOfficeNumber: "0102345678",
+  contacts: [
+    { label: "Alex Martin",  dialCode: "+31", number: "0612345678" },
+    { label: "Sam Rivera",   dialCode: "+31", number: "0687654321" },
+    { label: "Jordan Lee",   dialCode: "+31", number: "0104567890" },
+    { label: "Chris Morgan", dialCode: "+44", number: "07911123456" },
+  ],
+}
+
 // ══ DOWNLOAD / PAYMENT ══════════════════════════════════════════════
 let _validCode = null
 
@@ -839,40 +782,16 @@ window.addEventListener("resize", lsCloseAll)
 
 function onLangChange() {
   localStorage.setItem("maresafe_langs", JSON.stringify(getSelectedLanguages()))
-  updateDownloadLabel()
 }
 
-function updateDownloadLabel() {
-  const count = getSelectedLanguages().length
-  const free = _validCode !== null
-  const btn = document.getElementById("btn-buy")
-  const priceEl = document.getElementById("btn-buy-price")
-
-  const lockSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`
-  const dlSvg   = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
-  btn.disabled = count === 0
-  btn.classList.toggle("buy-btn--free", free)
-  document.getElementById("btn-buy-icon").innerHTML = free ? dlSvg : lockSvg
-  btn.querySelector("[data-i18n='btn_buy']").textContent = free ? "Download" : T[currentLang].btn_buy
-  priceEl.textContent = free ? `— ${T[currentLang].label_free}` : "— €2"
-}
-
-function handleBuyClick() {
-  if (_validCode) {
-    const langs = getSelectedLanguages()
-    if (!langs.length) { alert(T[currentLang].pdf_no_lang); return }
-    requestPDF({ type: "code", code: _validCode }, langs)
-  } else {
-    window.location.href = STRIPE_PAYMENT_LINK
-  }
-}
 
 function clearCodeInput() {
   const inp = document.getElementById("bypass-code-input")
   inp.value = ""
   _validCode = null
   document.getElementById("code-feedback").textContent = ""
-  updateDownloadLabel()
+  lsSetDisabled("dl-lang-select", true)
+  update()
   inp.focus()
 }
 
@@ -880,7 +799,6 @@ async function checkCode() {
   const code = document.getElementById("bypass-code-input").value.trim()
   const feedback = document.getElementById("code-feedback")
   _validCode = null
-  updateDownloadLabel()
   if (!code) { feedback.textContent = ""; return }
 
   feedback.style.color = "var(--mid)"
@@ -894,10 +812,13 @@ async function checkCode() {
     const data = await res.json()
     if (data.valid) {
       _validCode = code
+      lsSetDisabled("dl-lang-select", false)
+      lsSetMax("dl-lang-select", data.tokens)
+      update()
       const usesText =
-        data.uses === "unlimited"
+        data.tokens === "unlimited"
           ? T[currentLang].code_uses_unlimited
-          : T[currentLang].code_uses_remaining.replace("{n}", data.uses)
+          : T[currentLang].code_uses_remaining.replace("{n}", data.tokens)
       feedback.style.color = "var(--green)"
       feedback.textContent = "✓ " + usesText
     } else {
@@ -907,23 +828,15 @@ async function checkCode() {
   } catch {
     feedback.textContent = ""
   }
-  updateDownloadLabel()
 }
 
 function handleDownloadClick() {
   const langs = getSelectedLanguages()
   if (!langs.length) { alert(T[currentLang].pdf_no_lang); return }
-  requestPDF({ type: "code", code: _validCode }, langs)
+  requestPDF(langs)
 }
 
-async function handlePaymentReturn(sessionId) {
-  const langs = JSON.parse(localStorage.getItem("maresafe_langs") || '["nl","en"]')
-  await requestPDF({ type: "stripe", session: sessionId }, langs)
-  localStorage.removeItem("maresafe_langs")
-  window.history.replaceState({}, "", window.location.pathname)
-}
-
-async function requestPDF(authPayload, languages) {
+async function requestPDF(languages) {
   const btn    = document.getElementById("btn-download")
   const status = document.getElementById("pdf-status")
   btn.disabled = true
@@ -937,7 +850,7 @@ async function requestPDF(authPayload, languages) {
     response = await fetch(PDF_WORKER_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...authPayload, formData, languages, area: "netherlands" }),
+      body: JSON.stringify({ code: _validCode, formData, languages, area: "netherlands", lang: currentLang }),
     })
   } catch {
     status.style.color = "var(--red)"
@@ -947,7 +860,7 @@ async function requestPDF(authPayload, languages) {
   }
 
   if (!response.ok) {
-    const msgs = { 402: "pdf_error_402", 403: "pdf_error_403", 503: "pdf_error_503" }
+    const msgs = { 403: "pdf_error_403", 503: "pdf_error_503" }
     status.style.color = "var(--red)"
     status.textContent = T[currentLang][msgs[response.status] || "pdf_error"]
     btn.disabled = false
@@ -1088,7 +1001,7 @@ const LS_LANGS = [
 const _ls = {}
 
 function lsInit(id, mode, initialSelected, onChange) {
-  _ls[id] = { mode, selected: [...initialSelected], query: "", onChange }
+  _ls[id] = { mode, selected: [...initialSelected], query: "", onChange, disabled: false, max: undefined }
   lsRender(id)
 }
 
@@ -1098,7 +1011,7 @@ function lsRender(id) {
   const state = _ls[id]
   const chevron = `<svg class="ls-chevron" xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`
   wrap.innerHTML = `
-    <button class="ls-trigger" type="button" onclick="lsToggle('${id}',event)">
+    <button class="ls-trigger" type="button" onclick="lsToggle('${id}',event)"${state.disabled ? " disabled" : ""}>
       <span id="${id}-flags" class="ls-flags">${lsFlagsHTML(state)}</span>
       ${chevron}
     </button>
@@ -1174,6 +1087,7 @@ function lsCloseAll() {
 
 function lsToggle(id, e) {
   e.stopPropagation()
+  if (_ls[id]?.disabled) return
   const dp = document.getElementById(`${id}-dp`)
   const open = dp.style.display !== "none"
   lsCloseAll()
@@ -1243,6 +1157,7 @@ function lsSelect(id, code, e) {
     if (e) e.stopPropagation()
     const idx = state.selected.indexOf(code)
     if (idx === -1) {
+      if (state.max !== undefined && state.max !== "unlimited" && state.selected.length >= state.max) return
       state.selected.push(code)
     } else if (state.selected.length > 1) {
       state.selected.splice(idx, 1)
@@ -1251,6 +1166,25 @@ function lsSelect(id, code, e) {
   }
   document.getElementById(`${id}-flags`).innerHTML = lsFlagsHTML(state)
   state.onChange(state.selected)
+}
+
+function lsSetMax(id, n) {
+  const state = _ls[id]
+  if (!state) return
+  state.max = n
+  if (n !== undefined && n !== "unlimited" && state.selected.length > n) {
+    state.selected = state.selected.slice(0, n)
+    const fl = document.getElementById(`${id}-flags`)
+    if (fl) fl.innerHTML = lsFlagsHTML(state)
+  }
+}
+
+function lsSetDisabled(id, bool) {
+  const state = _ls[id]
+  if (!state) return
+  state.disabled = bool
+  const trigger = document.querySelector(`#${id} .ls-trigger`)
+  if (trigger) trigger.disabled = bool
 }
 
 function lsUpdateUi(langCode) {
@@ -1275,7 +1209,6 @@ function onUiLangSelect(langCode) {
   const opts = document.getElementById("dl-lang-select-opts")
   if (opts) opts.innerHTML = lsOptionsHTML("dl-lang-select")
   localStorage.setItem("maresafe_langs", JSON.stringify(dl.selected))
-  updateDownloadLabel()
 }
 
 // ══ INIT ════════════════════════════════════════════════════════════
@@ -1291,15 +1224,17 @@ if (!initRenderMode()) {
     catch { return ["nl", "en"] }
   })()
   lsInit("dl-lang-select", "multi", _savedLangs, () => onLangChange())
+  lsSetDisabled("dl-lang-select", true)
   lsInit("ui-lang-select", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
   lsInit("ui-lang-select-modal", "single", ["nl"], (sel) => onUiLangSelect(sel[0]))
 
   if (!loadFromStorage()) setLang("nl")
   updatePreviewScale()
-  updateDownloadLabel()
 
-  const sessionId = new URLSearchParams(window.location.search).get("session")
-  if (sessionId) setTimeout(() => handlePaymentReturn(sessionId), 100)
+  if (new URLSearchParams(window.location.search).get("payment") === "success") {
+    history.replaceState({}, "", window.location.pathname)
+    document.getElementById("payment-success-banner").style.display = "flex"
+  }
 
   if (!localStorage.getItem("maritieme_seen_info")) {
     setTimeout(openInfoModal, 400)
